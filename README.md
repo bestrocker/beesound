@@ -1,4 +1,10 @@
 # README #
 
 This is our application program for the OOP project.
-Members are Carlo Alberto Scola, Tiziano de Cristofaro and Gianluca Cincinelli.
+
+OOP15-BeeSound:
+
+Contributors:
+-Scola Carlo Alberto
+-De Cristofaro Tiziano
+-Cincinelli Gianluca
