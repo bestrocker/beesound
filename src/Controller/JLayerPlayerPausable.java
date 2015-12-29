@@ -117,11 +117,11 @@ public class JLayerPlayerPausable {
         
         // last frame, ensure all data flushed to the audio device.
         if (this.audioDevice != null) {
-            //this.audioDevice.flush();       decommenta
+            this.audioDevice.flush();     //  decommenta
 
             synchronized (this){
                 this.isComplete = (!this.isClosed);
-               // this.close();               decommenta
+               // this.close();               decommenta se vuoi chiudere il player
             }
 
             // report to listener

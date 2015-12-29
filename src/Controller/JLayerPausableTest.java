@@ -1,8 +1,8 @@
 package Controller;
 import java.io.*;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -32,14 +32,17 @@ public class JLayerPausableTest {
                     System.out.println("error reading metadata");
                     e.printStackTrace();
                 }
-                soundToPlay.play(9400);
+                Random rnd = new Random();
+                soundToPlay.play();
+                while (true){
+                    Thread.sleep(3000);
+                    soundToPlay.play(rnd.nextInt(7000));
+                    Thread.sleep(2000);
+                    soundToPlay.pause();
+                    Thread.sleep(2000);
+                    soundToPlay.pauseToggle();
+                }
                 
-//                while (true){
-//                        Thread.sleep(4000);
-//                        System.out.println("toggling pause");
-//
-//                        soundToPlay.pauseToggle();
-//                }
                 
         }
 }
@@ -63,31 +66,32 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
         public SoundJLayer(final List<String> pl){
             this.plist.addAll(pl);
             setSongInPlaylist();
-            
-            
         }
         
+        /**
+         * Set the current song to reproduce taking it by the current playlist.
+         */
         public void setSongInPlaylist(){
             this.filePath = this.plist.get(this.counter++);
             this.playerInitialize();
         }
         
-//        public void initPlaylist(final List<String> pl){
-//            this.player.takePlaylist(pl);
-//        }
-        
         public void stop(){
             this.player.stop();
             this.playerThread = null;
         }
+        
         public void pause() {
-                if(this.player!= null) {
-                    this.player.pause();
-                }
-                //this.playerThread.stop();
-                this.playerThread = null; //metodo funzionante per "stoppare" un thread
+            if(this.player!= null) {
+                this.player.pause();
+            }
+            this.playerThread = null; //metodo funzionante per "stoppare" un thread
         }
-
+        
+        /**
+         * Pause Toggle button.
+         * If isPaused then play() otherwise pause()
+         */
         public void pauseToggle() {
                 if (this.player.isPaused) {
                         this.play();
@@ -97,7 +101,7 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
         }
 
         public void play() {
-            this.flag = false;
+            //this.flag = false;
             if (this.player == null) {
                     this.playerInitialize();
             }
@@ -106,19 +110,15 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
             this.playerThread.start();
         }
         public void play(final int frame){
-            
             this.frameSelected=frame;
-            this.flag = true;
-          //  System.out.println("play with frames\n");
-            
-            pause();
-            if (this.player == null) {
-                this.playerInitialize();
-            }
-
-            this.playerThread = new Thread(this, "AudioPlayerThread");
-           // System.out.println("play with frames left\n");
-            this.playerThread.start();
+            this.play();
+//            this.flag = true;
+//            pause();
+//            if (this.player == null) {
+//                this.playerInitialize();
+//            }
+//            this.playerThread = new Thread(this, "AudioPlayerThread");
+//            this.playerThread.start();
         }
 
         private void playerInitialize() {
@@ -150,8 +150,9 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
 
         public void run() {
                 try {
-                        if (flag){
+                        if (this.frameSelected != 0){
                             this.player.resume(this.frameSelected);
+                            frameSelected = 0;
                         } else {
                             this.player.resume();
                         }
