@@ -1,5 +1,8 @@
 package Controller;
 import java.io.*;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -7,57 +10,21 @@ import javazoom.jl.decoder.JavaLayerException;
 
 public class JLayerPausableTest {
     
-    public JLayerPausableTest(){
-        new Ciao();
-    }
-    public class Ciao extends JLayerPlayerPausable.PlaybackListener{
-        String filePath;
-        JLayerPlayerPausable player2;
-        public Ciao() {
-            try {
-                String urlAsString = "file:///" + "/home/bestrocker221/Salmo-1984.mp3";
-                this.player2 = new JLayerPlayerPausable(new java.net.URL(urlAsString),this );
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            try {
-                this.player2.play(8200);
-                System.out.println("preSleep\n");
-                Thread.sleep(3000);
-                System.out.println("sleep");
-                this.player2.stop();
-                this.player2.play(200);
-                Thread.sleep(2500);
-                this.player2.play(9200);
-                
-            } catch (Exception e) {
-                System.out.println("error play on selected frame.");
-                e.printStackTrace();
-            }
-        }
-        
-        
-    }
         public static void main(String[] args) throws InterruptedException {
                 
-            //new JLayerPausableTest();    
                 final String path = "/home/bestrocker221/Salmo-1984.mp3";
-                SoundJLayer soundToPlay = new SoundJLayer(path);
-
-                //BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
-
-                System.out.println("About to start playing sound.");
-                System.out.println("Press enter to pause...");
+                final String path2 = "/home/bestrocker221/Dropbox/Musica/James Bay - Hold Back The River.mp3";
                 File f = new File(path);
-                soundToPlay.play();
-                Thread.sleep(2000);
-                soundToPlay.play(2000);
+                //SoundJLayer soundToPlay = new SoundJLayer(path);
+                final List<String> playlist = new ArrayList<>();
+                playlist.add(path);
+                playlist.add("/home/bestrocker221/Dropbox/Musica/James Bay - Hold Back The River.mp3");
+                System.out.println("Contenuti in playlist: ");
+                playlist.forEach(System.out::println);
+                System.out.println("About to start playing sound.");
                 
-                Thread.sleep(3000);
-                System.out.println("doposleep£");
-                soundToPlay.play(7000);
-                Thread.sleep(3000);
-                soundToPlay.play();
+                SoundJLayer soundToPlay = new SoundJLayer(playlist);
+                
                 MpegInfo infosong = new MpegInfo();
                 try {
                     infosong.load(f);
@@ -65,7 +32,8 @@ public class JLayerPausableTest {
                     System.out.println("error reading metadata");
                     e.printStackTrace();
                 }
-
+                soundToPlay.play(9400);
+                
 //                while (true){
 //                        Thread.sleep(4000);
 //                        System.out.println("toggling pause");
@@ -80,14 +48,42 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
         private String filePath;
         private JLayerPlayerPausable player;
         private Thread playerThread;    
+        
         volatile boolean flag = false;
         private int frameSelected=0;
-        public SoundJLayer(String filePath){
-                this.filePath = filePath;       
+        private List<String> plist = new ArrayList<>();
+        private int counter = 0;
+        
+//        public SoundJLayer(String filePath){
+//                this.filePath = filePath;       
+//        }
+        /*
+         * Aggiunto da me
+         */
+        public SoundJLayer(final List<String> pl){
+            this.plist.addAll(pl);
+            setSongInPlaylist();
+            
+            
         }
-
+        
+        public void setSongInPlaylist(){
+            this.filePath = this.plist.get(this.counter++);
+            this.playerInitialize();
+        }
+        
+//        public void initPlaylist(final List<String> pl){
+//            this.player.takePlaylist(pl);
+//        }
+        
+        public void stop(){
+            this.player.stop();
+            this.playerThread = null;
+        }
         public void pause() {
-                this.player.pause();
+                if(this.player!= null) {
+                    this.player.pause();
+                }
                 //this.playerThread.stop();
                 this.playerThread = null; //metodo funzionante per "stoppare" un thread
         }
@@ -102,25 +98,26 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
 
         public void play() {
             this.flag = false;
-                if (this.player == null) {
-                        this.playerInitialize();
-                }
-                pause();
-                this.playerThread = new Thread(this, "AudioPlayerThread");
-
-                this.playerThread.start();
+            if (this.player == null) {
+                    this.playerInitialize();
+            }
+            pause();
+            this.playerThread = new Thread(this, "AudioPlayerThread");
+            this.playerThread.start();
         }
         public void play(final int frame){
             
             this.frameSelected=frame;
             this.flag = true;
+          //  System.out.println("play with frames\n");
+            
             pause();
             if (this.player == null) {
                 this.playerInitialize();
             }
 
             this.playerThread = new Thread(this, "AudioPlayerThread");
-            System.out.println("play with frames left\n");
+           // System.out.println("play with frames left\n");
             this.playerThread.start();
         }
 
@@ -136,12 +133,18 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
         // PlaybackListener members
 
         public void playbackStarted(JLayerPlayerPausable.PlaybackEvent playbackEvent) {
-                System.out.println("playbackStarted()");
+                System.out.println(new java.util.Date()+" playback: Started()  "+this.filePath);
         }
 
         public void playbackFinished(JLayerPlayerPausable.PlaybackEvent playbackEvent) {
-                System.out.println("playbackEnded()");
-        }       
+                System.out.println("playback: Ended()");
+        }   
+        public void playbackSongFinished(JLayerPlayerPausable.PlaybackEvent playbackEvent) {
+            System.out.println("playback: SongEnded()");
+            this.stop();
+            this.setSongInPlaylist();
+            this.play();
+    }   
 
         // IRunnable members
 
@@ -149,7 +152,6 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
                 try {
                         if (flag){
                             this.player.resume(this.frameSelected);
-                            System.out.println("resume with frame called\n");
                         } else {
                             this.player.resume();
                         }
