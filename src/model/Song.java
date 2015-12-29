@@ -21,7 +21,6 @@ public class Song {
     }    
     
     public Song(String title, String album, String artist, String genre, double duration, Path path) {
-        super();
         this.title = title;
         this.album = album;
         this.artist = artist;
