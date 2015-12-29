@@ -1,5 +1,6 @@
 package Controller;
 import java.io.*;
+import java.nio.charset.MalformedInputException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -52,40 +53,46 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
         private JLayerPlayerPausable player;
         private Thread playerThread;    
         
-        volatile boolean flag = false;
         private int frameSelected=0;
-        private List<String> plist = new ArrayList<>();
+        final private List<String> plist = new ArrayList<>();
         private int counter = 0;
         
-//        public SoundJLayer(String filePath){
-//                this.filePath = filePath;       
-//        }
-        /*
-         * Aggiunto da me
+        /**
+         * SoundJLayer takes a List<String> and set it as current playlist to reproduce
+         * 
+         * @param playlist
          */
-        public SoundJLayer(final List<String> pl){
-            this.plist.addAll(pl);
+        public SoundJLayer(final List<String> playlist){
+            this.plist.addAll(playlist);
             setSongInPlaylist();
         }
         
         /**
-         * Set the current song to reproduce taking it by the current playlist.
+         * Private: Set the current song to reproduce taking it by the current playlist.
+         * @return void
          */
-        public void setSongInPlaylist(){
+        private void setSongInPlaylist(){
             this.filePath = this.plist.get(this.counter++);
             this.playerInitialize();
         }
-        
+        /**
+         * Stop the player.
+         * @return void
+         */
         public void stop(){
             this.player.stop();
             this.playerThread = null;
         }
         
+        /**
+         * Pause the player. 
+         * @return void
+         */
         public void pause() {
             if(this.player!= null) {
                 this.player.pause();
             }
-            this.playerThread = null; //metodo funzionante per "stoppare" un thread
+            this.playerThread = null; 
         }
         
         /**
@@ -99,9 +106,12 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
                         this.pause();
                 }
         }
-
+        
+        /**
+         * Initialize the player if not initialized and start a new Thread AudioPlayerThread
+         * @return void
+         */
         public void play() {
-            //this.flag = false;
             if (this.player == null) {
                     this.playerInitialize();
             }
@@ -109,18 +119,21 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
             this.playerThread = new Thread(this, "AudioPlayerThread");
             this.playerThread.start();
         }
+        /**
+         * Play the song from the frame in input
+         * @param frame
+         * @return void
+         */
         public void play(final int frame){
             this.frameSelected=frame;
             this.play();
-//            this.flag = true;
-//            pause();
-//            if (this.player == null) {
-//                this.playerInitialize();
-//            }
-//            this.playerThread = new Thread(this, "AudioPlayerThread");
-//            this.playerThread.start();
         }
-
+        
+        /**
+         * Private: Player initializer
+         * Create a new Pausable Player and set the path of the current song
+         * @exception MalformedInputException
+         */
         private void playerInitialize() {
                 try {
                         String urlAsString = "file:///" + this.filePath;
@@ -130,7 +143,10 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
                 }
         }
 
-        // PlaybackListener members
+        /*
+         *  PlaybackListener members(non-Javadoc)
+         * @see Controller.JLayerPlayerPausable.PlaybackListener#playbackStarted(Controller.JLayerPlayerPausable.PlaybackEvent)
+         */
 
         public void playbackStarted(JLayerPlayerPausable.PlaybackEvent playbackEvent) {
                 System.out.println(new java.util.Date()+" playback: Started()  "+this.filePath);
@@ -141,6 +157,9 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
         }   
         public void playbackSongFinished(JLayerPlayerPausable.PlaybackEvent playbackEvent) {
             System.out.println("playback: SongEnded()");
+            /*
+             * for reproducing audio one after another
+             */
             this.stop();
             this.setSongInPlaylist();
             this.play();

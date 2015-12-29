@@ -17,9 +17,6 @@ package Controller;
  */
 
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import javazoom.jl.decoder.*;
 import javazoom.jl.player.*;
 
@@ -230,7 +227,7 @@ public class JLayerPlayerPausable {
         public EventType eventType;
         public int frameIndex;
 
-        public PlaybackEvent(JLayerPlayerPausable source, EventType eventType, int frameIndex){
+        public PlaybackEvent(final JLayerPlayerPausable source, final EventType eventType, int frameIndex){
             this.source = source;
             this.eventType = eventType;
             this.frameIndex = frameIndex;
