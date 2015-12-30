@@ -17,6 +17,12 @@ public class Genre {
         this.artistList = new ArrayList<>();
     }
     
+    public Genre(String name) {
+        this.name = name;
+        this.albumList = new ArrayList<>();
+        this.artistList = new ArrayList<>();
+    }
+    
     public Genre(String name, List<Album> albumList, List<Artist> artistList) {
         this.name = name;
         this.albumList = albumList;

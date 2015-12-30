@@ -14,6 +14,11 @@ public class Artist {
         this.name = DEFAULT;
         this.albumList = new ArrayList<>();
     }
+    
+    public Artist(String name) {
+        this.name = name;
+        this.albumList = new ArrayList<>();
+    }
 
     public Artist(String name, List<Album> albumList) {
         this.name = name;
