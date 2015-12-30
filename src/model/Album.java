@@ -15,6 +15,11 @@ public class Album {
         this.trackList = new ArrayList<>();
     }
     
+    public Album(String title) {        // this constructor is called in LibraryManager
+        this.title = title;
+        this.trackList = new ArrayList<>();
+    }
+    
     public Album(String title, List<Song> trackList) {
         this.title = title;
         this.trackList = trackList;
