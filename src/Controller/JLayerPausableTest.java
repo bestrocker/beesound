@@ -1,5 +1,6 @@
 package Controller;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.nio.charset.MalformedInputException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,7 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
         
         /**
          * Private: Set the current song to reproduce taking it by the current playlist.
+         * 
          * @return void
          */
         private void setSongInPlaylist(){
@@ -138,7 +140,7 @@ class SoundJLayer extends JLayerPlayerPausable.PlaybackListener implements Runna
                 try {
                         String urlAsString = "file:///" + this.filePath;
                         this.player = new JLayerPlayerPausable(new java.net.URL(urlAsString),this );
-                } catch (Exception ex) {
+                } catch (JavaLayerException | MalformedURLException ex) {
                         ex.printStackTrace();
                 }
         }
