@@ -51,16 +51,7 @@ public class BasicPlayerTest implements BasicPlayerListener {
                     // Set Pan (-1.0 to 1.0).
                     // setPan should be called after control.play().
                     control.setPan(0.0);
-                    Thread.sleep(10000);
-                    control.pause();
-                    Thread.sleep(2000);
-                    control.resume();
                     
-                    Thread.sleep(2000);
-                    control.stop();
-                    Thread.sleep(2000);
-                    control.play();
-                    //control.resume();
                     // If you want to pause/resume/pause the played file then
                     // write a Swing player and just call control.pause(),
                     // control.resume() or control.stop().                  
@@ -85,6 +76,12 @@ public class BasicPlayerTest implements BasicPlayerListener {
      * @param stream could be File, URL or InputStream
      * @param properties audio stream properties.
      */
+    @SuppressWarnings("rawtypes")
+    /*  Map instead of Map<String,Object>
+     *  Because the method to override is in the library, and it is made as this (non-Javadoc)
+     * @see javazoom.jlgui.basicplayer.BasicPlayerListener#opened(java.lang.Object, java.util.Map)
+     */
+    @Override
     public void opened(final Object stream,final Map properties) {
             // Pay attention to properties. It's useful to get duration, 
             // bitrate, channels, even tag such as ID3v2.
@@ -103,6 +100,8 @@ public class BasicPlayerTest implements BasicPlayerListener {
      * @param pcmdata PCM samples.
      * @param properties audio stream parameters.
      */
+    @SuppressWarnings("rawtypes")
+    @Override
     public void progress(final int bytesread,final long microseconds,
             final byte[] pcmdata,final Map properties) {
             // Pay attention to properties. It depends on underlying JavaSound SPI
@@ -115,7 +114,8 @@ public class BasicPlayerTest implements BasicPlayerListener {
      *  
      * @param event
      */
-    public void stateUpdated(BasicPlayerEvent event) {
+    @Override
+    public void stateUpdated(final BasicPlayerEvent event) {
             // Notification of BasicPlayer states (opened, playing, end of media, ...)
             display("stateUpdated : "+event.toString());
             if (event.getCode()==BasicPlayerEvent.STOPPED) {
@@ -127,12 +127,12 @@ public class BasicPlayerTest implements BasicPlayerListener {
      * A handle to the BasicPlayer, plugins may control the player through
      * the controller (play, stop, ...)
      * @param controller : a handle to the player
-     */     
-    public void setController(BasicController controller) {
+     */
+    public void setController(final BasicController controller) {
             display("setController : "+controller);
     }
     
-    public void display(String msg) {
+    public void display(final String msg) {
             if (out != null) out.println(msg);
     }
 
