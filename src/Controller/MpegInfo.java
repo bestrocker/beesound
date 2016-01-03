@@ -48,13 +48,11 @@ public class MpegInfo implements TagInfo {
     private String emphasis = null;
     private int nominalbitrate = 0;
     private long total = 0;
-    private String vendor = null;
     private String location = null;
     private long size = 0;
     private boolean copyright = false;
     private boolean crc = false;
     private boolean original = false;
-    private boolean priv = false;
     private boolean vbr = false;
     private int track = -1;
     private String year = null;
