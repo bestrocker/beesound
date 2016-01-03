@@ -1,8 +1,11 @@
 package Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Map;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import javazoom.jlgui.basicplayer.*;
 
@@ -13,10 +16,15 @@ public class BasicPlayerTest implements BasicPlayerListener {
      * Entry point.
      * @param args filename to play.
      * @throws InterruptedException 
+     * @throws UnsupportedAudioFileException 
+     * @throws IOException 
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException, UnsupportedAudioFileException {
             BasicPlayerTest test = new BasicPlayerTest();
-            test.play("/home/bestrocker221/Salmo-1984.mp3");                
+            test.play("/home/bestrocker221/Salmo-1984.mp3");
+            MpegInfo infosong = new MpegInfo();
+            infosong.load(new File("/home/bestrocker221/Salmo-1984.mp3"));
+            System.out.println(infosong.getInfo());
     }
     
     /**
@@ -85,7 +93,7 @@ public class BasicPlayerTest implements BasicPlayerListener {
     public void opened(final Object stream,final Map properties) {
             // Pay attention to properties. It's useful to get duration, 
             // bitrate, channels, even tag such as ID3v2.
-            display("opened : "+properties.toString());             
+        //    display("opened : "+properties.toString());             
     }
             
     /**
@@ -106,7 +114,7 @@ public class BasicPlayerTest implements BasicPlayerListener {
             final byte[] pcmdata,final Map properties) {
             // Pay attention to properties. It depends on underlying JavaSound SPI
             // MP3SPI provides mp3.equalizer.
-            display("progress : "+properties.toString());
+     //       display("progress : "+properties.toString());
     }
     
     /**
