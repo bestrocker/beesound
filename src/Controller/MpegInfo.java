@@ -22,9 +22,7 @@ package Controller;
  *----------------------------------------------------------------------
  */
 
-
 import org.tritonus.share.sampled.file.TAudioFileFormat;
-
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -70,7 +68,7 @@ public class MpegInfo implements TagInfo {
         this.infoSong.put("genre", this.genre);
         this.infoSong.put("year", this.year);
         this.infoSong.put("size", this.size);
-        this.infoSong.put("locatio", this.location);
+        this.infoSong.put("location", this.location);
         return this.infoSong;
     }
     /**
@@ -86,7 +84,7 @@ public class MpegInfo implements TagInfo {
      * @param input
      * @throws IOException
      */
-    public void load(File input) throws IOException, UnsupportedAudioFileException {
+    public void load(final File input) throws IOException, UnsupportedAudioFileException {
         this.size = input.length();
         this.location = input.getPath();
         loadInfo(input);
@@ -99,7 +97,7 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    public void load(URL input) throws IOException, UnsupportedAudioFileException {
+    public void load(final URL input) throws IOException, UnsupportedAudioFileException {
         this.location = input.toString();
         loadInfo(input);
     }
@@ -111,7 +109,7 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    public void load(InputStream input) throws IOException, UnsupportedAudioFileException {
+    public void load(final InputStream input) throws IOException, UnsupportedAudioFileException {
         loadInfo(input);
     }
 
@@ -122,7 +120,7 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    private void loadInfo(InputStream input) throws IOException, UnsupportedAudioFileException {
+    private void loadInfo(final InputStream input) throws IOException, UnsupportedAudioFileException {
         final AudioFileFormat aff = AudioSystem.getAudioFileFormat(input);
         loadInfo(aff);
     }
@@ -134,7 +132,7 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    private void loadInfo(File file) throws IOException, UnsupportedAudioFileException {
+    private void loadInfo(final File file) throws IOException, UnsupportedAudioFileException {
         final AudioFileFormat aff = AudioSystem.getAudioFileFormat(file);
         loadInfo(aff);
     }
@@ -145,7 +143,7 @@ public class MpegInfo implements TagInfo {
      * @param aff
      */
     @SuppressWarnings("unchecked")
-    private void loadInfo(AudioFileFormat aff) throws UnsupportedAudioFileException {
+    private void loadInfo(final AudioFileFormat aff) throws UnsupportedAudioFileException {
         final String type = aff.getType().toString();
         if (!type.equalsIgnoreCase("mp3")){
             throw new UnsupportedAudioFileException("Not MP3 audio format");
@@ -240,7 +238,7 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    private void loadInfo(URL input) throws IOException, UnsupportedAudioFileException {
+    private void loadInfo(final URL input) throws IOException, UnsupportedAudioFileException {
         final AudioFileFormat aff = AudioSystem.getAudioFileFormat(input);
         loadInfo(aff);
         loadShoutastInfo(aff);
@@ -253,8 +251,8 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    @SuppressWarnings("unchecked")
-    private void loadShoutastInfo(AudioFileFormat aff) throws IOException, UnsupportedAudioFileException {
+    @SuppressWarnings("unchecked") // cause it depends on the library (map not parametrized)
+    private void loadShoutastInfo(final AudioFileFormat aff) throws IOException, UnsupportedAudioFileException {
         final String type = aff.getType().toString();
         if (!type.equalsIgnoreCase("mp3")){
             throw new UnsupportedAudioFileException("Not MP3 audio format");
