@@ -56,12 +56,6 @@ public interface TagInfo
      */
     public int getBitRate();
 
-    /**
-     * Get channels.
-     *
-     * @return channels
-     */
-    public int getChannels();
 
     /**
      * Get play time in seconds.
@@ -92,13 +86,6 @@ public interface TagInfo
     public String getAlbum();
 
     /**
-     * Get the track number of this track on the album
-     *
-     * @return the track number
-     */
-    public int getTrack();
-
-    /**
      * Get the genre string of the music
      *
      * @return the genre string
@@ -112,10 +99,4 @@ public interface TagInfo
      */
     public String getYear();
 
-    /**
-     * Get any comments provided about the song
-     *
-     * @return the comments
-     */
-    public Vector getComment();
 }

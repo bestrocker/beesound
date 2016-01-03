@@ -32,38 +32,49 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * This class gives information (audio format and comments) about MPEG file or URL.
  */
 public class MpegInfo implements TagInfo {
-    protected int channels = -1;
-    protected String channelsMode = null;
-    protected String version = null;
-    protected int rate = 0;
-    protected String layer = null;
-    protected String emphasis = null;
-    protected int nominalbitrate = 0;
-    protected long total = 0;
-    protected String vendor = null;
-    protected String location = null;
-    protected long size = 0;
-    protected boolean copyright = false;
-    protected boolean crc = false;
-    protected boolean original = false;
-    protected boolean priv = false;
-    protected boolean vbr = false;
-    protected int track = -1;
-    protected String year = null;
-    protected String genre = null;
-    protected String title = null;
-    protected String artist = null;
-    protected String album = null;
-    protected Vector<String> comments = null;
-
+    private int channels = -1;
+    private String channelsMode = null;
+    private String version = null;
+    private int rate = 0;
+    private String layer = null;
+    private String emphasis = null;
+    private int nominalbitrate = 0;
+    private long total = 0;
+    private String vendor = null;
+    private String location = null;
+    private long size = 0;
+    private boolean copyright = false;
+    private boolean crc = false;
+    private boolean original = false;
+    private boolean priv = false;
+    private boolean vbr = false;
+    private int track = -1;
+    private String year = null;
+    private String genre = null;
+    private String title = null;
+    private String artist = null;
+    private String album = null;
+    
+    private Map<String,Object> infoSong = new HashMap<String, Object>();
+    
+    public Map<String,Object> getInfo(){
+        this.infoSong.put("title", this.title);
+        this.infoSong.put("artist", this.artist);
+        this.infoSong.put("album", this.album);
+        this.infoSong.put("genre", this.genre);
+        this.infoSong.put("year", this.year);
+        this.infoSong.put("size", this.size);
+        this.infoSong.put("locatio", this.location);
+        return this.infoSong;
+    }
     /**
      * Constructor.
      */
@@ -113,7 +124,7 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    protected void loadInfo(InputStream input) throws IOException, UnsupportedAudioFileException {
+    private void loadInfo(InputStream input) throws IOException, UnsupportedAudioFileException {
         final AudioFileFormat aff = AudioSystem.getAudioFileFormat(input);
         loadInfo(aff);
     }
@@ -125,7 +136,7 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    protected void loadInfo(File file) throws IOException, UnsupportedAudioFileException {
+    private void loadInfo(File file) throws IOException, UnsupportedAudioFileException {
         final AudioFileFormat aff = AudioSystem.getAudioFileFormat(file);
         loadInfo(aff);
     }
@@ -135,39 +146,84 @@ public class MpegInfo implements TagInfo {
      *
      * @param aff
      */
-    protected void loadInfo(AudioFileFormat aff) throws UnsupportedAudioFileException {
-        String type = aff.getType().toString();
-        if (!type.equalsIgnoreCase("mp3")) throw new UnsupportedAudioFileException("Not MP3 audio format");
+    @SuppressWarnings("unchecked")
+    private void loadInfo(AudioFileFormat aff) throws UnsupportedAudioFileException {
+        final String type = aff.getType().toString();
+        if (!type.equalsIgnoreCase("mp3")){
+            throw new UnsupportedAudioFileException("Not MP3 audio format");
+        }
         if (aff instanceof TAudioFileFormat) {
-            Map<String,Object> props = ((TAudioFileFormat) aff).properties();
-            if (props.containsKey("mp3.channels")) channels = ((Integer) props.get("mp3.channels")).intValue();
-            if (props.containsKey("mp3.frequency.hz")) rate = ((Integer) props.get("mp3.frequency.hz")).intValue();
-            if (props.containsKey("mp3.bitrate.nominal.bps")) nominalbitrate = ((Integer) props.get("mp3.bitrate.nominal.bps")).intValue();
-            if (props.containsKey("mp3.version.layer")) layer = "Layer " + props.get("mp3.version.layer");
+            final Map<String,Object> props = ((TAudioFileFormat) aff).properties();
+            if (props.containsKey("mp3.channels")){
+                channels = ((Integer) props.get("mp3.channels")).intValue();
+            }
+            if (props.containsKey("mp3.frequency.hz")){
+                rate = ((Integer) props.get("mp3.frequency.hz")).intValue();
+            }
+            if (props.containsKey("mp3.bitrate.nominal.bps")){
+                nominalbitrate = ((Integer) props.get("mp3.bitrate.nominal.bps")).intValue();
+            }
+            if (props.containsKey("mp3.version.layer")){
+                layer = "Layer " + props.get("mp3.version.layer");
+            }
             if (props.containsKey("mp3.version.mpeg")) {
                 version = (String) props.get("mp3.version.mpeg");
-                if (version.equals("1")) version = "MPEG1";
-                else if (version.equals("2")) version = "MPEG2-LSF";
-                else if (version.equals("2.5")) version = "MPEG2.5-LSF";
+                if (version.equals("1")){
+                    version = "MPEG1";
+                }
+                else if (version.equals("2")){
+                    version = "MPEG2-LSF";
+                }
+                else if (version.equals("2.5")){
+                    version = "MPEG2.5-LSF";
+                }
             }
             if (props.containsKey("mp3.mode")) {
                 final int mode = ((Integer) props.get("mp3.mode")).intValue();
-                if (mode == 0) channelsMode = "Stereo";
-                else if (mode == 1) channelsMode = "Joint Stereo";
-                else if (mode == 2) channelsMode = "Dual Channel";
-                else if (mode == 3) channelsMode = "Single Channel";
+                if (mode == 0){
+                    channelsMode = "Stereo";
+                }
+                else if (mode == 1){
+                    channelsMode = "Joint Stereo";
+                }
+                else if (mode == 2){
+                    channelsMode = "Dual Channel";
+                }
+                else if (mode == 3){
+                    channelsMode = "Single Channel";
+                }
             }
-            if (props.containsKey("mp3.crc")) crc = ((Boolean) props.get("mp3.crc")).booleanValue();
-            if (props.containsKey("mp3.vbr")) vbr = ((Boolean) props.get("mp3.vbr")).booleanValue();
-            if (props.containsKey("mp3.copyright")) copyright = ((Boolean) props.get("mp3.copyright")).booleanValue();
-            if (props.containsKey("mp3.original")) original = ((Boolean) props.get("mp3.original")).booleanValue();
+            if (props.containsKey("mp3.crc")){
+                crc = ((Boolean) props.get("mp3.crc")).booleanValue();
+            }
+            if (props.containsKey("mp3.vbr")){
+                vbr = ((Boolean) props.get("mp3.vbr")).booleanValue();
+            }
+            if (props.containsKey("mp3.copyright")){
+                copyright = ((Boolean) props.get("mp3.copyright")).booleanValue();
+            }
+            if (props.containsKey("mp3.original")){
+                original = ((Boolean) props.get("mp3.original")).booleanValue();
+            }
             emphasis = "none";
-            if (props.containsKey("title")) title = (String) props.get("title");
-            if (props.containsKey("author")) artist = (String) props.get("author");
-            if (props.containsKey("album")) album = (String) props.get("album");
-            if (props.containsKey("date")) year = (String) props.get("date");
-            if (props.containsKey("duration")) total = (long) Math.round((((Long) props.get("duration")).longValue()) / 1000000);
-            if (props.containsKey("mp3.id3tag.genre")) genre = (String) props.get("mp3.id3tag.genre");
+            if (props.containsKey("title")){
+                title = (String) props.get("title");
+            }
+            if (props.containsKey("author")){
+                artist = (String) props.get("author");
+            }
+            if (props.containsKey("album")){
+                album = (String) props.get("album");
+            }
+            if (props.containsKey("date")){
+                year = (String) props.get("date");
+            }
+            if (props.containsKey("duration")){
+                total = (long) Math.round((((Long) props.get("duration")).longValue()) / 1000000);
+            }
+            if (props.containsKey("mp3.id3tag.genre")){
+                genre = (String) props.get("mp3.id3tag.genre");
+            }
             if (props.containsKey("mp3.id3tag.track")) {
                 try {
                     track = Integer.parseInt((String) props.get("mp3.id3tag.track"));
@@ -186,7 +242,7 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    protected void loadInfo(URL input) throws IOException, UnsupportedAudioFileException {
+    private void loadInfo(URL input) throws IOException, UnsupportedAudioFileException {
         final AudioFileFormat aff = AudioSystem.getAudioFileFormat(input);
         loadInfo(aff);
         loadShoutastInfo(aff);
@@ -199,16 +255,19 @@ public class MpegInfo implements TagInfo {
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
-    protected void loadShoutastInfo(AudioFileFormat aff) throws IOException, UnsupportedAudioFileException {
+    @SuppressWarnings("unchecked")
+    private void loadShoutastInfo(AudioFileFormat aff) throws IOException, UnsupportedAudioFileException {
         final String type = aff.getType().toString();
-        if (!type.equalsIgnoreCase("mp3")) throw new UnsupportedAudioFileException("Not MP3 audio format");
+        if (!type.equalsIgnoreCase("mp3")){
+            throw new UnsupportedAudioFileException("Not MP3 audio format");
+        }
         if (aff instanceof TAudioFileFormat) {
             final Map<String,Object> props = ((TAudioFileFormat) aff).properties();
             // Try shoutcast meta data (if any).
             final Iterator<String> it = props.keySet().iterator();
-            this.comments = new Vector<String>();
+            String key;
             while (it.hasNext()) {
-                String key = (String) it.next();
+                key = it.next();
                 if (key.startsWith("mp3.shoutcast.metadata.")) {
                     String value =  (String) props.get(key);
                     key = key.substring(23, key.length());
@@ -216,9 +275,7 @@ public class MpegInfo implements TagInfo {
                         title = value;
                     } else if (key.equalsIgnoreCase("icy-genre")) {
                         genre = value;
-                    } else {
-                        comments.add(key + "=" + value);
-                    }
+                    } 
                 }
             }
         }
@@ -297,10 +354,6 @@ public class MpegInfo implements TagInfo {
 
     public String getGenre() {
         return genre;
-    }
-
-    public Vector<String> getComment() {
-        return comments;
     }
 
     public String getYear() {
