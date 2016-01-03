@@ -14,9 +14,10 @@ public class AudioController implements BasicPlayerListener{
     private List<String> playlist = new ArrayList<>();
     final private BasicPlayer player;
     final private BasicController control;
-    private int counter = 0;
-    private PrintStream out ;
     final private Random rnd = new Random();
+    private int counter = 0;
+    private final PrintStream out ;
+    
     
     public AudioController(){
         
@@ -86,7 +87,7 @@ public class AudioController implements BasicPlayerListener{
     public void stateUpdated(final BasicPlayerEvent event) {
             // Notification of BasicPlayer states (opened, playing, end of media, ...)
             display("stateUpdated : "+event.toString());
-            if (event.getCode()==BasicPlayerEvent.STOPPED) {
+            if (event.getCode()==BasicPlayerEvent.EOM) {
                     shuffleReproducing();
             }
     }
