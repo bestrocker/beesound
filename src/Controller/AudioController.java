@@ -87,7 +87,7 @@ public class AudioController implements BasicPlayerListener{
             // Notification of BasicPlayer states (opened, playing, end of media, ...)
             display("stateUpdated : "+event.toString());
             if (event.getCode()==BasicPlayerEvent.STOPPED) {
-                    linearReproducing();
+                    shuffleReproducing();
             }
     }
     
