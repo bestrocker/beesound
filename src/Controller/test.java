@@ -1,14 +1,15 @@
 package Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class test {
 
-    public static void main(String[] args) throws InterruptedException {
-        
+    public static void main(String[] args) {
+        /*
         String dir = "/home/bestrocker221/Dropbox/Musica/";
         File mydir = new File(dir);
         
@@ -20,10 +21,13 @@ public class test {
         AudioController audio = new AudioController();
         audio.setPlaylist(list);
         audio.play();
-//        Thread.sleep(500);
-//        System.out.println("seeking");
-        
-        //audio.seek(1000);
+        */
+        FileController fc = new FileController();
+        try {
+            fc.importToLibrary("/home/bestrocker221/Salmo-1984.mp3", "/home/bestrocker221/Arduino/");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
