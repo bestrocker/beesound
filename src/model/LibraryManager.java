@@ -46,8 +46,9 @@ public class LibraryManager {   // this class is implemented using the singleton
         return this.playlistList;
     }
 
-    public void newSong(String title, String album, String artist, String genre, double duration, Path path) {
-        Song song = new Song(title, album, artist, genre, duration, path);
+    public void newSong(String title, String album, String artist, String genre, String year, 
+            double duration, int bitRate, long size, Path path) {
+        Song song = new Song(title, album, artist, genre, year, duration, bitRate, size, path);
         this.songList.add(song);
         // add serialization
     }
