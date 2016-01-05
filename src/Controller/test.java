@@ -7,6 +7,7 @@ import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class test {
@@ -32,22 +33,16 @@ public class test {
             e.printStackTrace();
         }
         */
-        final String libraryPath = System.getProperty("user.home")+"/beesound/";
+        System.out.println(new Date());
+        Log c = new Log("/home/bestrocker221/tette.txt");
         
-        System.out.println(System.getProperty("user.home")+"/");
-        if (Files.notExists(Paths.get(libraryPath), LinkOption.NOFOLLOW_LINKS)){
-            new File(libraryPath).mkdirs();
-            System.out.println("Library directory created");
-        }
-        if(Files.notExists(Paths.get(libraryPath+"properties.txt"), LinkOption.NOFOLLOW_LINKS)){
-            try {
-                new File(libraryPath+"properties.txt").createNewFile();
-                System.out.println("properties file created");
-            } catch (IOException e) {
-                System.err.println("cannot create properties File\n");
-                e.printStackTrace();
-            }
-        }
+        Log.INFO("ciao");
+        Log.INFO("ciao");
+        Log.PROGRAM("avviato");
+        Log.INFO("ciao");
+        Log.INFO("ciao");
+        Log.PROGRAM("chiuso");
+        
     }
 
 }
