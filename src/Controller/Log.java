@@ -8,12 +8,16 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 public class Log {
 
     private static PrintWriter logWriter;
     
-    public Log(String logfile) {
+    //private final Log SINGLELOG = new Log(FileController.logPath);
+    
+    public Log(final String logfile) {
         try {
             System.out.println(logfile);
             if (Files.notExists(Paths.get(logfile), LinkOption.NOFOLLOW_LINKS)){
@@ -24,6 +28,17 @@ public class Log {
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+    
+    public static Optional<List<String>> getLogLines(){
+        List<String> l = null;
+        try {
+            l =  Files.readAllLines(Paths.get(FileController.logPath));
+        } catch (IOException e) {
+            Log.ERROR("Can't parse log into List<String>. getLogLines Failed.");
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(l);
     }
     
     public static void INFO(final String msg) {
