@@ -20,6 +20,12 @@ public interface SystemManager {
     List<String> listAllSongPath(final File directory);
     
     /**
+     * Return a list of string representing the absolute path of every mp3 song in the default Music directory
+     * @return a List<String>
+     */
+    List<String> listAllSongPath();
+    
+    /**
      * Import the given mp3 into the library.
      * @param pathSource
      */

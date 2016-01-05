@@ -7,16 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
 
 public class AudioController implements BasicPlayerListener{
     
-    private List<String> playlist = new ArrayList<>();
+    private List<String> playlist;
     final private BasicPlayer player;
     final private BasicController control;
     final private Random rnd = new Random();
     private int counter = 0;
-    private final PrintStream out ;
+    final private  PrintStream out ;
     
     
     public AudioController(){
@@ -29,13 +30,18 @@ public class AudioController implements BasicPlayerListener{
     
     public void setPlaylist(final List<String> playlist){
         this.playlist = playlist;
+        Log.INFO("New playlist set");
     }
+    
     public void addSongInPlaylist(final String song){
         this.playlist.add(song);
+        Log.INFO(song +" added to current playlist");
+        
     }
     public List<String> getPlaylist(){
         return this.playlist;
     }
+    
     public void seek(final int nbytes){
         try {
             this.control.seek(nbytes);
