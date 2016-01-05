@@ -33,6 +33,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This class gives information (audio format and comments) about MPEG file or URL.
@@ -336,24 +337,25 @@ public class MpegInfo implements TagInfo {
     public void setTitle(final String title){
         this.title=title;
     }
-    public String getArtist() {
-        return artist;
+    @Override
+    public Optional<String> getArtist() {
+        return Optional.ofNullable(artist);
     }
 
-    public String getAlbum() {
-        return album;
+    public Optional<String> getAlbum() {
+        return Optional.ofNullable(album);
     }
 
     public int getTrack() {
         return track;
     }
-
-    public String getGenre() {
-        return genre;
+    
+    public Optional<String> getGenre() {
+        return Optional.ofNullable(genre);
     }
 
-    public String getYear() {
-        return year;
+    public Optional<String> getYear() {
+        return Optional.ofNullable(year);
     }
 
     /**

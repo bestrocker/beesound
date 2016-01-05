@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Optional;
+
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
@@ -75,27 +77,27 @@ public interface TagInfo
      *
      * @return the artist that performed the song
      */
-    public String getArtist();
+    public Optional<String> getArtist();
 
     /**
      * Get the name of the album upon which the song resides
      *
      * @return the album name
      */
-    public String getAlbum();
+    public Optional<String> getAlbum();
 
     /**
      * Get the genre string of the music
      *
      * @return the genre string
      */
-    public String getGenre();
+    public Optional<String> getGenre();
 
     /**
      * Get the year the track was released
      *
      * @return the year the track was released
      */
-    public String getYear();
+    public Optional<String> getYear();
 
 }
