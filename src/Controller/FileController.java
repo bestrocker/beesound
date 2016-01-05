@@ -17,17 +17,42 @@ import java.util.List;
 public  class FileController implements SystemManager{
 
     public static final String libraryPath = System.getProperty("user.dir")+"/beesound/";
-    private BufferedReader propertiesRead;
-    private BufferedWriter propertiesWrite;
-    public File properties;
+    private  final static String logPath = libraryPath+"LOG.txt";
+    private  final String propPath = libraryPath+"properties.txt";
+    private  final String musicDirPath = libraryPath + "Music/";
+    private  final BufferedReader propertiesRead;
+    private  final BufferedWriter propertiesWrite;
+    private static final Log log = new Log(logPath);
+    private  final File properties;
+    private  final File musicDir;
     
     public FileController() {
+        this.properties = new File(propPath);
+        this.musicDir = new File(musicDirPath);
+        initialize();
+        try {
+            if (Files.notExists(Paths.get(logPath), LinkOption.NOFOLLOW_LINKS)){
+                new File(logPath).createNewFile();
+            }
+            
+            this.propertiesRead = new BufferedReader(new FileReader(this.properties));
+            this.propertiesWrite = new BufferedWriter(new FileWriter(this.properties));
+        } catch (IOException e) {
+            System.out.println("Buffer and logger setted");
+            e.printStackTrace();
+        }
         
+    }
+    
+    private void initialize() {
         if (Files.notExists(Paths.get(libraryPath), LinkOption.NOFOLLOW_LINKS)){
             new File(libraryPath).mkdirs();
-            System.out.println("Library directory created");
+            ("Library directory created");
         }
-        this.properties = new File(libraryPath+"properties.txt");
+        if (Files.notExists(this.musicDir.toPath(), LinkOption.NOFOLLOW_LINKS)){
+            new File(musicDirPath).mkdirs();
+            System.out.println("Music Directory created");
+        }
         if (Files.notExists(this.properties.toPath(), LinkOption.NOFOLLOW_LINKS)){
             try {
                 this.properties.createNewFile();
@@ -37,13 +62,8 @@ public  class FileController implements SystemManager{
                 e.printStackTrace();
             }
         }
-        try {
-            this.propertiesRead = new BufferedReader(new FileReader(this.properties));
-            this.propertiesWrite = new BufferedWriter(new FileWriter(this.properties));
-        } catch (IOException e) {
-            System.out.println("Buffer setted");
-            e.printStackTrace();
-        }
+        
+        
     }
     
     public List<File> listAllFilesInDir(final File directory) {
