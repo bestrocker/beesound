@@ -87,6 +87,10 @@ public  class FileController implements SystemManager{
                                    .forEach(i->list.add(i.getAbsolutePath()));
         return list;
     }
+    @Override
+    public List<String> listAllSongPath(){
+        return listAllSongPath(new File(this.musicDirPath));
+    }
     
     @Override
     public List<String> getPlaylistSongs(final File playlist) throws IOException{
