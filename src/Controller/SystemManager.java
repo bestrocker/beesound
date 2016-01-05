@@ -23,5 +23,13 @@ public interface SystemManager {
      * Import the given mp3 into the library.
      * @param pathSource
      */
-    void importToLibrary(final String mp3Source, final String LibraryPath) throws IOException;
+    void importToLibrary(final String mp3Source) throws IOException;
+    
+    /**
+     * Return a List of every song's absolute path contained in the given playlist 
+     * @param playlist
+     * @return
+     * @throws IOException
+     */
+    List<String> getPlaylistSongs(final File playlist) throws IOException;
 }

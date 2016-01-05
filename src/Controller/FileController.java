@@ -18,14 +18,18 @@ public  class FileController implements SystemManager{
     public static final  String logPath = libraryPath+"LOG.txt";
     private  final String propPath = libraryPath+"properties.txt";
     private  final String musicDirPath = libraryPath + "Music/";
+    private  final String playlistDirPath = libraryPath + "Playlist/";
+    
     private  PrintWriter propertiesWrite;
     private  final File properties;
-    private  final File musicDir;
+   // private  final File musicDir;
+ //   private  final File playlistDir;
     
     public FileController() {
         
         this.properties = new File(propPath);
-        this.musicDir = new File(musicDirPath);
+       // this.musicDir = new File(musicDirPath);
+       // this.playlistDir = new File(playlistDirPath);
         initializeLibFolder();
         initialize();
         
@@ -37,16 +41,20 @@ public  class FileController implements SystemManager{
             new File(libraryPath).mkdirs();
         }
         Log.initializeLogger();
-        Log.PROGRAM("root library folder loaded");
+        Log.PROGRAM("Root library folder loaded");
     }
     
     private void initialize() {
         
-        if (Files.notExists(this.musicDir.toPath(), LinkOption.NOFOLLOW_LINKS)){
+        if (Files.notExists(Paths.get(this.musicDirPath), LinkOption.NOFOLLOW_LINKS)){
             new File(musicDirPath).mkdirs();
             Log.PROGRAM("Music Directory created");
         }
-        if (Files.notExists(this.properties.toPath(), LinkOption.NOFOLLOW_LINKS)){
+        if (Files.notExists(Paths.get(this.playlistDirPath), LinkOption.NOFOLLOW_LINKS)){
+            new File(this.playlistDirPath).mkdirs();
+            Log.PROGRAM("Playlist Directory created");
+        }
+        if (Files.notExists(Paths.get(this.propPath), LinkOption.NOFOLLOW_LINKS)){
             try {
                 this.properties.createNewFile();
                 Log.PROGRAM("properties file created");
@@ -77,17 +85,18 @@ public  class FileController implements SystemManager{
         Arrays.asList(directory.listFiles()).stream()
                                    .filter(i->i.getAbsolutePath().endsWith("mp3"))
                                    .forEach(i->list.add(i.getAbsolutePath()));
-        Paths.get("/home/");
         return list;
     }
-
-    /*
-     * NOTA BENE: libraryPath DEVE includere il "/" finale   (non-Javadoc)
-     * @see Controller.SystemManager#importToLibrary(java.io.File, java.lang.String)
-     */
-    public  void importToLibrary(final String pathSource, final String libraryPath) throws IOException {
+    
+    @Override
+    public List<String> getPlaylistSongs(final File playlist) throws IOException{
+        return Files.readAllLines(playlist.toPath());
+    }
+    
+    @Override
+    public  void importToLibrary(final String pathSource) throws IOException {
         Files.copy(Paths.get(pathSource),
-                   Paths.get(libraryPath+(pathSource.substring((pathSource.lastIndexOf("/"))+1))),
+                   Paths.get(this.musicDirPath),
                    StandardCopyOption.COPY_ATTRIBUTES);
         
     }
