@@ -1,14 +1,15 @@
 package model;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 public class Song {
        
     private String title;
-    private String album;
-    private String artist;
-    private String genre;
-    private String year;    
+    private Optional<String> album;
+    private Optional<String> artist;
+    private Optional<String> genre;
+    private Optional<String> year;    
     private double duration;    
     private int bitRate;
     private int reproductionsCounter;
@@ -22,8 +23,8 @@ public class Song {
         this.genre = DEFAULT;
     }*/    
     
-    public Song(String title, String album, String artist, String genre, String year,
-            double duration, int bitRate, long size, Path path) {
+    public Song(String title, Optional<String> album, Optional<String> artist, Optional<String> genre, 
+            Optional<String> year, double duration, int bitRate, long size, Path path) {
         this.title = title;
         this.album = album;
         this.artist = artist;
@@ -43,27 +44,27 @@ public class Song {
         this.title = title;
     }
 
-    public String getAlbum() {
+    public Optional<String> getAlbum() {
         return this.album;
     }
 
-    public void setAlbum(String album) {
+    public void setAlbum(Optional<String> album) {
         this.album = album;
     }
 
-    public String getArtist() {
+    public Optional<String> getArtist() {
         return this.artist;
     }
 
-    public void setArtist(String artist) {
+    public void setArtist(Optional<String> artist) {
         this.artist = artist;
     }
 
-    public String getGenre() {
+    public Optional<String> getGenre() {
         return this.genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(Optional<String> genre) {
         this.genre = genre;
     }
 
@@ -83,11 +84,11 @@ public class Song {
         this.path = path;
     }
 
-    public String getYear() {
+    public Optional<String> getYear() {
         return this.year;
     }
     
-    public void setYear(String year) {
+    public void setYear(Optional<String> year) {
         this.year = year;
     }
     
