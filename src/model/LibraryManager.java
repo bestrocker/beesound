@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibraryManager {   // this class is implemented using the singleton pattern
+public class LibraryManager implements Manager{   // this class is implemented using the singleton pattern
     
     private static final LibraryManager INSTANCE = new LibraryManager();
     
@@ -45,10 +45,9 @@ public class LibraryManager {   // this class is implemented using the singleton
     public List<Playlist> getPlaylistList() {
         return this.playlistList;
     }
-
-    public void newSong(String title, String album, String artist, String genre, String year, 
-            double duration, int bitRate, long size, Path path) {
-        Song song = new Song(title, album, artist, genre, year, duration, bitRate, size, path);
+    
+    @Override
+    public void addSongToLibrary(Song song) {
         this.songList.add(song);
         // add serialization
     }
@@ -77,7 +76,8 @@ public class LibraryManager {   // this class is implemented using the singleton
         //add serialization
     }
     
-    
-    
-
+    @Override
+    public void serializeData(Path path) {
+        
+    }
 }
