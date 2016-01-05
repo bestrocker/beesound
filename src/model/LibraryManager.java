@@ -22,7 +22,7 @@ public class LibraryManager implements Manager{   // this class is implemented u
         this.playlistList = new ArrayList<>();
     }
     
-    public LibraryManager getInstance() {
+    public static LibraryManager getInstance() {
         return INSTANCE;
     }
 
