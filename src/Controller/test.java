@@ -1,7 +1,9 @@
 package Controller;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
@@ -33,9 +35,12 @@ public class test {
             e.printStackTrace();
         }
         */
-        System.out.println(new Date());
-        Log c = new Log("/home/bestrocker221/tette.txt");
-        
+        System.out.println(System.getProperty("user.home"));
+        FileController fc = new FileController();
+        Log.INFO("program started");
+        Log.INFO("program closed");
+//        Log c = new Log("/home/bestrocker221/tette.txt");
+        /*
         Log.INFO("ciao");
         Log.INFO("ciao");
         Log.PROGRAM("avviato");
@@ -44,7 +49,7 @@ public class test {
         Log.INFO("ciao");
         Log.PROGRAM("chiuso");
         Log.getLogLines().get().stream().forEach(System.out::println);
-        
+        */
     }
 
 }
