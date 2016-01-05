@@ -1,11 +1,9 @@
 package Controller;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
@@ -16,34 +14,34 @@ import java.util.List;
 
 public  class FileController implements SystemManager{
 
-    public static final String libraryPath = System.getProperty("user.dir")+"/beesound/";
+    public static final String libraryPath = System.getProperty("user.home")+"/beesound/";
     public static final  String logPath = libraryPath+"LOG.txt";
     private  final String propPath = libraryPath+"properties.txt";
     private  final String musicDirPath = libraryPath + "Music/";
-    //private  final BufferedReader propertiesRead;
-    private  BufferedWriter propertiesWrite;
+    private  PrintWriter propertiesWrite;
     private  final File properties;
     private  final File musicDir;
     
     public FileController() {
+        
         this.properties = new File(propPath);
         this.musicDir = new File(musicDirPath);
+        initializeLibFolder();
         initialize();
-        try {
-            //this.propertiesRead = new BufferedReader(new FileReader(this.properties));
-            this.propertiesWrite = new BufferedWriter(new FileWriter(this.properties));
-        } catch (IOException e) {
-            System.out.println("Buffer and logger setted");
-            e.printStackTrace();
-        }
+        
         
     }
     
-    private void initialize() {
+    private void initializeLibFolder(){
         if (Files.notExists(Paths.get(libraryPath), LinkOption.NOFOLLOW_LINKS)){
             new File(libraryPath).mkdirs();
-            Log.PROGRAM("Library directory created");
         }
+        Log.initializeLogger();
+        Log.PROGRAM("root library folder loaded");
+    }
+    
+    private void initialize() {
+        
         if (Files.notExists(this.musicDir.toPath(), LinkOption.NOFOLLOW_LINKS)){
             new File(musicDirPath).mkdirs();
             Log.PROGRAM("Music Directory created");
@@ -56,6 +54,13 @@ public  class FileController implements SystemManager{
                 Log.ERROR("Cannot create properties File\n");
                 e.printStackTrace();
             }
+        }
+        try {
+            //this.propertiesRead = new BufferedReader(new FileReader(this.properties));
+            this.propertiesWrite = new PrintWriter(new FileWriter(this.properties));
+        } catch (IOException e) {
+            Log.ERROR("Buffer and logger not set, error in FileController constructor");
+            e.printStackTrace();
         }
         
         
