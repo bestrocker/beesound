@@ -6,25 +6,18 @@ import java.util.Optional;
 public class Song {
        
     private String title;
-    private Optional<String> album;
-    private Optional<String> artist;
-    private Optional<String> genre;
-    private Optional<String> year;    
+    private String album;
+    private String artist;
+    private String genre;
+    private String year;    
     private double duration;    
     private int bitRate;
     private int reproductionsCounter;
     private long size;
     private Path path;
-
-    /*public Song() {
-        this.title = DEFAULT;
-        this.album = DEFAULT;
-        this.artist = DEFAULT;
-        this.genre = DEFAULT;
-    }*/    
-    
-    public Song(String title, Optional<String> album, Optional<String> artist, Optional<String> genre, 
-            Optional<String> year, double duration, int bitRate, long size, Path path) {
+   
+    public Song(String title, String album, String artist, String genre, 
+            String year, double duration, int bitRate, long size, Path path) {
         this.title = title;
         this.album = album;
         this.artist = artist;
@@ -35,69 +28,101 @@ public class Song {
         this.size = size;
         this.path = path;
     }
+    
+    public static class Builder {       // Builder pattern is implemented here 
+        
+        private String title;
+        private String album;
+        private String artist;
+        private String genre;
+        private String year;    
+        private double duration;    
+        private int bitRate;
+        private int reproductionsCounter = 0;
+        private long size;
+        private Path path;     
+        
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+        
+        public Builder album(Optional<String> album) {
+            this.album = album.get();
+            return this;
+        }
+        
+        public Builder artist(Optional<String> artist) {
+            this.artist = artist.get();
+            return this;
+        }
+        
+        public Builder genre(Optional<String> genre) {
+            this.genre = genre.get();
+            return this;            
+        }
+        
+        public Builder year(Optional<String> year) {
+            this.year = year.get();
+            return this;
+        }
+        
+        public Builder duration(double duration) {
+            this.duration = duration;
+            return this;
+        }
+        
+        public Builder bitRate(int bitRate) {
+            this.bitRate = bitRate;
+            return this;            
+        }
+        
+        public Builder size(long size) {
+            this.size = size;
+            return this;
+        }
+        
+        public Builder path(Path path) {
+            this.path = path;
+            return this;
+        }
+        
+        public Song build() {
+            return new Song(this.title, this.album, this.artist, this.genre, this.year, this.duration,
+                    this.bitRate, this.size, this.path);
+        }       
+    }
 
     public String getTitle() {
         return this.title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Optional<String> getAlbum() {
+    public String getAlbum() {
         return this.album;
     }
 
-    public void setAlbum(Optional<String> album) {
-        this.album = album;
-    }
-
-    public Optional<String> getArtist() {
+    public String getArtist() {
         return this.artist;
     }
 
-    public void setArtist(Optional<String> artist) {
-        this.artist = artist;
-    }
-
-    public Optional<String> getGenre() {
+    public String getGenre() {
         return this.genre;
-    }
-
-    public void setGenre(Optional<String> genre) {
-        this.genre = genre;
     }
 
     public double getDuration() {
         return this.duration;
     }
 
-    public void setDuration(double duration) {
-        this.duration = duration;
-    }
-
     public Path getPath() {
         return this.path;
     }
 
-    public void setPath(Path path) {
-        this.path = path;
-    }
-
-    public Optional<String> getYear() {
+    public String getYear() {
         return this.year;
-    }
-    
-    public void setYear(Optional<String> year) {
-        this.year = year;
     }
     
     public int getBitRate() {
         return this.bitRate;
-    }
-    
-    public void setBitRate(int bitRate) {
-        this.bitRate = bitRate; 
     }
     
     public int getReproductionsCounter() {
@@ -110,9 +135,5 @@ public class Song {
     
     public long getSize() {
         return this.size;
-    }
-    
-    public void setSize(long size) {
-        this.size = size;
     }
 }
