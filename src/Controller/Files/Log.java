@@ -48,13 +48,13 @@ public class Log {
     }
     
     public static void INFO(final String msg) {
-            Log.logWriter.println( "INFO: "+new Date() + " " + msg);
+        Log.logWriter.println( "INFO: "+new Date() + " " + msg);
     }
     public static void PROGRAM(final String msg) {
         Log.logWriter.println("PROGRAM: "+ new Date() + " " + msg);
     }
     public static void ERROR(final String msg) {
-        Log.logWriter.println("ERROR: "+ new Date() + " " + msg);
+        Log.logWriter.println("ERROR: "+ new Date() + " " + msg.toUpperCase());
     }
 
 }

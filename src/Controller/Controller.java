@@ -1,7 +1,10 @@
 package Controller;
 
+import java.io.IOException;
+import java.net.URL;
 import Controller.Audio.AudioController;
 import Controller.Files.FileController;
+import Controller.Files.Log;
 import model.LibraryManager;
 
 public class Controller implements ViewObserver{
@@ -15,10 +18,23 @@ public class Controller implements ViewObserver{
         this.model = model;        
         this.filecontroller = new FileController();
         this.audiocontroller = new AudioController();
-        loadInfoToLibrary();
+        try {
+            loadInfoToLibrary();
+        } catch (IOException e) {
+            Log.ERROR("Cannot load info into Library");
+            e.printStackTrace();
+        }
     }
     
-    void loadInfoToLibrary(){
-        
+    void loadInfoToLibrary() throws IOException{
+        this.filecontroller.listAllSongPath().stream()
+                           .forEach(i->{
+                                try {
+                                    this.audiocontroller.getMpegInfo().load(new URL(i));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                
+                            });
     }
 }
