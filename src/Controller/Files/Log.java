@@ -1,4 +1,4 @@
-package Controller;
+package Controller.Files;
 
 import java.io.File;
 import java.io.FileWriter;
