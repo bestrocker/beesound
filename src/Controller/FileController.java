@@ -17,12 +17,11 @@ import java.util.List;
 public  class FileController implements SystemManager{
 
     public static final String libraryPath = System.getProperty("user.dir")+"/beesound/";
-    private  final static String logPath = libraryPath+"LOG.txt";
+    public static final  String logPath = libraryPath+"LOG.txt";
     private  final String propPath = libraryPath+"properties.txt";
     private  final String musicDirPath = libraryPath + "Music/";
-    private  final BufferedReader propertiesRead;
-    private  final BufferedWriter propertiesWrite;
-    private static final Log log = new Log(logPath);
+    //private  final BufferedReader propertiesRead;
+    private  BufferedWriter propertiesWrite;
     private  final File properties;
     private  final File musicDir;
     
@@ -31,11 +30,7 @@ public  class FileController implements SystemManager{
         this.musicDir = new File(musicDirPath);
         initialize();
         try {
-            if (Files.notExists(Paths.get(logPath), LinkOption.NOFOLLOW_LINKS)){
-                new File(logPath).createNewFile();
-            }
-            
-            this.propertiesRead = new BufferedReader(new FileReader(this.properties));
+            //this.propertiesRead = new BufferedReader(new FileReader(this.properties));
             this.propertiesWrite = new BufferedWriter(new FileWriter(this.properties));
         } catch (IOException e) {
             System.out.println("Buffer and logger setted");
@@ -47,18 +42,18 @@ public  class FileController implements SystemManager{
     private void initialize() {
         if (Files.notExists(Paths.get(libraryPath), LinkOption.NOFOLLOW_LINKS)){
             new File(libraryPath).mkdirs();
-            ("Library directory created");
+            Log.PROGRAM("Library directory created");
         }
         if (Files.notExists(this.musicDir.toPath(), LinkOption.NOFOLLOW_LINKS)){
             new File(musicDirPath).mkdirs();
-            System.out.println("Music Directory created");
+            Log.PROGRAM("Music Directory created");
         }
         if (Files.notExists(this.properties.toPath(), LinkOption.NOFOLLOW_LINKS)){
             try {
                 this.properties.createNewFile();
-                System.out.println("properties file created");
+                Log.PROGRAM("properties file created");
             } catch (IOException e) {
-                System.err.println("cannot create properties File\n");
+                Log.ERROR("Cannot create properties File\n");
                 e.printStackTrace();
             }
         }

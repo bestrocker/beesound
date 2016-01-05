@@ -40,8 +40,10 @@ public class test {
         Log.INFO("ciao");
         Log.PROGRAM("avviato");
         Log.INFO("ciao");
+        Log.ERROR("ERRORE");
         Log.INFO("ciao");
         Log.PROGRAM("chiuso");
+        Log.getLogLines().get().stream().forEach(System.out::println);
         
     }
 
