@@ -23,6 +23,7 @@ package Controller.Audio;
  */
 
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +31,8 @@ import java.net.URL;
 import java.util.Optional;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+import Controller.Audio.MpegInfo.Duration;
 
 /**
  * This interface define needed features for song information.
@@ -99,5 +102,11 @@ public interface TagInfo
      * @return the year the track was released
      */
     public Optional<String> getYear();
-
+    
+    /**
+     * Get the song's duration.
+     * 
+     * @return a Dimension including minutes and seconds. Width = minutes, Height = seconds;
+     */
+    public Duration getDurationInMinutes();
 }

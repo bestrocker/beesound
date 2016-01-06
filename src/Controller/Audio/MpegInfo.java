@@ -26,6 +26,8 @@ import org.tritonus.share.sampled.file.TAudioFileFormat;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,6 +64,7 @@ public class MpegInfo implements TagInfo {
     private String title = null;
     private String artist = null;
     private String album = null;
+    private Duration durationInMinutes;
     
     public static MpegInfo getInstance(){
         return MpegInfo.SINGLEINSTANCE;
@@ -77,6 +80,18 @@ public class MpegInfo implements TagInfo {
         this.infoSong.put("year", this.year);
         this.infoSong.put("size", this.size);
         this.infoSong.put("location", this.location);
+        this.infoSong.put("duration ", this.total);
+        this.infoSong.put("Layer ", this.layer);
+        this.infoSong.put("version ", this.version);
+        this.infoSong.put("Channels ", this.channels);
+        this.infoSong.put("Channelsmode ", this.channelsMode); //Stereo
+        this.infoSong.put("Copyright ", this.copyright);
+        this.infoSong.put("emphasis ", this.emphasis);
+        this.infoSong.put("NominalBitrare ", this.nominalbitrate);
+        this.infoSong.put("Rate", this.rate); //HZ Stereo
+        this.infoSong.put("Version ", this.version);
+        this.infoSong.put("Dur min: ", this.durationInMinutes.getMin());
+        this.infoSong.put("Dur sec ", this.durationInMinutes.getSec());
         return this.infoSong;
     }
     
@@ -226,6 +241,7 @@ public class MpegInfo implements TagInfo {
             if (props.containsKey("duration")){
                 total = (long) Math.round((((Long) props.get("duration")).longValue()) / 1000000);
             }
+            this.durationInMinutes = new Duration((int)(this.total/60), (int)(this.total % 60));
             if (props.containsKey("mp3.id3tag.genre")){
                 genre = (String) props.get("mp3.id3tag.genre");
             }
@@ -392,6 +408,7 @@ public class MpegInfo implements TagInfo {
      */
     @Override
     public Optional<String> getYear() {
+        if(year == null) return Optional.empty();
         return Optional.ofNullable(year);
     }
 
@@ -402,5 +419,29 @@ public class MpegInfo implements TagInfo {
      */
     public String getChannelsMode() {
         return channelsMode;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Duration getDurationInMinutes() {
+        return durationInMinutes;
+        
+    }
+    
+    public static class Duration{
+        final private int min;
+        final private int sec;
+        public Duration(final int min, final int sec) {
+            this.min = min;
+            this.sec = sec;
+        }
+        public int getMin(){
+            return this.min;
+        }
+        public int getSec(){
+            return this.sec;
+        }
     }
 }
