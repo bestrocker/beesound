@@ -12,7 +12,7 @@ import Controller.Files.Log;
 import model.LibraryManager;
 import model.Song;
 
-public class Controller implements ViewObserver{
+public class Controller {
 
     private final LibraryManager model;
   //private final View view;
@@ -47,9 +47,9 @@ public class Controller implements ViewObserver{
                                 .album(info.getAlbum().orElse(unk))
                                 .artist(info.getArtist().orElse(unk))
                                 .bitRate(info.getBitRate())
-                                .year(info.getYear().orElse(unk))
                                 .genre(info.getGenre().orElse(unk))
                                 .size(info.getSize())
+                                .duration(info.getDurationInMinutes())
                                 .path(Paths.get(i))
                                 .build()
                                 );
@@ -65,12 +65,7 @@ public class Controller implements ViewObserver{
         c.audiocontroller.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
         c.audiocontroller.setPlaylist(l);
         c.audiocontroller.playPlayer();
-        Thread.sleep(10000);
-        c.audiocontroller.nextPlayer();
-        Thread.sleep(10000);
-        c.audiocontroller.nextPlayer();
-        Thread.sleep(10000);
-        c.audiocontroller.prevPlayer();
+        
         System.out.println("import fatto");
         Thread.sleep(200);
         for(Song i : c.model.getSongList()){
@@ -79,10 +74,11 @@ public class Controller implements ViewObserver{
             System.out.println("title "+i.getTitle());
             System.out.println("album" + i.getAlbum());
             System.out.println("artist "+i.getArtist());
-            System.out.println(i.getBitRate());
+            System.out.println("bitrate "+i.getBitRate());
             System.out.println("genre "+i.getGenre());
             System.out.println("size "+i.getSize());
             System.out.println("year " +i.getYear());
+            System.out.println("duration "+i.getDuration());
             System.out.println("FINE");
         }
     }
