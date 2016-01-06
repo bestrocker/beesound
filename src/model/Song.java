@@ -47,23 +47,23 @@ public class Song {
             return this;
         }
         
-        public Builder album(Optional<String> album) {
-            this.album = album.get();
+        public Builder album(String album) {
+            this.album = album;
             return this;
         }
         
-        public Builder artist(Optional<String> artist) {
-            this.artist = artist.get();
+        public Builder artist(String artist) {
+            this.artist = artist;
             return this;
         }
         
-        public Builder genre(Optional<String> genre) {
-            this.genre = genre.get();
+        public Builder genre(String genre) {
+            this.genre = genre;
             return this;            
         }
         
-        public Builder year(Optional<String> year) {
-            this.year = year.get();
+        public Builder year(String year) {
+            this.year = year;
             return this;
         }
         

@@ -99,10 +99,13 @@ public  class FileController implements SystemManager{
     
     @Override
     public  void importToLibrary(final String pathSource) throws IOException {
-        Files.copy(Paths.get(pathSource),
-                   Paths.get(this.musicDirPath),
+        String d = this.musicDirPath + pathSource.substring(pathSource.lastIndexOf("/"));
+       if(Files.notExists(Paths.get(d), LinkOption.NOFOLLOW_LINKS)){
+           Files.copy(Paths.get(pathSource),
+                   Paths.get(d),
                    StandardCopyOption.COPY_ATTRIBUTES);
-        
+           Log.INFO(pathSource +" added to library");
+       }
     }
     
 }

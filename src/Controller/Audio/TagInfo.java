@@ -70,7 +70,7 @@ public interface TagInfo
      *
      * @return the title of the song
      */
-    public String getTitle();
+    public Optional<String> getTitle();
 
     /**
      * Get the artist that performed the song

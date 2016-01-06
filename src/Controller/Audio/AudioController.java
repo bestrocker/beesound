@@ -52,6 +52,25 @@ public class AudioController implements BasicPlayerListener{
             Log.ERROR("Error seeking song");
         }
     }
+    public void next(){
+        try {
+            control.pause();
+        } catch (BasicPlayerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        linearReproducing();
+    }
+    public void prev(){
+        try {
+            control.stop();
+        } catch (BasicPlayerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        this.counter--;
+        this.play();
+    }
     public void play(){
         try {
             //System.out.println("canzone: "+this.playlist.get(this.counter));
