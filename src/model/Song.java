@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Dimension;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -9,15 +10,14 @@ public class Song {
     private String album;
     private String artist;
     private String genre;
-    private String year;    
-    private double duration;    
+    private Dimension duration;    
     private int bitRate;
     private int reproductionsCounter;
     private long size;
     private Path path;
    
     public Song(String title, String album, String artist, String genre, 
-            String year, double duration, int bitRate, long size, Path path) {
+            Dimension duration, int bitRate, long size, Path path) {
         this.title = title;
         this.album = album;
         this.artist = artist;
@@ -35,10 +35,9 @@ public class Song {
         private String album;
         private String artist;
         private String genre;
-        private String year;    
-        private double duration;    
+        private Dimension duration;    
         private int bitRate;
-        private int reproductionsCounter = 0;
+        //private int reproductionsCounter = 0;
         private long size;
         private Path path;     
         
@@ -47,27 +46,22 @@ public class Song {
             return this;
         }
         
-        public Builder album(Optional<String> album) {
-            this.album = album.get();
+        public Builder album(String album) {
+            this.album = album;
             return this;
         }
         
-        public Builder artist(Optional<String> artist) {
-            this.artist = artist.get();
+        public Builder artist(String artist) {
+            this.artist = artist;
             return this;
         }
         
-        public Builder genre(Optional<String> genre) {
-            this.genre = genre.get();
+        public Builder genre(String genre) {
+            this.genre = genre;
             return this;            
         }
         
-        public Builder year(Optional<String> year) {
-            this.year = year.get();
-            return this;
-        }
-        
-        public Builder duration(double duration) {
+        public Builder duration(Dimension duration) {
             this.duration = duration;
             return this;
         }
@@ -88,7 +82,7 @@ public class Song {
         }
         
         public Song build() {
-            return new Song(this.title, this.album, this.artist, this.genre, this.year, this.duration,
+            return new Song(this.title, this.album, this.artist, this.genre, this.duration, 
                     this.bitRate, this.size, this.path);
         }       
     }
@@ -109,7 +103,7 @@ public class Song {
         return this.genre;
     }
 
-    public double getDuration() {
+    public Dimension getDuration() {
         return this.duration;
     }
 
@@ -117,10 +111,6 @@ public class Song {
         return this.path;
     }
 
-    public String getYear() {
-        return this.year;
-    }
-    
     public int getBitRate() {
         return this.bitRate;
     }
@@ -129,11 +119,11 @@ public class Song {
         return this.reproductionsCounter;
     }
     
-    public void incrementCounter() {
-        this.reproductionsCounter++;
-    }
-    
     public long getSize() {
         return this.size;
+    }
+    
+    public void incrementCounter() {
+        this.reproductionsCounter++;
     }
 }
