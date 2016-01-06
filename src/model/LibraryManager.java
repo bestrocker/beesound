@@ -3,6 +3,7 @@ package model;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class LibraryManager implements Manager{   // this class is implemented using the singleton pattern
     
@@ -22,7 +23,7 @@ public class LibraryManager implements Manager{   // this class is implemented u
         this.playlistList = new ArrayList<>();
     }
     
-    public static LibraryManager getInstance() {
+    public LibraryManager getInstance() {
         return INSTANCE;
     }
 
@@ -80,4 +81,13 @@ public class LibraryManager implements Manager{   // this class is implemented u
     public void serializeData(Path path) {
         
     }
+    
+    public Song getSongFromPath(Path path) throws NoSuchElementException {
+        for (Song s : this.songList) {
+            if (s.getPath().equals(path)) {
+                return s;
+            } 
+        }
+        throw new NoSuchElementException("This song is not present in the list.");
+    }   
 }
