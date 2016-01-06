@@ -48,9 +48,51 @@ public class LibraryManager implements Manager{   // this class is implemented u
     }
     
     @Override
-    public void addSongToLibrary(Song song) {
-        this.songList.add(song);
-        // add serialization
+    public void addSongToLibrary(Song song) {   // raw version, try to improve
+        if (!this.albumList.contains(song.getAlbum())) {
+            this.newAlbum(song.getAlbum());
+        }
+        this.getAlbumFromList(song.getAlbum()).addSong(song);
+        if (!this.artistList.contains(song.getArtist())) {
+            this.newArtist(song.getArtist());
+        }
+        this.getArtistFromList(song.getArtist()).addAlbum(this.getAlbumFromList(song.getAlbum()));
+        if (!this.genreList.contains(song.getGenre())) {
+            this.newGenre(song.getGenre());
+        }
+        if (!this.getGenreFromList(song.getGenre()).getAlbumList().contains(song.getAlbum())) {
+            this.getGenreFromList(song.getGenre()).getAlbumList().add(this.getAlbumFromList(song.getAlbum()));
+        }
+        if (!this.getGenreFromList(song.getGenre()).getArtistList().contains(song.getArtist())) {
+            this.getGenreFromList(song.getGenre()).getArtistList().add(this.getArtistFromList(song.getArtist()));
+        }       
+    }
+    // try to reduce the private methods below
+    private Album getAlbumFromList(String title) throws NoSuchElementException {
+        for (Album a : this.albumList) {
+            if (a.getTitle().equals(title)) {
+                return a;
+            }
+        }
+        throw new NoSuchElementException("No such album in the library");
+    }
+    
+    private Artist getArtistFromList(String name) throws NoSuchElementException {
+        for (Artist a : this.artistList) {
+            if (a.getName().equals(name)) {
+                return a;
+            }
+        }
+        throw new NoSuchElementException("No such artist in the library");
+    }
+    
+    private Genre getGenreFromList(String name) throws NoSuchElementException {
+        for (Genre g : this.genreList) {
+            if (g.getName().equals(name)) {
+                return g;
+            }
+        }
+        throw new NoSuchElementException("No such genre in the library");
     }
     
     public void newAlbum(String title) {
