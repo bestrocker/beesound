@@ -2,7 +2,6 @@ package model;
 
 import java.awt.Dimension;
 import java.nio.file.Path;
-import java.util.Optional;
 
 public class Song {
        
