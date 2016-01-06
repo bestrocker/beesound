@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Dimension;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -9,14 +10,14 @@ public class Song {
     private String album;
     private String artist;
     private String genre;
-    private long duration;    
+    private Dimension duration;    
     private int bitRate;
     private int reproductionsCounter;
     private long size;
     private Path path;
    
     public Song(String title, String album, String artist, String genre, 
-            long duration, int bitRate, long size, Path path) {
+            Dimension duration, int bitRate, long size, Path path) {
         this.title = title;
         this.album = album;
         this.artist = artist;
@@ -34,7 +35,7 @@ public class Song {
         private String album;
         private String artist;
         private String genre;
-        private long duration;    
+        private Dimension duration;    
         private int bitRate;
         //private int reproductionsCounter = 0;
         private long size;
@@ -60,7 +61,7 @@ public class Song {
             return this;            
         }
         
-        public Builder duration(long duration) {
+        public Builder duration(Dimension duration) {
             this.duration = duration;
             return this;
         }
@@ -102,7 +103,7 @@ public class Song {
         return this.genre;
     }
 
-    public long getDuration() {
+    public Dimension getDuration() {
         return this.duration;
     }
 
