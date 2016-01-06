@@ -331,8 +331,8 @@ public class MpegInfo implements TagInfo {
         return total;
     }
     
-    public String getTitle() {
-        return title;
+    public Optional<String> getTitle() {
+        return Optional.ofNullable(title);
     }
     public void setTitle(final String title){
         this.title=title;
