@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public  class FileController implements SystemManager{
 
@@ -80,12 +81,11 @@ public  class FileController implements SystemManager{
     }
 
     @Override
-    public List<String> listAllSongPath(final File directory) {
-        List<String> list = new ArrayList<>();
-        Arrays.asList(directory.listFiles()).stream()
-                                   .filter(i->i.getAbsolutePath().endsWith("mp3"))
-                                   .forEach(i->list.add(i.getAbsolutePath()));
-        return list;
+    public List<String> listAllSongPath(final File directory) {        
+        return Arrays.asList(directory.listFiles()).stream()
+                .filter(i->i.getAbsolutePath().endsWith("mp3"))
+                .map(i->i.getAbsolutePath())
+                .collect(Collectors.toList());
     }
     @Override
     public List<String> listAllSongPath(){

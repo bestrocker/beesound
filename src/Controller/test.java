@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import Controller.Files.FileController;
 import Controller.Files.Log;
@@ -38,10 +39,20 @@ public class test {
             e.printStackTrace();
         }
         */
+        /*
         System.out.println(System.getProperty("user.home"));
         FileController fc = new FileController();
         Log.INFO("program started");
         Log.INFO("program closed");
+        */
+        
+            System.out.println(
+                    Arrays.asList(new File("/home/bestrocker221/Dropbox/Musica/").listFiles())
+                    .stream()
+                    .filter(i->i.getAbsolutePath().endsWith("mp3"))
+                    .map(i->i.getAbsolutePath())
+                    .collect(Collectors.toList()));
+        
 //        Log c = new Log("/home/bestrocker221/tette.txt");
         /*
         Log.INFO("ciao");
