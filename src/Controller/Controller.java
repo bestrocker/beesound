@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import Controller.Audio.AudioController;
+import Controller.Audio.MpegInfo;
 import Controller.Files.FileController;
 import Controller.Files.Log;
 import model.LibraryManager;
@@ -31,26 +32,27 @@ public class Controller implements ViewObserver{
     }
     
     void loadInfoToLibrary() throws IOException{
-        String unk = "Unknown";
+        final Optional<String> unk = Optional.of("Unknown");
+        
+        final MpegInfo info = new MpegInfo();
         
         this.filecontroller.listAllSongPath().stream()
                            .forEach(i->{
-                                try {
-                                    this.audiocontroller.getMpegInfo().load(new URL(i));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                
+                                
+                                
                                 this.model.addSongToLibrary(new Song.Builder()
-                                .title(this.audiocontroller.getMpegInfo().getTitle())
-                                .album(this.audiocontroller.getMpegInfo().getAlbum())
-                                .artist(this.audiocontroller.getMpegInfo().getArtist())
-                                .bitRate(this.audiocontroller.getMpegInfo().getBitRate())
-                                .year(this.audiocontroller.getMpegInfo().getYear())
-                                .genre(this.audiocontroller.getMpegInfo().getGenre())
-                                .size(this.audiocontroller.getMpegInfo().getSize())
+                                .title(info.getTitle())
+                                .album(info.getAlbum().)
+                                .artist(info.getArtist().orElseGet(unk))
+                                .bitRate(info.getBitRate())
+                                .year(info.getYear().orElseGet(unk))
+                                .genre(info.getGenre().orElseGet(unk))
+                                .size(info.getSize())
                                 .path(Paths.get(i))
                                 .build()
                                 );
-                            });
+                               });
+                            
     }
 }
