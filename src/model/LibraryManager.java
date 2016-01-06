@@ -89,5 +89,11 @@ public class LibraryManager implements Manager{   // this class is implemented u
             } 
         }
         throw new NoSuchElementException("This song is not present in the list.");
-    }   
+    }
+    
+    public List<String> getPathsFromPlaylist(Playlist playlist) {
+        List<String> list = new ArrayList<>();
+        playlist.getTrackList().forEach(x -> list.add(x.getPath().toString()));
+        return list;
+    }    
 }
