@@ -327,41 +327,70 @@ public class MpegInfo implements TagInfo {
     }
 
     /*-- TagInfo Implementation --*/
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getSamplingRate() {
         return rate;
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getBitRate() {
         return nominalbitrate;
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public long getPlayTime() {
         return total;
     }
-    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Optional<String> getTitle() {
         return Optional.ofNullable(title);
     }
     public void setTitle(final String title){
         this.title=title;
     }
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<String> getArtist() {
         return Optional.ofNullable(artist);
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Optional<String> getAlbum() {
         return Optional.ofNullable(album);
     }
-
+    
     public int getTrack() {
         return track;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public Optional<String> getGenre() {
         return Optional.ofNullable(genre);
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Optional<String> getYear() {
         return Optional.ofNullable(year);
     }

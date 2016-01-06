@@ -5,20 +5,19 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
 
 public class AudioController implements BasicPlayerListener{
     
     private List<String> playlist;
+    private int counter = 0;
+    private boolean strategy; /* if true linear, else shuffle */
     final private BasicPlayer player;
     final private BasicController control;
     final private Random rnd = new Random();
-    private int counter = 0;
     final private  PrintStream out ;
     final private MpegInfo mp3Info;
-    private boolean strategy; /* if true linear, else shuffle */
     
     /**
      * This enum contain the reproduction strategy for obtaining the next track to play
@@ -40,10 +39,11 @@ public class AudioController implements BasicPlayerListener{
     public AudioController(){
         
         this.player = new BasicPlayer();
-        this.control = (BasicController) player;
+        this.control = this.player;
         this.player.addBasicPlayerListener(this);
-        this.out = System.out;
         this.mp3Info = MpegInfo.getInstance();
+        this.out = System.out;
+        
     }
     
     /**
@@ -56,6 +56,7 @@ public class AudioController implements BasicPlayerListener{
     
     /**
      * Set the current Playlist to play to the given one.
+     * Be sure to pass an ArrayList.
      * @param playlist
      */
     public void setPlaylist(final List<String> playlist){
@@ -160,7 +161,6 @@ public class AudioController implements BasicPlayerListener{
      * Set the next song to reproduce.
      */
     private void nextSongPlayer(){
-        
         if(strategy) {
             if(this.counter + 1 > this.playlist.size()-1){
                 this.stopPlayer();
@@ -170,11 +170,10 @@ public class AudioController implements BasicPlayerListener{
             ++this.counter;
         } else {
             int c;
-            while ( (c=rnd.nextInt(this.playlist.size()) ) != this.counter ){
-                this.counter = c;
-            }
+            while ( (c=rnd.nextInt(this.playlist.size()) ) == this.counter ){}
+            this.counter = c;
         }
-            this.playPlayer();
+        this.playPlayer();
     }
     /*
     private void shuffleReproducing(){

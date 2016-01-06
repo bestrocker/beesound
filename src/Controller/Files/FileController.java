@@ -26,27 +26,25 @@ public  class FileController implements SystemManager{
    // private  final File musicDir;
  //   private  final File playlistDir;
     
+    /**
+     * Initialize FileController, Libraries folder, Logger, Properties.
+     */
     public FileController() {
         
         this.properties = new File(propPath);
        // this.musicDir = new File(musicDirPath);
        // this.playlistDir = new File(playlistDirPath);
-        initializeLibFolder();
         initialize();
         
         
     }
-    
-    private void initializeLibFolder(){
+
+    private void initialize() {
         if (Files.notExists(Paths.get(libraryPath), LinkOption.NOFOLLOW_LINKS)){
             new File(libraryPath).mkdirs();
         }
         Log.initializeLogger();
-        Log.PROGRAM("Root library folder loaded. STARTING PROGRAM");
-    }
-    
-    private void initialize() {
-        
+        Log.PROGRAM("Root Library folder loaded. STARTING PROGRAM");
         if (Files.notExists(Paths.get(this.musicDirPath), LinkOption.NOFOLLOW_LINKS)){
             new File(musicDirPath).mkdirs();
             Log.PROGRAM("Music Directory created");
@@ -71,15 +69,20 @@ public  class FileController implements SystemManager{
             Log.ERROR("Buffer and logger not set, error in FileController constructor");
             e.printStackTrace();
         }
-        
-        
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<File> listAllFilesInDir(final File directory) {
         return Arrays.asList(directory.listFiles());
         
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> listAllSongPath(final File directory) {        
         return Arrays.asList(directory.listFiles()).stream()
@@ -87,16 +90,26 @@ public  class FileController implements SystemManager{
                 .map(i->i.getAbsolutePath())
                 .collect(Collectors.toList());
     }
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> listAllSongPath(){
         return listAllSongPath(new File(this.musicDirPath));
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> getPlaylistSongs(final File playlist) throws IOException{
         return Files.readAllLines(playlist.toPath());
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public  void importToLibrary(final String pathSource) throws IOException {
        final String d = this.musicDirPath + pathSource.substring(pathSource.lastIndexOf("/"));

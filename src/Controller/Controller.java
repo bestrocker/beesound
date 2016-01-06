@@ -1,11 +1,9 @@
 package Controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import Controller.Audio.AudioController;
 import Controller.Audio.MpegInfo;
 import Controller.Audio.AudioController.REPRODUCTION_STRATEGY;
