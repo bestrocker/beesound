@@ -132,7 +132,6 @@ public class GUI {
 	    Image image = ImageIO.read(file);
 	    JLabel imageLabel = new JLabel(new ImageIcon(image));	    
 	    imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.5), 0));
-	    imageLabel.setAlignmentY(Component.TOP_ALIGNMENT);
 	    imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    rightPanel.add(imageLabel);
 
@@ -143,7 +142,6 @@ public class GUI {
 	    currentSongInfo.setFont(new Font("Dialog", Font.PLAIN, 11));
 	    currentSongInfo.setBackground(Color.WHITE);
 	    currentSongInfo.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.5), (int)(frame.getHeight() * 0.3)));
-	    currentSongInfo.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 	    currentSongInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    rightPanel.add(currentSongInfo);   
 		
