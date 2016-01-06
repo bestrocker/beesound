@@ -49,6 +49,7 @@ public class Controller {
                                 .bitRate(info.getBitRate())
                                 .genre(info.getGenre().orElse(unk))
                                 .size(info.getSize())
+                                .bitRate(info.getBitRate())
                                 .duration(info.getDurationInMinutes())
                                 .path(Paths.get(i))
                                 .build()
@@ -77,8 +78,7 @@ public class Controller {
             System.out.println("bitrate "+i.getBitRate());
             System.out.println("genre "+i.getGenre());
             System.out.println("size "+i.getSize());
-            System.out.println("year " +i.getYear());
-            System.out.println("duration "+i.getDuration());
+            System.out.println("duration "+i.getDuration().getMin()+":"+ i.getDuration().getSec());
             System.out.println("FINE");
         }
     }

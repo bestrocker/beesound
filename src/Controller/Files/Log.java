@@ -65,7 +65,7 @@ public class Log {
      * @param msg
      */
     public static void INFO(final String msg) {
-        Log.logWriter.println( "INFO: "+new Date() + " " + msg);
+        Log.logWriter.println( "INFO:\t"+new Date() + " " + msg);
     }
     
     /**
@@ -74,7 +74,7 @@ public class Log {
      * @param msg
      */
     public static void PROGRAM(final String msg) {
-        Log.logWriter.println("PROGRAM: "+ new Date() + " " + msg);
+        Log.logWriter.println("PROGRAM:\t"+ new Date() + " " + msg);
     }
     
     /**
@@ -83,7 +83,7 @@ public class Log {
      * @param msg
      */
     public static void ERROR(final String msg) {
-        Log.logWriter.println("ERROR: "+ new Date() + " " + msg.toUpperCase());
+        Log.logWriter.println("ERROR:\t"+ new Date() + " " + msg.toUpperCase());
     }
 
 }
