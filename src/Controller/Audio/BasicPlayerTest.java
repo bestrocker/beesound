@@ -22,7 +22,7 @@ public class BasicPlayerTest implements BasicPlayerListener {
     public static void main(String[] args) throws InterruptedException, IOException, UnsupportedAudioFileException {
             BasicPlayerTest test = new BasicPlayerTest();
             test.play("/home/bestrocker221/Salmo-1984.mp3");
-            MpegInfo infosong = new MpegInfo();
+            MpegInfo infosong = MpegInfo.getInstance();
             infosong.load(new File("/home/bestrocker221/Salmo-1984.mp3"));
             System.out.println(infosong.getInfo());
     }
