@@ -13,13 +13,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import Controller.Audio.AudioController;
+import Controller.Audio.AudioController.REPRODUCTION_STRATEGY;
 import Controller.Files.FileController;
 import Controller.Files.Log;
 
 public class test {
 
-    public static void main(String[] args) throws IOException {
-        /*
+    public static void main(String[] args) throws IOException, InterruptedException {
+        
         String dir = "/home/bestrocker221/Dropbox/Musica/";
         File mydir = new File(dir);
         
@@ -28,10 +30,18 @@ public class test {
                                    .filter(i->i.getAbsolutePath().endsWith("mp3"))
                                    .forEach(i->list.add(i.getAbsolutePath()));
         list.forEach(System.out::println);
+        
         AudioController audio = new AudioController();
         audio.setPlaylist(list);
-        audio.play();
-        
+        audio.playPlayer();
+        audio.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
+        Thread.sleep(12000);
+        audio.nextPlayer();
+        Thread.sleep(12000);
+        audio.nextPlayer();
+        Thread.sleep(12000);
+        audio.nextPlayer();
+        /*
         FileController fc = new FileController();
         try {
             fc.importToLibrary("/home/bestrocker221/Salmo-1984.mp3", "/home/bestrocker221/Arduino/");
@@ -45,14 +55,14 @@ public class test {
         Log.INFO("program started");
         Log.INFO("program closed");
         */
-        
+        /*
             System.out.println(
                     Arrays.asList(new File("/home/bestrocker221/Dropbox/Musica/").listFiles())
                     .stream()
                     .filter(i->i.getAbsolutePath().endsWith("mp3"))
                     .map(i->i.getAbsolutePath())
                     .collect(Collectors.toList()));
-        
+        */
 //        Log c = new Log("/home/bestrocker221/tette.txt");
         /*
         Log.INFO("ciao");

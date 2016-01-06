@@ -39,6 +39,9 @@ import java.util.Optional;
  * This class gives information (audio format and comments) about MPEG file or URL.
  */
 public class MpegInfo implements TagInfo {
+    
+    private static final MpegInfo SINGLEINSTANCE = new MpegInfo();
+    
     private int channels = -1;
     private String channelsMode = null;
     private String version = null;
@@ -60,6 +63,10 @@ public class MpegInfo implements TagInfo {
     private String artist = null;
     private String album = null;
     
+    public static MpegInfo getInstance(){
+        return MpegInfo.SINGLEINSTANCE;
+    }
+    
     private Map<String,Object> infoSong = new HashMap<String, Object>();
     
     public Map<String,Object> getInfo(){
@@ -72,10 +79,11 @@ public class MpegInfo implements TagInfo {
         this.infoSong.put("location", this.location);
         return this.infoSong;
     }
+    
     /**
      * Constructor.
      */
-    public MpegInfo() {
+    private MpegInfo() {
         super();
     }
 

@@ -8,6 +8,7 @@ import java.util.List;
 
 import Controller.Audio.AudioController;
 import Controller.Audio.MpegInfo;
+import Controller.Audio.AudioController.REPRODUCTION_STRATEGY;
 import Controller.Files.FileController;
 import Controller.Files.Log;
 import model.LibraryManager;
@@ -33,10 +34,8 @@ public class Controller implements ViewObserver{
     
     void loadInfoToLibrary() {
         final String unk = "";
-        
-        final MpegInfo info = new MpegInfo();
+        final MpegInfo info = MpegInfo.getInstance();
         this.filecontroller.listAllSongPath().stream().parallel()
-        
                            .forEach(i->{
                                synchronized(j){
                                    try {
@@ -65,15 +64,16 @@ public class Controller implements ViewObserver{
         for(Song s : c.model.getSongList()){
             l.add(s.getPath().toString());
         }
+        c.audiocontroller.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
         c.audiocontroller.setPlaylist(l);
-        c.audiocontroller.play();
+        c.audiocontroller.playPlayer();
         Thread.sleep(10000);
-        c.audiocontroller.next();
+        c.audiocontroller.nextPlayer();
         Thread.sleep(10000);
-        c.audiocontroller.next();
+        c.audiocontroller.nextPlayer();
         Thread.sleep(10000);
-        c.audiocontroller.prev();
-        /*System.out.println("import fatto");
+        c.audiocontroller.prevPlayer();
+        System.out.println("import fatto");
         Thread.sleep(200);
         for(Song i : c.model.getSongList()){
             System.out.println("INIZIO");
@@ -86,6 +86,6 @@ public class Controller implements ViewObserver{
             System.out.println("size "+i.getSize());
             System.out.println("year " +i.getYear());
             System.out.println("FINE");
-        }*/
+        }
     }
 }
