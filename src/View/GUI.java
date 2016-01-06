@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
@@ -21,18 +22,21 @@ import java.awt.Component;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.SwingConstants;
 
 public class GUI {
 	
 	private static final double PERC_HALF = 0.5;
 	private static final double PERC_QUATER = 0.25;
     private JFrame frame;
-    private String imageDirectory = System.getProperty("user.dir") + System.getProperty("file.separator") + "src"
-    		+ System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "bee3.jpeg";
+    private String pathImage = System.getProperty("user.dir") + System.getProperty("file.separator") + "src"
+    		+ System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "bee4.png";
     
 	/*GUI constructor*/
 	public GUI() throws IOException {
-		System.out.println(imageDirectory);
+		//System.out.println(System.getProperty("user.dir"));
+		//System.out.println(pathImage);
+		
 		
 		/*THE FRAME*/
 		frame = new JFrame("BeeSound example");
@@ -60,7 +64,7 @@ public class GUI {
 		leftPanel.setLayout(gridLeftPanel);
 		bigPanel.add(leftPanel, BorderLayout.WEST);
 		
-		/*buttons*/
+		/*left buttons*/
 		JButton button = new JButton("Brani");
 		button.setBorder(null);
 		button.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
@@ -93,7 +97,7 @@ public class GUI {
 		leftPanel.add(button_5);
 		
 		/*SELECTION PANEL*/
-		/*a box layout panel with otehr two panels inside*/
+		/*a box layout panel witch contains two panels*/
 		JPanel selectionPanel = new JPanel();
 		selectionPanel.setLayout(new BoxLayout(selectionPanel, BoxLayout.Y_AXIS));
 		bigPanel.add(selectionPanel);
@@ -105,7 +109,7 @@ public class GUI {
 		selectionPanel.add(listPanel);
 		listPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		/*second panel: information panel about the grid of records. will contain a label*/
+		/*second panel: information panel about the grid of records. it contains a label*/
 		JPanel counterPanel = new JPanel();
 		counterPanel.setBackground(Color.DARK_GRAY);
 		counterPanel.setMaximumSize(new Dimension(32767, 30));
@@ -118,22 +122,30 @@ public class GUI {
  
 		/*RIGHT PANEL*/
 		JPanel rightPanel = new JPanel();
+		rightPanel.setBackground(new Color(153, 204, 102));
 		rightPanel.setFont(new Font("SansSerif", Font.PLAIN, 12));
 	    bigPanel.add(rightPanel, BorderLayout.EAST);
 	    rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 	    
-	    Image image = ImageIO.read(getClass().getResource(imageDirectory));
-	    JLabel lblNewLabel = new JLabel(new ImageIcon(image));	    
-	    lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    lblNewLabel.setAlignmentY(Component.TOP_ALIGNMENT);
-	    rightPanel.add(lblNewLabel);
-	    
-	    JLabel lblNewLabel_1 = new JLabel("New label");
-	    lblNewLabel_1.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-	    lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    rightPanel.add(lblNewLabel_1);
-	    
-	    
+	    /*album/logo image*/
+	    File file = new File(pathImage);
+	    Image image = ImageIO.read(file);
+	    JLabel imageLabel = new JLabel(new ImageIcon(image));	    
+	    imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.5), 0));
+	    imageLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+	    imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    rightPanel.add(imageLabel);
+
+	    /*label with current song's info*/
+	    JLabel currentSongInfo = new JLabel("Current Song's Info");
+	    currentSongInfo.setHorizontalAlignment(SwingConstants.CENTER);
+	    currentSongInfo.setHorizontalTextPosition(SwingConstants.CENTER);
+	    currentSongInfo.setFont(new Font("Dialog", Font.PLAIN, 11));
+	    currentSongInfo.setBackground(Color.WHITE);
+	    currentSongInfo.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.5), (int)(frame.getHeight() * 0.3)));
+	    currentSongInfo.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+	    currentSongInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    rightPanel.add(currentSongInfo);   
 		
 		/*SOUTH PANEL: CONTROL PLAYER'S BUTTONS 
 		/*create a new flowlayout*/
@@ -163,35 +175,28 @@ public class GUI {
 		JMenu mnFile = new JMenu("File");
 		mnFile.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		menuBar.add(mnFile);
-		JMenu mnVisualizza = new JMenu("Visualizza");
-		mnVisualizza.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		menuBar.add(mnVisualizza);
-		JMenu mnModifica = new JMenu("Modifica");
-		mnModifica.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		menuBar.add(mnModifica);
 		JMenu mnHelp = new JMenu("Info");
 		mnHelp.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		menuBar.add(mnHelp);
 		
+		JMenuItem mntmInfoBeesound = new JMenuItem("Info Beesound");
+		mntmInfoBeesound.setFont(new Font("Dialog", Font.PLAIN, 11));
+		mnHelp.add(mntmInfoBeesound);
+		
 		/*add choice menu(JMenuItem)for jmenu file*/
-		JMenuItem mnFileChoice = new JMenuItem("choice");
+		JMenuItem mnFileChoice = new JMenuItem("Import");
+		mnFileChoice.setFont(new Font("Dialog", Font.PLAIN, 11));
 		mnFile.add(mnFileChoice);
-		JMenuItem mnFileChoice_1 = new JMenuItem("choice 1");
+		JMenuItem mnFileChoice_1 = new JMenuItem("Open");
+		mnFileChoice_1.setFont(new Font("Dialog", Font.PLAIN, 11));
 		mnFile.add(mnFileChoice_1);
 		
-		/*add choice menu(JMenuItem) for jmenu visualizza*/
-		JMenuItem mntmChoice = new JMenuItem("choice");
-		mnVisualizza.add(mntmChoice);
-		JMenuItem mntmChoice_1 = new JMenuItem("choice 1");
-		mnVisualizza.add(mntmChoice_1);
-		JMenuItem mntmChoice_2 = new JMenuItem("choice 2");
-		mnVisualizza.add(mntmChoice_2);
-		JMenuItem mntmChoiceFor = new JMenuItem("choice for");
-		mnVisualizza.add(mntmChoiceFor);		
+		JMenuItem mntmClose = new JMenuItem("Exit");
+		mntmClose.setFont(new Font("Dialog", Font.PLAIN, 11));
+		mnFile.add(mntmClose);
 
 		/*set frame details*/
 		frame.getContentPane().add(bigPanel);
-		//frame.setIconImage(resizedImg);
 		frame.setVisible(true);
 	}
 	
