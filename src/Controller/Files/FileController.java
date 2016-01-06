@@ -42,7 +42,7 @@ public  class FileController implements SystemManager{
             new File(libraryPath).mkdirs();
         }
         Log.initializeLogger();
-        Log.PROGRAM("Root library folder loaded");
+        Log.PROGRAM("Root library folder loaded. STARTING PROGRAM");
     }
     
     private void initialize() {
@@ -99,7 +99,7 @@ public  class FileController implements SystemManager{
     
     @Override
     public  void importToLibrary(final String pathSource) throws IOException {
-        String d = this.musicDirPath + pathSource.substring(pathSource.lastIndexOf("/"));
+       final String d = this.musicDirPath + pathSource.substring(pathSource.lastIndexOf("/"));
        if(Files.notExists(Paths.get(d), LinkOption.NOFOLLOW_LINKS)){
            Files.copy(Paths.get(pathSource),
                    Paths.get(d),
