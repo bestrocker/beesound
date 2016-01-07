@@ -44,7 +44,7 @@ public interface TagInfo
 
     public void load(URL input) throws IOException, UnsupportedAudioFileException;
 
-    public void load(File input) throws IOException, UnsupportedAudioFileException;
+    public boolean load(File input) throws IOException, UnsupportedAudioFileException;
 
     /**
      * Get Sampling Rate

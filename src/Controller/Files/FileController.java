@@ -69,16 +69,7 @@ public  class FileController implements SystemManager{
             e.printStackTrace();
         }*/
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<File> listAllFilesInDir(final File directory) {
-        return Arrays.asList(directory.listFiles());
-        
-    }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -110,14 +101,21 @@ public  class FileController implements SystemManager{
      * {@inheritDoc}
      */
     @Override
-    public  void importToLibrary(final String pathSource) throws IOException {
+    public  String importToLibrary(final String pathSource) {
        final String d = musicDirPath + pathSource.substring(pathSource.lastIndexOf(sep));
        if(Files.notExists(Paths.get(d), LinkOption.NOFOLLOW_LINKS)){
-           Files.copy(Paths.get(pathSource),
+           try{
+               Files.copy(Paths.get(pathSource),
                    Paths.get(d),
                    StandardCopyOption.COPY_ATTRIBUTES);
-           Log.INFO(pathSource +" added to library");
+               Log.INFO(pathSource +" added to library");
+               return d;
+           } catch (Exception e){
+               e.printStackTrace();
+               Log.ERROR("Can't importToLibrary, error during copy");
+           }
        }
+       return "";
     }
     
     /**
