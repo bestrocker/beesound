@@ -4,23 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Album {
+     
+    private final String title;
+    private final List<Song> trackList;
     
-    private static String DEFAULT = "Unknown";
-    
-    private String title;
-    private List<Song> trackList;
-    
-    public Album() {
-        this.title = DEFAULT;
-        this.trackList = new ArrayList<>();
-    }
-    
-    public Album(String title) {        // this constructor is called in LibraryManager
+    public Album(final String title) {        // this constructor is called in LibraryManager
         this.title = title;
         this.trackList = new ArrayList<>();
     }
     
-    public Album(String title, List<Song> trackList) {
+    public Album(final String title, final List<Song> trackList) {
         this.title = title;
         this.trackList = trackList;
     }
@@ -33,11 +26,11 @@ public class Album {
         return this.trackList;
     }
     
-    public void addSong(Song song) {
+    public void addSong(final Song song) {
         this.trackList.add(song);
     }
     
-    public void removeSong(Song song) {
+    public void removeSong(final Song song) {
         this.trackList.remove(song);
     }
 }
