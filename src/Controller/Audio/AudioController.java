@@ -172,7 +172,7 @@ public class AudioController implements BasicPlayerListener{
     public void playPlayer(){
         try {
             //String s = this.playlist.get(this.counter);
-            //this.mainControl.incrementSongCounter(s);
+            this.incrementSongCounter(this.lsong.get(this.counter));
             String s = this.lsong.get(this.counter).getPath();
             this.paused = false;
             this.control.open(new File(s));
@@ -273,20 +273,7 @@ public class AudioController implements BasicPlayerListener{
         display("setController : "+controller);
     }
     
-    public void incrementSongCounter(final String songPath){
-        System.out.println(songPath+"  DA TROVARE");
-        List<String> l = new ArrayList<>();
-        //this.model.getSongFromPath(Paths.get(songPath)).incrementCounter();
-        for(Song s : this.lm.getSongList()){
-            System.out.println(s.getPath().toString());
-            l.add(s.getPath().toString());
-            
-        }
-        for(String s:l){
-            if (s==songPath){
-                System.out.println("CIAOOO");
-            }
-        }
-        
+    public void incrementSongCounter(final Song song){
+        song.incrementCounter();
     }
 }

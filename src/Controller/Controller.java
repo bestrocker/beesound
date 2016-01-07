@@ -35,7 +35,7 @@ public class Controller implements ViewObserver {
         if(this.filecontrol.notExist(FileController.playlistDirPath+name+".txt")){
             this.filecontrol.createNewFile(name, FileController.playlistDirPath);
         }
-        this.model.newPlaylist(name);
+        this.model.newPlaylist(name,FileController.playlistDirPath + name + ".txt");
     }
     
     /**
@@ -93,8 +93,9 @@ public class Controller implements ViewObserver {
       //  System.out.println(c.model.getSongList().get(0).getTitle() + " added to "+ c.model.getPlaylistList().get(0).getName() );
         System.out.println("import fatto");
        
-        
+        while (true){
         Thread.sleep(2000);
+        c.audiocontrol.nextPlayer();
         for(Song i : c.model.getSongList()){
             System.out.println("INIZIO");
             System.out.println(i.getPath());
@@ -107,6 +108,7 @@ public class Controller implements ViewObserver {
             System.out.println("duration "+i.getDuration().getMin()+":"+ i.getDuration().getSec());
             System.out.println("counter " + i.getReproductionsCounter());
             System.out.println("FINE");
+        }
         }
     }
     
