@@ -7,6 +7,7 @@ public class Playlist {
     
     private String name;
     private List<Song> trackList;
+    private String path;
     
     public Playlist(String name) {
         this.name = name;
@@ -24,6 +25,10 @@ public class Playlist {
 
     public List<Song> getTrackList() {
         return this.trackList;
+    }
+    
+    public String getPath() {
+        return this.path;
     }
     
     public void addSong(Song song) {
