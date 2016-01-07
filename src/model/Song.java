@@ -1,6 +1,7 @@
 package model;
 
 import Controller.Audio.MpegInfo.Duration;
+import java.nio.file.Path;
 
 public class Song {
        
