@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
@@ -13,14 +14,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public  class FileController implements SystemManager{
-
-    public static final String libraryPath = System.getProperty("user.home")+"/beesound/";
+    public static final String sep = System.getProperty("file.separator");
+    public static final String libraryPath = System.getProperty("user.home")+sep+"beesound"+sep;
     public static final  String logPath = libraryPath+"LOG.txt";
     public static final String propPath = libraryPath+"properties.txt";
-    public static final String musicDirPath = libraryPath + "Music/";
-    public static final String playlistDirPath = libraryPath + "Playlist/";
+    public static final String musicDirPath = libraryPath + "Music"+sep;
+    public static final String playlistDirPath = libraryPath + "Playlist"+sep;
     
-  //  private  PrintWriter propertiesWrite;
+    private  PrintWriter writer;
     
     /**
      * Initialize FileController, Libraries folder, Logger, Properties.
@@ -48,20 +49,21 @@ public  class FileController implements SystemManager{
         }
         Log.initializeLogger();
         Log.PROGRAM("Root Library folder loaded. STARTING PROGRAM");
-        if (notExist(FileController.musicDirPath)){
+        if (notExist(musicDirPath)){
             new File(musicDirPath).mkdirs();
             Log.PROGRAM("Music Directory created");
         }
-        if (notExist(FileController.playlistDirPath)){
-            new File(FileController.playlistDirPath).mkdirs();
+        if (notExist(playlistDirPath)){
+            new File(playlistDirPath).mkdirs();
             Log.PROGRAM("Playlist Directory created");
         }
-        if (notExist(FileController.propPath)){
-            createNewFile("" , FileController.propPath);
+        if (notExist(propPath)){
+            createNewFile("" ,propPath);
         }
-        /*try {
+        /*
+        try {
             //this.propertiesRead = new BufferedReader(new FileReader(this.properties));
-            this.propertiesWrite = new PrintWriter(new FileWriter(this.properties));
+            
         } catch (IOException e) {
             Log.ERROR("Buffer and logger not set, error in FileController constructor");
             e.printStackTrace();
@@ -93,7 +95,7 @@ public  class FileController implements SystemManager{
      */
     @Override
     public List<String> listAllSongPath(){
-        return listAllSongPath(new File(FileController.musicDirPath));
+        return listAllSongPath(new File(musicDirPath));
     }
     
     /**
@@ -109,7 +111,7 @@ public  class FileController implements SystemManager{
      */
     @Override
     public  void importToLibrary(final String pathSource) throws IOException {
-       final String d = FileController.musicDirPath + pathSource.substring(pathSource.lastIndexOf("/"));
+       final String d = musicDirPath + pathSource.substring(pathSource.lastIndexOf(sep));
        if(Files.notExists(Paths.get(d), LinkOption.NOFOLLOW_LINKS)){
            Files.copy(Paths.get(pathSource),
                    Paths.get(d),
@@ -131,6 +133,18 @@ public  class FileController implements SystemManager{
             return;
         }
         Log.PROGRAM("New file "+name+" created : "+name+dstPath);
+    }
+    
+    public void appendToFile(final String msg, final String path){
+        try {
+            this.writer = new PrintWriter(new FileWriter(new File(path),true),true);
+            this.writer.println(msg);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+         
     }
     
 }

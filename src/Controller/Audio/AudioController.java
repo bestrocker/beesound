@@ -10,9 +10,14 @@ import java.util.Random;
 import Controller.Controller;
 import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
+import model.LibraryManager;
+import model.Playlist;
+import model.Song;
 
 public class AudioController implements BasicPlayerListener{
-    final private Controller mainControl ;
+    
+    final private LibraryManager lm;
+    private List<Song> lsong;
     private List<String> playlist;
     private int counter = 0;
     private boolean strategy; /* if true linear, else shuffle */
@@ -39,15 +44,17 @@ public class AudioController implements BasicPlayerListener{
         }
     }
     
-    public AudioController(final Controller c){
+    public AudioController(final LibraryManager c){
         
-        this.mainControl = c;
+        this.lm = c;
         this.player = new BasicPlayer();
         this.control = this.player;
         this.player.addBasicPlayerListener(this);
         this.mp3Info = MpegInfo.getInstance();
         this.out = System.out;
         this.playlist = new ArrayList<>();
+        
+        this.lsong = new ArrayList<>();
     }
     
     /**
@@ -63,8 +70,11 @@ public class AudioController implements BasicPlayerListener{
      * Be sure to pass an ArrayList.
      * @param playlist
      */
-    public void setPlaylist(final List<String> playlist){
-        this.playlist = playlist;
+    public void setPlaylist(final Playlist playlist){
+        this.lsong.addAll(playlist.getTrackList());
+       // this.playlist.clear();
+       // playlist.getTrackList().stream().forEach(i->this.playlist.add(i.getPath()));
+        //this.playlist = playlist;
         Log.INFO("New current playing playlist set ");
     }
     
@@ -73,9 +83,10 @@ public class AudioController implements BasicPlayerListener{
      * Must specify its absolute path.
      * @param song
      */
-    public void addSongInPlaylist(final String songPath){
-        this.playlist.add(songPath);
-        Log.INFO(songPath +" added to current playlist");
+    public void addSongInPlaylist(final Song song){
+      //  this.playlist.add(songPath);
+        this.lsong.add(song);
+        Log.INFO(song.getPath() +" added to current playlist");
         
     }
     
@@ -83,8 +94,9 @@ public class AudioController implements BasicPlayerListener{
      * Obtain the current playlist.
      * @return a List<String> representing the current playlist
      */
-    public List<String> getPlaylist(){
-        return this.playlist;
+    public List<Song> getPlaylist(){
+       // return this.playlist;
+        return this.lsong;
     }
     
     /**
@@ -142,8 +154,10 @@ public class AudioController implements BasicPlayerListener{
      */
     public void playPlayer(){
         try {
-            String s = this.playlist.get(this.counter);
-            this.mainControl.incrementSongCounter(s);
+            //String s = this.playlist.get(this.counter);
+            //this.mainControl.incrementSongCounter(s);
+            String s = this.lsong.get(this.counter).getPath();
+            
             this.control.open(new File(s));
             this.control.play();
             this.control.setGain(0.85);
@@ -168,7 +182,8 @@ public class AudioController implements BasicPlayerListener{
      */
     private void nextSongPlayer(){
         if(strategy) {
-            if(this.counter + 1 > this.playlist.size()-1){
+           // if(this.counter + 1 > this.playlist.size()-1){
+            if(this.counter + 1 > this.lsong.size() -1 ){
                 this.stopPlayer();
                 Log.INFO("playlist finished");
                 return;
@@ -176,7 +191,8 @@ public class AudioController implements BasicPlayerListener{
             ++this.counter;
         } else {
             int c;
-            while ( (c=rnd.nextInt(this.playlist.size()) ) == this.counter ){}
+            //while ( (c=rnd.nextInt(this.playlist.size()) ) == this.counter ){}
+            while ( (c=rnd.nextInt(this.lsong.size()) ) == this.counter ){}
             this.counter = c;
         }
         this.playPlayer();
@@ -226,5 +242,22 @@ public class AudioController implements BasicPlayerListener{
     @Override
     public void setController(final BasicController controller) {
         display("setController : "+controller);
+    }
+    
+    public void incrementSongCounter(final String songPath){
+        System.out.println(songPath+"  DA TROVARE");
+        List<String> l = new ArrayList<>();
+        //this.model.getSongFromPath(Paths.get(songPath)).incrementCounter();
+        for(Song s : this.lm.getSongList()){
+            System.out.println(s.getPath().toString());
+            l.add(s.getPath().toString());
+            
+        }
+        for(String s:l){
+            if (s==songPath){
+                System.out.println("CIAOOO");
+            }
+        }
+        
     }
 }
