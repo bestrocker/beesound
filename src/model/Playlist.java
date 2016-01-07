@@ -33,6 +33,10 @@ public class Playlist {
         return this.trackList;
     }
     
+    public String getPath() {
+        return this.path;
+    }
+    
     public void addSong(Song song) {
         this.trackList.add(song);
     }
