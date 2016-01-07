@@ -13,10 +13,10 @@ public class Song {
     private int bitRate;
     private int reproductionsCounter;
     private long size;
-    private Path path;
+    private String path;
    
     public Song(String title, String album, String artist, String genre, 
-            Duration duration, int bitRate, long size, Path path) {
+            Duration duration, int bitRate, long size, String path) {
         this.title = title;
         this.album = album;
         this.artist = artist;
@@ -38,7 +38,7 @@ public class Song {
         private int bitRate;
         //private int reproductionsCounter = 0;
         private long size;
-        private Path path;     
+        private String path;     
         
         public Builder title(String title) {
             this.title = title;
@@ -75,7 +75,7 @@ public class Song {
             return this;
         }
         
-        public Builder path(Path path) {
+        public Builder path(String path) {
             this.path = path;
             return this;
         }
@@ -106,7 +106,7 @@ public class Song {
         return this.duration;
     }
 
-    public Path getPath() {
+    public String getPath() {
         return this.path;
     }
 
