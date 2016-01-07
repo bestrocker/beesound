@@ -37,7 +37,7 @@ public class TryModel {
         System.out.println("Genres:");
         library.getGenreList().forEach(x -> x.getArtistList().forEach(y -> System.out.println(y.getName())));
         library.getGenreList().forEach(x -> x.getAlbumList().forEach(y -> System.out.println(y.getTitle())));*/
-        //playlist.getTrackList().forEach(x -> System.out.println(x.getTitle()));
+        playlist.getTrackList().forEach(x -> System.out.println(x.getTitle()));
         
     }
 }
