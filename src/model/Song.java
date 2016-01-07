@@ -1,6 +1,6 @@
 package model;
 
-import java.awt.Dimension;
+import Controller.Audio.MpegInfo.Duration;
 import java.nio.file.Path;
 
 public class Song {
@@ -9,14 +9,14 @@ public class Song {
     private String album;
     private String artist;
     private String genre;
-    private Dimension duration;    
+    private Duration duration;    
     private int bitRate;
     private int reproductionsCounter;
     private long size;
     private Path path;
    
     public Song(String title, String album, String artist, String genre, 
-            Dimension duration, int bitRate, long size, Path path) {
+            Duration duration, int bitRate, long size, Path path) {
         this.title = title;
         this.album = album;
         this.artist = artist;
@@ -34,7 +34,7 @@ public class Song {
         private String album;
         private String artist;
         private String genre;
-        private Dimension duration;    
+        private Duration duration;    
         private int bitRate;
         //private int reproductionsCounter = 0;
         private long size;
@@ -60,7 +60,7 @@ public class Song {
             return this;            
         }
         
-        public Builder duration(Dimension duration) {
+        public Builder duration(Duration duration) {
             this.duration = duration;
             return this;
         }
@@ -102,7 +102,7 @@ public class Song {
         return this.genre;
     }
 
-    public Dimension getDuration() {
+    public Duration getDuration() {
         return this.duration;
     }
 
