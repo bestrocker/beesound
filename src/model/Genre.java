@@ -5,25 +5,17 @@ import java.util.List;
 
 public class Genre {
     
-    private static String DEFAULT = "Unknown";
+    private final String name;
+    private final List<Album> albumList;
+    private final List<Artist> artistList;
     
-    private String name;
-    private List<Album> albumList;
-    private List<Artist> artistList;
-    
-    public Genre() {
-        this.name = DEFAULT;
-        this.albumList = new ArrayList<>();
-        this.artistList = new ArrayList<>();
-    }
-    
-    public Genre(String name) {
+    public Genre(final String name) {
         this.name = name;
         this.albumList = new ArrayList<>();
         this.artistList = new ArrayList<>();
     }
     
-    public Genre(String name, List<Album> albumList, List<Artist> artistList) {
+    public Genre(final String name, final List<Album> albumList, final List<Artist> artistList) {
         this.name = name;
         this.albumList = albumList;
         this.artistList = artistList;
@@ -41,19 +33,19 @@ public class Genre {
         return this.artistList;
     }
     
-    public void addAlbum(Album album) {
+    public void addAlbum(final Album album) {
         this.albumList.add(album);
     }
     
-    public void removeAlbum(Album album) {
+    public void removeAlbum(final Album album) {
         this.albumList.remove(album);
     }
     
-    public void addArtist(Artist artist) {
+    public void addArtist(final Artist artist) {
         this.artistList.add(artist);
     }
     
-    public void removeArtist(Artist artist) {
+    public void removeArtist(final Artist artist) {
         this.artistList.remove(artist);
     }
 }
