@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Representation of the music library. 
+ * @author tiziano
+ */
 public final class LibraryManager implements Manager{   // this class is implemented using the singleton pattern
     
     private static final LibraryManager INSTANCE = new LibraryManager();
@@ -23,26 +27,50 @@ public final class LibraryManager implements Manager{   // this class is impleme
         this.playlistList = new ArrayList<>();
     }
     
+    /**
+     * Returns the only instance of this class.
+     * @return an instance of this class.
+     */
     public static LibraryManager getInstance() {
         return INSTANCE;
     }
-
+    
+    /**
+     * Returns the list of the songs in the music library.
+     * @return the list of the songs in the music library.
+     */
     public List<Song> getSongList() {
         return this.songList;
     }
-
+    
+    /**
+     * Returns the list of the albums in the music library.
+     * @return the list of the albums in the music library.
+     */
     public List<Album> getAlbumList() {
         return this.albumList;
     }
-
+    
+    /**
+     * Returns the list of the artists in the music library.
+     * @return the list of the artists in the music library.
+     */
     public List<Artist> getArtistList() {
         return this.artistList;
     }
-
+    
+    /**
+     * Returns the list of the genres in the music library.
+     * @return the list of the genres in the music library.
+     */
     public List<Genre> getGenreList() {
         return this.genreList;
     }
-
+    
+    /**
+     * Returns the list of the playlists in the music library.
+     * @return the list of the playlists in the music library.
+     */
     public List<Playlist> getPlaylistList() {
         return this.playlistList;
     }
@@ -137,6 +165,11 @@ public final class LibraryManager implements Manager{   // this class is impleme
         //add serialization
     }
     
+    /**
+     * Adds a new playlist to the music library.
+     * @param name - the name of the playlist.
+     * @param path - the path in which store the playlist.
+     */
     public void newPlaylist(final String name, final String path) {
         final Playlist playlist = new Playlist(name, path);
         this.playlistList.add(playlist);
@@ -157,6 +190,11 @@ public final class LibraryManager implements Manager{   // this class is impleme
         throw new NoSuchElementException("This song is not present in the list.");
     }
     
+    /**
+     * Returns a list containing the paths of the songs in the specified playlist.
+     * @param playlist - the playlist from which the song paths are extracted.
+     * @return a list containing the paths of the songs in the specified playlist.
+     */
     public List<String> getPathsFromPlaylist(final Playlist playlist) {
         final List<String> list = new ArrayList<>();
         playlist.getTrackList().forEach(x -> list.add(x.getPath().toString()));
