@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
@@ -27,14 +26,9 @@ public  class FileController implements SystemManager{
      * Initialize FileController, Libraries folder, Logger, Properties.
      */
     public FileController() {
-        
-    //    this.properties = new File(propPath);
-       // this.musicDir = new File(musicDirPath);
-       // this.playlistDir = new File(playlistDirPath);
         initialize();
-        
-        
     }
+    
     /**
      * {@inheritDoc}
      */
