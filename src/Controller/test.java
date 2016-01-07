@@ -21,17 +21,22 @@ import Controller.Files.Log;
 public class test {
 
     public static void main(String[] args) throws IOException, InterruptedException {
+       
         
-        String dir = "/home/bestrocker221/Dropbox/Musica/";
+        System.out.println(System.getProperty("file.separator"));
+        
+        String dir = "/home/bestrocker221/Dropbox/Musica/ciao.tdt";
         File mydir = new File(dir);
-        
+        System.out.println(mydir.getPath());
+        /*
         List<String> list = new ArrayList<>();
         Arrays.asList(mydir.listFiles()).stream()
                                    .filter(i->i.getAbsolutePath().endsWith("mp3"))
                                    .forEach(i->list.add(i.getAbsolutePath()));
         list.forEach(System.out::println);
         
-        AudioController audio = new AudioController();
+        
+//        AudioController audio = new AudioController();
         audio.setPlaylist(list);
         audio.playPlayer();
         audio.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
@@ -40,7 +45,7 @@ public class test {
         Thread.sleep(12000);
         audio.nextPlayer();
         Thread.sleep(12000);
-        audio.nextPlayer();
+        audio.nextPlayer();*/
         /*
         FileController fc = new FileController();
         try {
