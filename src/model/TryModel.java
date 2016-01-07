@@ -11,11 +11,20 @@ public class TryModel {
         LibraryManager library = LibraryManager.getInstance();
         Duration duration = new Duration(6, 30);
         Path path = FileSystems.getDefault().getPath(System.getProperty("user.home"));
-        Song song = new Song("Money", "The Dark Side Of The Moon", "Pink Floyd", "Prog Rock", duration, 192, 8000, path);
+        String album = "The Dark Side Of The Moon";
+        String genre = "Prog Rock";
+        String artist = "Pink Floyd";
+        Song song = new Song("Money", "The Dark Side Of The Moon", artist, genre, duration, 192, 8000, path);
+        Song song2 = new Song("Eclipse", "The Dark Side Of The Moon", artist, genre, duration, 320, 100000, path);
         library.addSongToLibrary(song);
-        System.out.println(library.getSongList());
-        System.out.println(library.getAlbumList());
-        System.out.println(library.getArtistList());
-        System.out.println(library.getGenreList());        
+        library.addSongToLibrary(song2);
+        library.getSongList().forEach(x -> System.out.println(x.getTitle()));
+        library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));
+        library.getArtistList().forEach(x -> System.out.println(x.getName()));
+        library.getGenreList().forEach(x -> System.out.println(x.getName()));
+    
+        System.out.println("Genres:");
+        library.getGenreList().forEach(x -> x.getAlbumList().forEach(y -> System.out.println(y.getTitle())));
+        library.getGenreList().forEach(x -> x.getArtistList().forEach(y -> System.out.println(y.getName())));
     }
 }
