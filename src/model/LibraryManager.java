@@ -49,6 +49,7 @@ public class LibraryManager implements Manager{   // this class is implemented u
     
     @Override
     public void addSongToLibrary(Song song) {   // raw version, try to improve
+        this.songList.add(song);
         if (!this.albumList.contains(song.getAlbum())) {
             this.newAlbum(song.getAlbum());
         }
