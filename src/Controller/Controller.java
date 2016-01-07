@@ -12,36 +12,40 @@ import Controller.Files.Log;
 import model.LibraryManager;
 import model.Song;
 
-public class Controller {
+public class Controller implements ViewObserver {
 
     private final LibraryManager model;
   //private final View view;
-    private final AudioController audiocontroller;
-    private final FileController filecontroller;
+    private final AudioController audiocontrol;
+    private final FileController filecontrol;
     
-    public Object j = new Object();
+    private Object j = new Object();
     
     public Controller() {
         this.model = LibraryManager.getInstance();        
-        this.filecontroller = new FileController();
-        this.audiocontroller = new AudioController();
-        
+        this.filecontrol = new FileController();
+        this.audiocontrol = new AudioController();
         loadInfoToLibrary();
        
     }
     
-    void loadInfoToLibrary() {
+    public void newPlaylistFile(final String name){
+        if(this.filecontrol.notExist(FileController.playlistDirPath+name)){
+            this.filecontrol.createNewFile(name, FileController.playlistDirPath);
+        }
+    }
+    
+    private void loadInfoToLibrary() {
         final String unk = "";
         final MpegInfo info = MpegInfo.getInstance();
-        this.filecontroller.listAllSongPath().stream().parallel()
+        this.filecontrol.listAllSongPath().stream().parallel()
                            .forEach(i->{
                                synchronized(j){
                                    try {
                                     info.load(new File(i));
                                 } catch (Exception e) {
                                     Log.ERROR("Can't Load song info from file");
-                                    e.printStackTrace();
-                                }
+                                    e.printStackTrace(); }
                                 this.model.addSongToLibrary(new Song.Builder()
                                 .title(info.getTitle().orElse(i.substring(i.lastIndexOf("/")+1,i.length()-4)))
                                 .album(info.getAlbum().orElse(unk))
@@ -55,17 +59,18 @@ public class Controller {
                                 .build()
                                 );
                                }});
-                            
+        Log.INFO("Mpeg tag loaded into the library.");
     }
+    
     public static void main(String[] args) throws InterruptedException{
         Controller c = new Controller();
         List<String> l = new ArrayList<>();
         for(Song s : c.model.getSongList()){
             l.add(s.getPath().toString());
         }
-        c.audiocontroller.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
-        c.audiocontroller.setPlaylist(l);
-        c.audiocontroller.playPlayer();
+        c.audiocontrol.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
+        c.audiocontrol.setPlaylist(l);
+        c.audiocontrol.playPlayer();
         
         System.out.println("import fatto");
         Thread.sleep(200);
