@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,58 +16,56 @@ public  class FileController implements SystemManager{
 
     public static final String libraryPath = System.getProperty("user.home")+"/beesound/";
     public static final  String logPath = libraryPath+"LOG.txt";
-    private  final String propPath = libraryPath+"properties.txt";
-    private  final String musicDirPath = libraryPath + "Music/";
-    private  final String playlistDirPath = libraryPath + "Playlist/";
+    public static final String propPath = libraryPath+"properties.txt";
+    public static final String musicDirPath = libraryPath + "Music/";
+    public static final String playlistDirPath = libraryPath + "Playlist/";
     
-    private  PrintWriter propertiesWrite;
-    private  final File properties;
-   // private  final File musicDir;
- //   private  final File playlistDir;
+  //  private  PrintWriter propertiesWrite;
     
     /**
      * Initialize FileController, Libraries folder, Logger, Properties.
      */
     public FileController() {
         
-        this.properties = new File(propPath);
+    //    this.properties = new File(propPath);
        // this.musicDir = new File(musicDirPath);
        // this.playlistDir = new File(playlistDirPath);
         initialize();
         
         
     }
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean notExist(final String srcPath){
+        return (Files.notExists(Paths.get(srcPath), LinkOption.NOFOLLOW_LINKS));
+    }
+    
     private void initialize() {
-        if (Files.notExists(Paths.get(libraryPath), LinkOption.NOFOLLOW_LINKS)){
+        if (notExist(libraryPath)){
             new File(libraryPath).mkdirs();
         }
         Log.initializeLogger();
         Log.PROGRAM("Root Library folder loaded. STARTING PROGRAM");
-        if (Files.notExists(Paths.get(this.musicDirPath), LinkOption.NOFOLLOW_LINKS)){
+        if (notExist(FileController.musicDirPath)){
             new File(musicDirPath).mkdirs();
             Log.PROGRAM("Music Directory created");
         }
-        if (Files.notExists(Paths.get(this.playlistDirPath), LinkOption.NOFOLLOW_LINKS)){
-            new File(this.playlistDirPath).mkdirs();
+        if (notExist(FileController.playlistDirPath)){
+            new File(FileController.playlistDirPath).mkdirs();
             Log.PROGRAM("Playlist Directory created");
         }
-        if (Files.notExists(Paths.get(this.propPath), LinkOption.NOFOLLOW_LINKS)){
-            try {
-                this.properties.createNewFile();
-                Log.PROGRAM("properties file created");
-            } catch (IOException e) {
-                Log.ERROR("Cannot create properties File\n");
-                e.printStackTrace();
-            }
+        if (notExist(FileController.propPath)){
+            createNewFile("" , FileController.propPath);
         }
-        try {
+        /*try {
             //this.propertiesRead = new BufferedReader(new FileReader(this.properties));
             this.propertiesWrite = new PrintWriter(new FileWriter(this.properties));
         } catch (IOException e) {
             Log.ERROR("Buffer and logger not set, error in FileController constructor");
             e.printStackTrace();
-        }
+        }*/
     }
     
     /**
@@ -96,7 +93,7 @@ public  class FileController implements SystemManager{
      */
     @Override
     public List<String> listAllSongPath(){
-        return listAllSongPath(new File(this.musicDirPath));
+        return listAllSongPath(new File(FileController.musicDirPath));
     }
     
     /**
@@ -112,13 +109,28 @@ public  class FileController implements SystemManager{
      */
     @Override
     public  void importToLibrary(final String pathSource) throws IOException {
-       final String d = this.musicDirPath + pathSource.substring(pathSource.lastIndexOf("/"));
+       final String d = FileController.musicDirPath + pathSource.substring(pathSource.lastIndexOf("/"));
        if(Files.notExists(Paths.get(d), LinkOption.NOFOLLOW_LINKS)){
            Files.copy(Paths.get(pathSource),
                    Paths.get(d),
                    StandardCopyOption.COPY_ATTRIBUTES);
            Log.INFO(pathSource +" added to library");
        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @throws IOException 
+     */
+    public void createNewFile(final String name,final String dstPath) {
+        try {
+            new File(dstPath+name+".txt").createNewFile();
+        } catch (IOException e) {
+            Log.ERROR("Can't createNewFile()");
+            e.printStackTrace();
+            return;
+        }
+        Log.PROGRAM("New file "+name+" created : "+name+dstPath);
     }
     
 }

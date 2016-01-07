@@ -38,4 +38,17 @@ public interface SystemManager {
      * @throws IOException
      */
     List<String> getPlaylistSongs(final File playlist) throws IOException;
+    
+    /**
+     * Return true if is already existing in the library.
+     * @return boolean
+     */
+    boolean notExist(final String srcPath);
+    
+    /**
+     * Create a new text file with the given name in the dstPath
+     * Note: dstPath must have final "/"
+     * @param dstPath, name
+     */
+    void createNewFile(final String name,final String dstPath);
 }
