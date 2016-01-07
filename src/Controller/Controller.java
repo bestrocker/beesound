@@ -21,8 +21,6 @@ public class Controller implements ViewObserver {
     private final AudioController audiocontrol;
     private final FileController filecontrol;
     
-    private Object j = new Object();
-    
     public Controller() {
         this.model = LibraryManager.getInstance();        
         this.filecontrol = new FileController();
@@ -49,11 +47,10 @@ public class Controller implements ViewObserver {
     public void addSongInPlaylist(final Song song, final Playlist playlist){
         playlist.addSong(song);
         try {
-            if(!this.filecontrol.getPlaylistSongs(
-                    new File(playlist.getPath()))
+            if(!this.filecontrol.getPlaylistSongs(new File(playlist.getPath()))
                     .contains(song.getPath())){
-                System.out.println("MERD");
                 this.filecontrol.appendToFile(song.getPath(),playlist.getPath());
+                Log.INFO(song.getTitle()+ " Added to library");
             }
         } catch (IOException e) {
             Log.ERROR("Can't addSongInPlaylist");
@@ -61,31 +58,15 @@ public class Controller implements ViewObserver {
         }
     }
     
-    
-    
     private void loadInfoToLibrary() {
-        final String unk = "";
         final MpegInfo info = MpegInfo.getInstance();
-        this.filecontrol.listAllSongPath().stream()
-                           .forEach(i->{
-                                   try {
-                                    info.load(new File(i));
-                                } catch (Exception e) {
-                                    Log.ERROR("Can't Load song info from file");
-                                    e.printStackTrace(); }
-                                this.model.addSongToLibrary(new Song.Builder()
-                                .title(info.getTitle().orElse(i.substring(i.lastIndexOf("/")+1,i.length()-4)))
-                                .album(info.getAlbum().orElse(unk))
-                                .artist(info.getArtist().orElse(unk))
-                                .bitRate(info.getBitRate())
-                                .genre(info.getGenre().orElse(unk))
-                                .size(info.getSize())
-                                .bitRate(info.getBitRate())
-                                .duration(info.getDurationInMinutes())
-                                .path(i)
-                                .build()
-                                );
-                               });
+        this.filecontrol.listAllSongPath()
+                        .stream()
+                        .forEach(i->{
+                             if(info.load(new File(i))){
+                                 this.addSong(i, info);
+                             }
+                         });
         Log.INFO("Mpeg tag loaded into the library.");
     }
     
@@ -109,10 +90,12 @@ public class Controller implements ViewObserver {
         //c.audiocontrol.setPlaylist(c.model.getPlaylistList().get(0));
        
         c.audiocontrol.playPlayer();
+        Thread.sleep(10000);
+        c.playButton(c.model.getSongList().get(3));
       //  System.out.println(c.model.getSongList().get(0).getTitle() + " added to "+ c.model.getPlaylistList().get(0).getName() );
         System.out.println("import fatto");
        
-        /*
+        
         Thread.sleep(2000);
         for(Song i : c.model.getSongList()){
             System.out.println("INIZIO");
@@ -126,63 +109,106 @@ public class Controller implements ViewObserver {
             System.out.println("duration "+i.getDuration().getMin()+":"+ i.getDuration().getSec());
             System.out.println("counter " + i.getReproductionsCounter());
             System.out.println("FINE");
-        }*/
+        }
     }
-
+    
+    private void addSong(String songPath, MpegInfo info){
+        final String unk = "";
+        this.model.addSongToLibrary(new Song.Builder()
+                .title(info.getTitle().orElse(songPath.substring(songPath.lastIndexOf(FileController.sep)+1,songPath.length()-4)))
+                .album(info.getAlbum().orElse(unk))
+                .artist(info.getArtist().orElse(unk))
+                .bitRate(info.getBitRate())
+                .genre(info.getGenre().orElse(unk))
+                .size(info.getSize())
+                .bitRate(info.getBitRate())
+                .duration(info.getDurationInMinutes())
+                .path(songPath)
+                .build()
+                );
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addSong(String songPath) {
-        // TODO Auto-generated method stub
+        String path =this.filecontrol.importToLibrary(songPath);
+        MpegInfo info = MpegInfo.getInstance();
+        info.load(new File(path));
+        this.addSong(songPath, info);
         
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Song> showAllSong() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.model.getSongList();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Playlist> showAllPlaylist() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.model.getPlaylistList();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void playButton() {
-        // TODO Auto-generated method stub
-        
+        this.audiocontrol.playPlayer();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void playButton(Song song) {
-        // TODO Auto-generated method stub
-        
+        this.audiocontrol.playPlayer(song);
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void pauseButton() {
-        // TODO Auto-generated method stub
+        this.audiocontrol.togglePause();
         
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void stopButton() {
-        // TODO Auto-generated method stub
+       this.audiocontrol.stopPlayer();
         
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setVolumeButton(double volume) {
-        // TODO Auto-generated method stub
-        
+        this.audiocontrol.setVolume(volume);
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void skipTo(long toBytes) {
-        // TODO Auto-generated method stub
-        
+        this.audiocontrol.seekPlayer(toBytes);
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addSongInReproductionPlaylist(Song song) {
         this.audiocontrol.addSongInPlaylist(song);

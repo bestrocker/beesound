@@ -23,6 +23,9 @@ package Controller.Audio;
  */
 
 import org.tritonus.share.sampled.file.TAudioFileFormat;
+
+import Controller.Files.Log;
+
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -106,10 +109,17 @@ public class MpegInfo implements TagInfo {
      * @param input
      * @throws IOException
      */
-    public void load(final File input) throws IOException, UnsupportedAudioFileException {
+    public boolean load(final File input){
         this.size = input.length();
         this.location = input.getPath();
-        loadInfo(input);
+        try{
+            loadInfo(input);
+        } catch (IOException | UnsupportedAudioFileException e) {
+            Log.ERROR("Can't load MPEG TAG of "+input.getPath());
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**

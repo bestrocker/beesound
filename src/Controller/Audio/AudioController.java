@@ -20,12 +20,14 @@ public class AudioController implements BasicPlayerListener{
     private List<Song> lsong;
     private List<String> playlist;
     private int counter = 0;
+    private boolean paused;
     private boolean strategy; /* if true linear, else shuffle */
     final private BasicPlayer player;
     final private BasicController control;
     final private Random rnd = new Random();
     final private  PrintStream out ;
     final private MpegInfo mp3Info;
+    
     
     /**
      * This enum contain the reproduction strategy for obtaining the next track to play
@@ -78,6 +80,21 @@ public class AudioController implements BasicPlayerListener{
         Log.INFO("New current playing playlist set ");
     }
     
+    public void togglePause(){
+        try{
+            if(!this.paused){
+                this.control.pause();
+                this.paused = true;
+                
+            } else {
+                this.control.resume();
+                this.paused = false;
+            }
+        } catch (BasicPlayerException e){
+            e.printStackTrace();
+            Log.ERROR("impossible toggle pause");
+        }
+    }
     /**
      * Add a song manually to the current playing Playlist.
      * Must specify its absolute path.
@@ -103,7 +120,7 @@ public class AudioController implements BasicPlayerListener{
      * Skip the song to the given number of bytes.
      * @param nbytes
      */
-    public void seekPlayer(final int nbytes){
+    public void seekPlayer(final long nbytes){
         try {
             this.control.seek(nbytes);
         } catch (BasicPlayerException e) {
@@ -157,7 +174,7 @@ public class AudioController implements BasicPlayerListener{
             //String s = this.playlist.get(this.counter);
             //this.mainControl.incrementSongCounter(s);
             String s = this.lsong.get(this.counter).getPath();
-            
+            this.paused = false;
             this.control.open(new File(s));
             this.control.play();
             this.control.setGain(0.85);
@@ -169,6 +186,11 @@ public class AudioController implements BasicPlayerListener{
         }
     }
     
+    public void playPlayer(final Song song){
+        this.lsong.add(song);
+        this.counter = this.lsong.indexOf((Song)(song));
+        this.playPlayer();
+    }
     /**
      * Set the strategy for reproducing the next tracks.
      * @param strategy
@@ -202,7 +224,14 @@ public class AudioController implements BasicPlayerListener{
         this.counter = rnd.nextInt(this.playlist.size()-1);
         this.play();
     }*/
-    
+    public void setVolume(final double volume){
+        try {
+            this.control.setGain(volume);
+        } catch (BasicPlayerException e) {
+            Log.ERROR("impossible to change volume, error in setVolume");
+            e.printStackTrace();
+        }
+    }
     
     private void display(final String msg) {
         if (out != null) out.println(msg);
