@@ -46,27 +46,51 @@ public class LibraryManager implements Manager{   // this class is implemented u
     public List<Playlist> getPlaylistList() {
         return this.playlistList;
     }
-    
+
     @Override
     public void addSongToLibrary(Song song) {   // raw version, try to improve
-        if (!this.albumList.contains(song.getAlbum())) {
+        boolean albumCheck = false;
+        boolean artistCheck = false;
+        this.songList.add(song);
+        if (!this.getAlbumTitles().contains(song.getAlbum())) {
             this.newAlbum(song.getAlbum());
+            albumCheck = true;;
         }
         this.getAlbumFromList(song.getAlbum()).addSong(song);
-        if (!this.artistList.contains(song.getArtist())) {
+        if (!this.getArtistNames().contains(song.getArtist())) {      // this method seems not to use equals.
             this.newArtist(song.getArtist());
+            artistCheck = true;
         }
         this.getArtistFromList(song.getArtist()).addAlbum(this.getAlbumFromList(song.getAlbum()));
-        if (!this.genreList.contains(song.getGenre())) {
+        if (!this.getGenreNames().contains(song.getGenre())) {
             this.newGenre(song.getGenre());
         }
-        if (!this.getGenreFromList(song.getGenre()).getAlbumList().contains(song.getAlbum())) {
+        if (albumCheck) {
             this.getGenreFromList(song.getGenre()).getAlbumList().add(this.getAlbumFromList(song.getAlbum()));
         }
-        if (!this.getGenreFromList(song.getGenre()).getArtistList().contains(song.getArtist())) {
+        if (artistCheck) {
             this.getGenreFromList(song.getGenre()).getArtistList().add(this.getArtistFromList(song.getArtist()));
         }       
     }
+    
+    private List<String> getAlbumTitles() {     // try to generalize these methods with interfaces and abstract classes
+        List<String> list = new ArrayList<>();
+        this.albumList.forEach(x -> list.add(x.getTitle()));
+        return list;       
+    }
+    
+    private List<String> getArtistNames() {
+        List<String> list = new ArrayList<>();
+        this.artistList.forEach(x -> list.add(x.getName()));
+        return list;       
+    }
+    
+    private List<String> getGenreNames() {
+        List<String> list = new ArrayList<>();
+        this.genreList.forEach(x -> list.add(x.getName()));
+        return list;
+    }
+    
     // try to reduce the private methods below
     private Album getAlbumFromList(String title) throws NoSuchElementException {
         for (Album a : this.albumList) {
