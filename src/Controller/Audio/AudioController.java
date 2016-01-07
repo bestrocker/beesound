@@ -2,14 +2,17 @@ package Controller.Audio;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import Controller.Controller;
 import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
 
 public class AudioController implements BasicPlayerListener{
-    
+    final private Controller mainControl ;
     private List<String> playlist;
     private int counter = 0;
     private boolean strategy; /* if true linear, else shuffle */
@@ -36,14 +39,15 @@ public class AudioController implements BasicPlayerListener{
         }
     }
     
-    public AudioController(){
+    public AudioController(final Controller c){
         
+        this.mainControl = c;
         this.player = new BasicPlayer();
         this.control = this.player;
         this.player.addBasicPlayerListener(this);
         this.mp3Info = MpegInfo.getInstance();
         this.out = System.out;
-        
+        this.playlist = new ArrayList<>();
     }
     
     /**
@@ -61,16 +65,17 @@ public class AudioController implements BasicPlayerListener{
      */
     public void setPlaylist(final List<String> playlist){
         this.playlist = playlist;
-        Log.INFO("New playlist set");
+        Log.INFO("New current playing playlist set ");
     }
     
     /**
-     * Add a song manually to the current playing Playlist
+     * Add a song manually to the current playing Playlist.
+     * Must specify its absolute path.
      * @param song
      */
-    public void addSongInPlaylist(final String song){
-        this.playlist.add(song);
-        Log.INFO(song +" added to current playlist");
+    public void addSongInPlaylist(final String songPath){
+        this.playlist.add(songPath);
+        Log.INFO(songPath +" added to current playlist");
         
     }
     
@@ -137,8 +142,9 @@ public class AudioController implements BasicPlayerListener{
      */
     public void playPlayer(){
         try {
-            //System.out.println("canzone: "+this.playlist.get(this.counter));
-            this.control.open(new File(this.playlist.get(this.counter)));
+            String s = this.playlist.get(this.counter);
+            this.mainControl.incrementSongCounter(s);
+            this.control.open(new File(s));
             this.control.play();
             this.control.setGain(0.85);
             this.control.setPan(0.0);

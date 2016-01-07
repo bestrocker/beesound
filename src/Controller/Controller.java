@@ -1,6 +1,7 @@
 package Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +25,41 @@ public class Controller implements ViewObserver {
     public Controller() {
         this.model = LibraryManager.getInstance();        
         this.filecontrol = new FileController();
-        this.audiocontrol = new AudioController();
+        this.audiocontrol = new AudioController(this);
         loadInfoToLibrary();
        
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void newPlaylistFile(final String name){
         if(this.filecontrol.notExist(FileController.playlistDirPath+name)){
             this.filecontrol.createNewFile(name, FileController.playlistDirPath);
         }
+        this.model.newPlaylist(name);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void incrementSongCounter(final String songPath){
+        System.out.println(songPath+"  DA TROVARE");
+        List<String> l = new ArrayList<>();
+        //this.model.getSongFromPath(Paths.get(songPath)).incrementCounter();
+        for(Song s : this.model.getSongList()){
+            System.out.println(s.getPath().toString());
+            l.add(s.getPath().toString());
+            
+        }
+        for(String s:l){
+            if (s==songPath){
+                System.out.println("CIAOOO");
+            }
+        }
+        
     }
     
     private void loadInfoToLibrary() {
@@ -64,16 +91,17 @@ public class Controller implements ViewObserver {
     
     public static void main(String[] args) throws InterruptedException{
         Controller c = new Controller();
-        List<String> l = new ArrayList<>();
-        for(Song s : c.model.getSongList()){
-            l.add(s.getPath().toString());
-        }
+        
+        List<String> l = c.filecontrol.listAllSongPath();
+        
+        
+       // c.audiocontrol.addSongInPlaylist("/home/bestrocker221/Dropbox/Musica/holdbacktheriver.mp3");
         c.audiocontrol.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
         c.audiocontrol.setPlaylist(l);
         c.audiocontrol.playPlayer();
         
         System.out.println("import fatto");
-        Thread.sleep(200);
+        Thread.sleep(2000);
         for(Song i : c.model.getSongList()){
             System.out.println("INIZIO");
             System.out.println(i.getPath());
@@ -84,6 +112,7 @@ public class Controller implements ViewObserver {
             System.out.println("genre "+i.getGenre());
             System.out.println("size "+i.getSize());
             System.out.println("duration "+i.getDuration().getMin()+":"+ i.getDuration().getSec());
+            System.out.println("counter " + i.getReproductionsCounter());
             System.out.println("FINE");
         }
     }
