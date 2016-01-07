@@ -3,18 +3,16 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import Controller.Files.FileController;
-
 public class Playlist {
     
     private String name;
     private List<Song> trackList;
     private String path;
     
-    public Playlist(String name) {
+    public Playlist(String name, String path) {
         this.name = name;
         this.trackList = new ArrayList<>();
-        this.path = FileController.playlistDirPath+ name+".txt";
+        this.path = path;
     }
 
     public Playlist(String name, List<Song> trackList) {
@@ -31,10 +29,6 @@ public class Playlist {
 
     public List<Song> getTrackList() {
         return this.trackList;
-    }
-    
-    public String getPath() {
-        return this.path;
     }
     
     public void addSong(Song song) {

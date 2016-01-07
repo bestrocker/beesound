@@ -137,8 +137,8 @@ public class LibraryManager implements Manager{   // this class is implemented u
         //add serialization
     }
     
-    public void newPlaylist(String name) {
-        Playlist playlist = new Playlist(name);
+    public void newPlaylist(String name, String path) {
+        Playlist playlist = new Playlist(name, path);
         this.playlistList.add(playlist);
         //add serialization
     }
