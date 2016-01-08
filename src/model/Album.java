@@ -3,41 +3,54 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representation of an album inside the music library.
+ * @author tiziano
+ *
+ */
 public class Album {
+     
+    private final String title;
+    private final List<Song> trackList;
     
-    private static String DEFAULT = "Unknown";
-    
-    private String title;
-    private List<Song> trackList;
-    
-    public Album() {
-        this.title = DEFAULT;
-        this.trackList = new ArrayList<>();
-    }
-    
-    public Album(String title) {        // this constructor is called in LibraryManager
+    /**
+     * Constructs an album with the specified title and an empty list of tracks.
+     * @param title - the title of the album to create.
+     */
+    public Album(final String title) {        // this constructor is called in LibraryManager
         this.title = title;
         this.trackList = new ArrayList<>();
-    }
-    
-    public Album(String title, List<Song> trackList) {
-        this.title = title;
-        this.trackList = trackList;
     }
 
+    /**
+     * Returns the title of the album.
+     * @return the title of the album.
+     */
     public String getTitle() {
         return this.title;
     }
 
+    /**
+     * Returns the list of the songs in the album. 
+     * @return list of the songs in the field trackList.
+     */
     public List<Song> getTrackList() {
         return this.trackList;
     }
     
-    public void addSong(Song song) {
+    /**
+     * Adds a new song to the album.
+     * @param song - the song to insert in the album.
+     */
+    public void addSong(final Song song) {
         this.trackList.add(song);
     }
     
-    public void removeSong(Song song) {
+    /**
+     * Removes a song from the album.
+     * @param song - the song to remove from the album.
+     */
+    public void removeSong(final Song song) {
         this.trackList.remove(song);
     }
 }
