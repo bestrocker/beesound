@@ -5,15 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class LibraryManager implements Manager{   // this class is implemented using the singleton pattern
+/**
+ * Representation of the music library. 
+ * @author tiziano
+ */
+public final class LibraryManager implements Manager{   // this class is implemented using the singleton pattern
     
     private static final LibraryManager INSTANCE = new LibraryManager();
     
-    private List<Song> songList;
-    private List<Album> albumList;
-    private List<Artist> artistList;
-    private List<Genre> genreList;
-    private List<Playlist> playlistList;        // try to find a better name for this field
+    private final List<Song> songList;
+    private final List<Album> albumList;
+    private final List<Artist> artistList;
+    private final List<Genre> genreList;
+    private final List<Playlist> playlistList;        // try to find a better name for this field
     
     private LibraryManager() {
         this.songList = new ArrayList<>();
@@ -23,38 +27,62 @@ public class LibraryManager implements Manager{   // this class is implemented u
         this.playlistList = new ArrayList<>();
     }
     
+    /**
+     * Returns the only instance of this class.
+     * @return an instance of this class.
+     */
     public static LibraryManager getInstance() {
         return INSTANCE;
     }
-
+    
+    /**
+     * Returns the list of the songs in the music library.
+     * @return the list of the songs in the music library.
+     */
     public List<Song> getSongList() {
         return this.songList;
     }
-
+    
+    /**
+     * Returns the list of the albums in the music library.
+     * @return the list of the albums in the music library.
+     */
     public List<Album> getAlbumList() {
         return this.albumList;
     }
-
+    
+    /**
+     * Returns the list of the artists in the music library.
+     * @return the list of the artists in the music library.
+     */
     public List<Artist> getArtistList() {
         return this.artistList;
     }
-
+    
+    /**
+     * Returns the list of the genres in the music library.
+     * @return the list of the genres in the music library.
+     */
     public List<Genre> getGenreList() {
         return this.genreList;
     }
-
+    
+    /**
+     * Returns the list of the playlists in the music library.
+     * @return the list of the playlists in the music library.
+     */
     public List<Playlist> getPlaylistList() {
         return this.playlistList;
     }
 
     @Override
-    public void addSongToLibrary(Song song) {   // raw version, try to improve
+    public void addSongToLibrary(final Song song) {   // raw version, try to improve
         boolean albumCheck = false;
         boolean artistCheck = false;
         this.songList.add(song);
         if (!this.getAlbumTitles().contains(song.getAlbum())) {
             this.newAlbum(song.getAlbum());
-            albumCheck = true;;
+            albumCheck = true;
         }
         this.getAlbumFromList(song.getAlbum()).addSong(song);
         if (!this.getArtistNames().contains(song.getArtist())) {      // this method seems not to use equals.
@@ -74,26 +102,26 @@ public class LibraryManager implements Manager{   // this class is implemented u
     }
     
     private List<String> getAlbumTitles() {     // try to generalize these methods with interfaces and abstract classes
-        List<String> list = new ArrayList<>();
+        final List<String> list = new ArrayList<>();
         this.albumList.forEach(x -> list.add(x.getTitle()));
         return list;       
     }
     
     private List<String> getArtistNames() {
-        List<String> list = new ArrayList<>();
+        final List<String> list = new ArrayList<>();
         this.artistList.forEach(x -> list.add(x.getName()));
         return list;       
     }
     
     private List<String> getGenreNames() {
-        List<String> list = new ArrayList<>();
+        final List<String> list = new ArrayList<>();
         this.genreList.forEach(x -> list.add(x.getName()));
         return list;
     }
     
     // try to reduce the private methods below
-    private Album getAlbumFromList(String title) throws NoSuchElementException {
-        for (Album a : this.albumList) {
+    private Album getAlbumFromList(final String title) throws NoSuchElementException {
+        for (final Album a : this.albumList) {
             if (a.getTitle().equals(title)) {
                 return a;
             }
@@ -101,8 +129,8 @@ public class LibraryManager implements Manager{   // this class is implemented u
         throw new NoSuchElementException("No such album in the library");
     }
     
-    private Artist getArtistFromList(String name) throws NoSuchElementException {
-        for (Artist a : this.artistList) {
+    private Artist getArtistFromList(final String name) throws NoSuchElementException {
+        for (final Artist a : this.artistList) {
             if (a.getName().equals(name)) {
                 return a;
             }
@@ -110,8 +138,8 @@ public class LibraryManager implements Manager{   // this class is implemented u
         throw new NoSuchElementException("No such artist in the library");
     }
     
-    private Genre getGenreFromList(String name) throws NoSuchElementException {
-        for (Genre g : this.genreList) {
+    private Genre getGenreFromList(final String name) throws NoSuchElementException {
+        for (final Genre g : this.genreList) {
             if (g.getName().equals(name)) {
                 return g;
             }
@@ -119,37 +147,42 @@ public class LibraryManager implements Manager{   // this class is implemented u
         throw new NoSuchElementException("No such genre in the library");
     }
     
-    public void newAlbum(String title) {
-        Album album = new Album(title);
+    private void newAlbum(final String title) {
+        final Album album = new Album(title);
         this.albumList.add(album);
         //add serialization
     }
     
-    public void newArtist(String name) {
-        Artist artist = new Artist(name);
+    private void newArtist(final String name) {
+        final Artist artist = new Artist(name);
         this.artistList.add(artist);
         //add serialization
     }
     
-    public void newGenre(String name) {
-        Genre genre = new Genre(name);
+    private void newGenre(final String name) {
+        final Genre genre = new Genre(name);
         this.genreList.add(genre);
         //add serialization
     }
     
-    public void newPlaylist(String name, String path) {
-        Playlist playlist = new Playlist(name, path);
+    /**
+     * Adds a new playlist to the music library.
+     * @param name - the name of the playlist.
+     * @param path - the path in which store the playlist.
+     */
+    public void newPlaylist(final String name, final String path) {
+        final Playlist playlist = new Playlist(name, path);
         this.playlistList.add(playlist);
         //add serialization
     }
     
     @Override
-    public void serializeData(Path path) {
+    public void serializeData(final Path path) {
         
     }
     
-    public Song getSongFromPath(Path path) throws NoSuchElementException {
-        for (Song s : this.songList) {
+    public Song getSongFromPath(final Path path) throws NoSuchElementException {
+        for (final Song s : this.songList) {
             if (s.getPath().equals(path)) {
                 return s;
             } 
@@ -157,8 +190,13 @@ public class LibraryManager implements Manager{   // this class is implemented u
         throw new NoSuchElementException("This song is not present in the list.");
     }
     
-    public List<String> getPathsFromPlaylist(Playlist playlist) {
-        List<String> list = new ArrayList<>();
+    /**
+     * Returns a list containing the paths of the songs in the specified playlist.
+     * @param playlist - the playlist from which the song paths are extracted.
+     * @return a list containing the paths of the songs in the specified playlist.
+     */
+    public List<String> getPathsFromPlaylist(final Playlist playlist) {
+        final List<String> list = new ArrayList<>();
         playlist.getTrackList().forEach(x -> list.add(x.getPath().toString()));
         return list;
     }    

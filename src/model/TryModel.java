@@ -1,8 +1,7 @@
 package model;
 
-import java.nio.file.FileSystems;
 import Controller.Audio.MpegInfo.Duration;
-import java.nio.file.Path;
+
 
 public class TryModel {
 
@@ -26,7 +25,7 @@ public class TryModel {
         /*System.out.println("Genres:");
         library.getGenreList().forEach(x -> x.getAlbumList().forEach(y -> System.out.println(y.getTitle())));
         library.getGenreList().forEach(x -> x.getArtistList().forEach(y -> System.out.println(y.getName())));*/
-        Playlist playlist = new Playlist("prova");
+        Playlist playlist = new Playlist("prova", path);
         playlist.addSong(song);
         Song song3 = new Song("Trains", "In Absentia", "Porcupine Tree", "Prog Rock", duration, 200, 15000, path);
         library.addSongToLibrary(song3);

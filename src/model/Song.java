@@ -1,22 +1,32 @@
 package model;
 
 import Controller.Audio.MpegInfo.Duration;
-import java.nio.file.Path;
 
 public class Song {
        
-    private String title;
-    private String album;
-    private String artist;
-    private String genre;
-    private Duration duration;    
-    private int bitRate;
+    private final String title;
+    private final String album;
+    private final String artist;
+    private final String genre;
+    private final Duration duration;    
+    private final int bitRate;
     private int reproductionsCounter;
-    private long size;
-    private String path;
-   
-    public Song(String title, String album, String artist, String genre, 
-            Duration duration, int bitRate, long size, String path) {
+    private final long size;
+    private final String path;
+    
+    /**
+     * Constructor for class Song. 
+     * @param title
+     * @param album
+     * @param artist
+     * @param genre
+     * @param duration
+     * @param bitRate 
+     * @param size 
+     * @param path 
+     */
+    public Song(final String title, final String album, final String artist, final String genre, 
+            final Duration duration, final int bitRate, final long size, final String path) {
         this.title = title;
         this.album = album;
         this.artist = artist;
@@ -36,46 +46,45 @@ public class Song {
         private String genre;
         private Duration duration;    
         private int bitRate;
-        //private int reproductionsCounter = 0;
         private long size;
         private String path;     
         
-        public Builder title(String title) {
+        public Builder title(final String title) {
             this.title = title;
             return this;
         }
         
-        public Builder album(String album) {
+        public Builder album(final String album) {
             this.album = album;
             return this;
         }
         
-        public Builder artist(String artist) {
+        public Builder artist(final String artist) {
             this.artist = artist;
             return this;
         }
         
-        public Builder genre(String genre) {
+        public Builder genre(final String genre) {
             this.genre = genre;
             return this;            
         }
         
-        public Builder duration(Duration duration) {
+        public Builder duration(final Duration duration) {
             this.duration = duration;
             return this;
         }
         
-        public Builder bitRate(int bitRate) {
+        public Builder bitRate(final int bitRate) {
             this.bitRate = bitRate;
             return this;            
         }
         
-        public Builder size(long size) {
+        public Builder size(final long size) {
             this.size = size;
             return this;
         }
         
-        public Builder path(String path) {
+        public Builder path(final String path) {
             this.path = path;
             return this;
         }
@@ -83,7 +92,7 @@ public class Song {
         public Song build() {
             return new Song(this.title, this.album, this.artist, this.genre, this.duration, 
                     this.bitRate, this.size, this.path);
-        }       
+        }
     }
 
     public String getTitle() {
