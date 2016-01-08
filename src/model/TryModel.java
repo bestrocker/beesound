@@ -6,7 +6,7 @@ import Controller.Audio.MpegInfo.Duration;
 public class TryModel {
 
     public static void main(String[] args) {
-        
+        /*
         LibraryManager library = LibraryManager.getInstance();
         Duration duration = new Duration(6, 30);
         String path = System.getProperty("user.home");
@@ -25,7 +25,7 @@ public class TryModel {
         /*System.out.println("Genres:");
         library.getGenreList().forEach(x -> x.getAlbumList().forEach(y -> System.out.println(y.getTitle())));
         library.getGenreList().forEach(x -> x.getArtistList().forEach(y -> System.out.println(y.getName())));*/
-        Playlist playlist = new Playlist("prova", path);
+     /*   Playlist playlist = new Playlist("prova", path);
         playlist.addSong(song);
         Song song3 = new Song("Trains", "In Absentia", "Porcupine Tree", "Prog Rock", duration, 200, 15000, path);
         library.addSongToLibrary(song3);
@@ -36,7 +36,7 @@ public class TryModel {
         System.out.println("Genres:");
         library.getGenreList().forEach(x -> x.getArtistList().forEach(y -> System.out.println(y.getName())));
         library.getGenreList().forEach(x -> x.getAlbumList().forEach(y -> System.out.println(y.getTitle())));*/
-        playlist.getTrackList().forEach(x -> System.out.println(x.getTitle()));
-        
+       // playlist.getTrackList().forEach(x -> System.out.println(x.getTitle()));
+       
     }
 }
