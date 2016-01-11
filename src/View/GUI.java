@@ -91,7 +91,7 @@ public class GUI {
 		
 		/*SELECTION PANEL*/
 		
-		/*a box layout panel witch contains two panels*/
+		/*a box layout panel that contains two panels*/
 		final JPanel selectionPanel = new JPanel();
 		selectionPanel.setLayout(new BoxLayout(selectionPanel, BoxLayout.Y_AXIS));
 		bigPanel.add(selectionPanel);
