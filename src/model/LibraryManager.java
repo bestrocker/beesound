@@ -183,7 +183,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
     
     public Song getSongFromPath(final Path path) throws NoSuchElementException {
         for (final Song s : this.songList) {
-            if (s.getPath().equals(path)) {
+            if (s.getPath().equals(path.toString())) {
                 return s;
             } 
         }
