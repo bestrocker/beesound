@@ -65,7 +65,7 @@ public class Controller implements ViewObserver {
                                  this.addSong(i, info);
                              }
                          });
-        Log.INFO("Mpeg tag loaded into the library.");
+        Log.INFO("Mpeg tag succesfully loaded into the library.");
     }
     
     public static void main(String[] args) throws InterruptedException{
@@ -74,10 +74,10 @@ public class Controller implements ViewObserver {
         List<String> l = c.filecontrol.listAllSongPath();
         
         List<Song> lsong = c.model.getSongList();
-        c.audiocontrol.setPlaylist(new Playlist("ciao", lsong));
+        
        // c.audiocontrol.addSongInPlaylist("/home/bestrocker221/Dropbox/Musica/holdbacktheriver.mp3");
         c.audiocontrol.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
-        
+        c.audiocontrol.setPlaylist(c.model.getPlaylistList().get(0));
        /* 
         c.newPlaylistFile("bella");
         System.out.println("CREATED : " +c.model.getPlaylistList().get(0).getPath());
@@ -133,9 +133,9 @@ public class Controller implements ViewObserver {
      */
     @Override
     public void addSong(String songPath) {
-        String path =this.filecontrol.importToLibrary(songPath);
+      //  String path =this.filecontrol.importToLibrary(songPath);
         MpegInfo info = MpegInfo.getInstance();
-        info.load(new File(path));
+        info.load(new File(this.filecontrol.importToLibrary(songPath)));
         this.addSong(songPath, info);
         
     }
