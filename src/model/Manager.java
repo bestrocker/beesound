@@ -15,9 +15,6 @@ public interface Manager {
      */
     void addSongToLibrary(Song song);
     
-    /**
-     * Serializes info of a specified song in the file system.
-     * @param path - the path in which data is serialized.
-     */
-    void serializeData(Path path);
+    
+
 }

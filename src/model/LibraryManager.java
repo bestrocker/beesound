@@ -19,6 +19,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
     private final List<Genre> genreList;
     private final List<Playlist> playlistList;        // try to find a better name for this field
     
+    
     private LibraryManager() {
         this.songList = new ArrayList<>();
         this.albumList = new ArrayList<>();
@@ -174,11 +175,6 @@ public final class LibraryManager implements Manager{   // this class is impleme
         final Playlist playlist = new Playlist(name, path);
         this.playlistList.add(playlist);
         //add serialization
-    }
-    
-    @Override
-    public void serializeData(final Path path) {
-        
     }
     
     public Song getSongFromPath(final Path path) throws NoSuchElementException {
