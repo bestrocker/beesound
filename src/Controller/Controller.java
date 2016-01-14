@@ -9,8 +9,6 @@ import Controller.Audio.AudioController.REPRODUCTION_STRATEGY;
 import Controller.Files.FileController;
 import Controller.Files.Log;
 import model.LibraryManager;
-import model.Playlist;
-import model.Song;
 
 public class Controller implements ViewObserver {
 
@@ -42,13 +40,16 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void addSongInPlaylist(final Song song, final Playlist playlist){
-        playlist.addSong(song);
+    public void addSongInPlaylist(final String song, final String playlist){
+       this.model.addSongInPlaylist(song,playlist);
+        /* playlist.addSong(song);*/
+       final String songPath= this.model.getSongPath(song);
+       final String playlistPath = this.model.getPlaylistPath(playlist);
         try {
-            if(!this.filecontrol.getPlaylistSongs(new File(playlist.getPath()))
-                    .contains(song.getPath())){
-                this.filecontrol.appendToFile(song.getPath(),playlist.getPath());
-                Log.INFO(song.getTitle()+ " Added to library");
+            if(!this.filecontrol.getPlaylistSongs(new File(playlistPath))
+                    .contains(songPath)){
+                this.filecontrol.appendToFile(songPath,playlistPath);
+                Log.INFO(songPath+ " Added to library");
             }
         } catch (IOException e) {
             Log.ERROR("Can't addSongInPlaylist");
@@ -121,7 +122,6 @@ public class Controller implements ViewObserver {
                 .bitRate(info.getBitRate())
                 .genre(info.getGenre().orElse(unk))
                 .size(info.getSize())
-                .bitRate(info.getBitRate())
                 .duration(info.getDurationInMinutes())
                 .path(songPath)
                 .build()
@@ -144,16 +144,16 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public List<Song> showAllSong() {
-        return this.model.getSongList();
+    public List<String> showAllSong() {
+        return this.model.getSongTitles();
     }
     
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Playlist> showAllPlaylist() {
-        return this.model.getPlaylistList();
+    public List<String> showAllPlaylist() {
+        return this.model.getPlaylistNames();
     }
     
     /**
@@ -167,11 +167,11 @@ public class Controller implements ViewObserver {
     /**
      * {@inheritDoc}
      */
-    @Override
+    @Override/*
     public void playButton(Song song) {
         this.audiocontrol.playPlayer(song);
     }
-    
+    */
     /**
      * {@inheritDoc}
      */
@@ -210,8 +210,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void addSongInReproductionPlaylist(Song song) {
-        this.audiocontrol.addSongInPlaylist(song);
-        
+    public void addSongInReproductionPlaylist(String song) {
+        this.addSongInPlaylist(song);
     }
 }
