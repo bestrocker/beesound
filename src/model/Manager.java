@@ -2,6 +2,7 @@ package model;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import Controller.Audio.MpegInfo.Duration;
 
@@ -20,17 +21,9 @@ public interface Manager {
             Duration duration, int bitRate, long size, String path, boolean copyright, int channel,
             String version, int rate, String channelsMode);
     
-    public List<Song> getSongList();
+    public void newPlaylist(final String name, final String path);
     
-    public List<Album> getAlbumList();
+    public Song getSongFromPath(final Path path) throws NoSuchElementException;
     
-    public List<Artist> getArtistList();
-    
-    public List<Genre> getGenreList();
-    
-    public List<Playlist> getPlaylistList();
-    
-    
-    
-
+    public List<String> getPathsFromPlaylist(final Playlist playlist);
 }
