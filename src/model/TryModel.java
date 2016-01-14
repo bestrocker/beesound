@@ -26,7 +26,7 @@ public class TryModel {
                             .build();
         
         LibraryManager library = LibraryManager.getInstance();
-        library.addSongToLibrary(song);
+        //library.addSongToLibrary(song);
         library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));
                 
         
