@@ -21,30 +21,90 @@ public interface Manager {
             Duration duration, int bitRate, long size, String path, boolean copyright, int channel,
             String version, int rate, String channelsMode);
     
+    
+    /**
+     * Creates a new playlist with the specified name and path and adds it to the music library.
+     * @param name - the name of the playlist to create
+     * @param path - the path of the playlist to create
+     */
     public void newPlaylist(final String name, final String path);
     
+    /**
+     * Returns a song from the spiecified path.
+     * @param path - the path in which the song to find is stored.
+     * @return - the song stored in the specified path.
+     * @throws NoSuchElementException
+     */
     public Song getSongFromPath(final Path path) throws NoSuchElementException;
     
+    /**
+     * Returns the list of the paths of the songs in the specified playlist.
+     * @param playlist - the name of the playlist from which the song paths are extracted.
+     * @return the list of the paths of the songs in the specified playlist.
+     */
     public List<String> getPathsFromPlaylist(final Playlist playlist);
     
+    /**
+     * Returns a list containing the titles of all the songs in the music library.
+     * @return a list containing the titles of all the songs in the music library.
+     */
     public List<String> getSongTitles();
     
+    /**
+     * Returns a list containing the names of all the playlists in the music library.
+     * @return a list containing the names of all the playlists in the music library.
+     */
     public List<String> getPlaylistNames();
     
-    public String getCurrentSong(String songTitle);
+    /**
+     * Returns the path of the song stored in the specified index of the list.
+     * @param index - the index of the song from which the path is extracted.
+     * @return the path of the song stored in the specified index of the list.
+     */
+    public String getCurrentSong(int index);
     
+    /**
+     * Adds the specified song to the specified playlist.
+     * @param songTitle - the title of the song to add.
+     * @param playlistName - the name of the playlist in which the song is added.
+     */
     public void addSongInPlaylist(String songTitle, String playlistName);
     
+    /**
+     * Adds the specified song to the reproduction playlist.
+     * @param songTitle - the title of the song to add to the reproduction playlist.
+     */
     public void addSongInPlaylist(String songTitle);
     
+    /**
+     * Adds the song with the specified index to the reproduction playlist.
+     * @param index - the index of the song to add to the reproduction playlist.
+     */
     public void addSongToQueue(int index);
     
+    /**
+     * Returns the path of the song with the specified title.
+     * @param songTitle - the title of the song whose path is returned. 
+     * @return the path of the song with the specified title.
+     */
     public String getSongPath(String songTitle);
     
+    /**
+     * Returns the path of the playlist with the specified name.
+     * @param playlistName - the name of the playlist whose path is returned.
+     * @return the path of the playlist with the specified name.
+     */
     public String getPlaylistPath(String playlistName);
     
-    public String setReproductionPlaylist(String playlistName);
+    /**
+     * Sets the playlist with the specified name as reproduction playlist.
+     * @param playlistName - the name of the playlist to set as reproduction playlist.
+     */
+    public void setReproductionPlaylist(String playlistName);
     
+    /**
+     * Sets the song with the specified title as song in reproduction. 
+     * @param songTitle - the title of the song to set in reproduction.
+     */
     public void setInReproduction(String songTitle);
-    
 }
