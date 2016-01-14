@@ -20,14 +20,15 @@ public final class LibraryManager implements Manager{   // this class is impleme
     private final List<Artist> artistList;
     private final List<Genre> genreList;
     private final List<Playlist> playlistList;        // try to find a better name for this field
+    //private final Playlist.Playing playlistInReproduction;
     
-    
-    private LibraryManager() {
+    private LibraryManager(/*String queueName, String queuePath*/) {
         this.songList = new ArrayList<>();
         this.albumList = new ArrayList<>();
         this.artistList = new ArrayList<>();
         this.genreList = new ArrayList<>();
         this.playlistList = new ArrayList<>();
+        //this.playlistInReproduction = new Playlist.Playing(queueName, queuePath); 
     }
     
     /**
