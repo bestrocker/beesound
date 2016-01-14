@@ -23,6 +23,7 @@ public class Song {
     private final String version;
     private final int rate;
     private final String channelsMode;
+    private boolean isPaused;
     
     /**
      * Constructs a new song with the specified parameters. The reproductionsCounter field is initialized to 0. 
@@ -52,6 +53,7 @@ public class Song {
         this.version = version;
         this.rate = rate;
         this.channelsMode = channelsMode;
+        this.isPaused = false;
     }
     
     /**
@@ -279,6 +281,14 @@ public class Song {
     
     public String getChannelsMode() {
         return this.channelsMode;
+    }
+    
+    public boolean getIsPaused() {
+        return this.isPaused;
+    }
+    
+    public void setSongPaused(boolean pause) {
+        this.isPaused = pause;
     }
     
     /**
