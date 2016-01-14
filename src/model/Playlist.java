@@ -20,6 +20,33 @@ public class Playlist implements Serializable{
         this.trackList = new ArrayList<>();
         this.path = path;
     }
+    
+    public class Playing extends Playlist {
+        
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+        //private final String QUEUE_NAME = "Reproduction_Queue";
+        private Song songInReproduction;
+        
+        public Playing() {
+            super(null, null);
+           
+        }
+        
+        /**
+         * Returns the number of elements inside the reproduction queue.
+         * @return the number of elements inside the reproduction queue.
+         */
+        public int getQueueLenght() {
+            return super.trackList.size();
+        }
+        
+        public Song getSongInReproduction() {
+            return this.songInReproduction;
+        }
+    }
 
     /**
      * Returns the path in which the playlist is stored.
