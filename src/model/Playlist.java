@@ -30,9 +30,9 @@ public class Playlist implements Serializable{
         //private final String QUEUE_NAME = "Reproduction_Queue";
         private Song songInReproduction;
         
-        public Playing(String name, String path) {
-            super(name, path);
-            this.songInReproduction = null;
+        public Playing() {
+            super(null, null);
+           
         }
         
         /**
