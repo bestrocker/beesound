@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import Controller.Audio.MpegInfo.Duration;
+
 /**
  * Representation of the music library. 
  * @author tiziano
@@ -77,7 +79,12 @@ public final class LibraryManager implements Manager{   // this class is impleme
     }
 
     @Override
-    public void addSongToLibrary(final Song song) {   // raw version, try to improve
+    public void addSongToLibrary(String title, String album, String artist, String genre,
+            Duration duration, int bitRate, long size, String path, boolean copyright, int channel,
+            String version, int rate, String channelsMode) {   // raw version, try to improve
+        
+        Song song = createSong(title, album, artist, genre, duration, bitRate, size, path, copyright, channel, 
+                                version, rate, channelsMode);
         boolean albumCheck = false;
         boolean artistCheck = false;
         this.songList.add(song);
@@ -100,6 +107,26 @@ public final class LibraryManager implements Manager{   // this class is impleme
         if (artistCheck) {
             this.getGenreFromList(song.getGenre()).getArtistList().add(this.getArtistFromList(song.getArtist()));
         }       
+    }
+    
+    private Song createSong(String title, String album, String artist, String genre,
+            Duration duration, int bitRate, long size, String path, boolean copyright, int channel,
+            String version, int rate, String channelsMode) {
+        return new Song.Builder()
+                .title(title)
+                .album(album)
+                .artist(artist)
+                .genre(genre)
+                .duration(duration)
+                .bitRate(bitRate)
+                .size(size)
+                .path(path)
+                .copyright(copyright)
+                .channel(channel)
+                .version(version)
+                .rate(rate)
+                .channelsMode(channelsMode)
+                .build();
     }
     
     private List<String> getAlbumTitles() {     // try to generalize these methods with interfaces and abstract classes
