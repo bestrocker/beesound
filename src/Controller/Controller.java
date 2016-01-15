@@ -9,11 +9,12 @@ import Controller.Audio.AudioController.REPRODUCTION_STRATEGY;
 import Controller.Files.FileController;
 import Controller.Files.Log;
 import model.LibraryManager;
+import view.GUI;
 
 public class Controller implements ViewObserver {
 
     private final LibraryManager model;
-  //private final View view;
+    private final GUI view;
     private final AudioController audiocontrol;
     private final FileController filecontrol;
     
@@ -21,6 +22,7 @@ public class Controller implements ViewObserver {
         this.model = LibraryManager.getInstance();        
         this.filecontrol = new FileController();
         this.audiocontrol = new AudioController(model);
+        this.view = new GUI();
         loadInfoToLibrary();
        
     }
@@ -49,7 +51,7 @@ public class Controller implements ViewObserver {
             if(!this.filecontrol.getPlaylistSongs(new File(playlistPath))
                     .contains(songPath)){
                 this.filecontrol.appendToFile(songPath,playlistPath);
-                Log.INFO(songPath+ " Added to library");
+                Log.INFO(songPath+ " Added to playlist "+playlist);
             }
         } catch (IOException e) {
             Log.ERROR("Can't addSongInPlaylist");
@@ -74,11 +76,11 @@ public class Controller implements ViewObserver {
         
         List<String> l = c.filecontrol.listAllSongPath();
         
-        List<Song> lsong = c.model.getSongList();
+    //    List<Song> lsong = c.model.getSongList();
         
        // c.audiocontrol.addSongInPlaylist("/home/bestrocker221/Dropbox/Musica/holdbacktheriver.mp3");
-        c.audiocontrol.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
-        c.audiocontrol.setPlaylist(c.model.getPlaylistList().get(0));
+      //  c.audiocontrol.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
+    //    c.audiocontrol.setPlaylist(c.model.getPlaylistList().get(0));
        /* 
         c.newPlaylistFile("bella");
         System.out.println("CREATED : " +c.model.getPlaylistList().get(0).getPath());
@@ -88,12 +90,12 @@ public class Controller implements ViewObserver {
         System.out.println("TRYING TO SET PLAYLIST "+c.model.getPlaylistList().get(0).getPath());*/
         //c.audiocontrol.setPlaylist(c.model.getPlaylistList().get(0));
        
-        c.audiocontrol.playPlayer();
-        Thread.sleep(10000);
-        c.playButton(c.model.getSongList().get(3));
+        //c.audiocontrol.playPlayer();
+       // Thread.sleep(10000);
+      //  c.playButton(c.model.getSongList().get(3));
       //  System.out.println(c.model.getSongList().get(0).getTitle() + " added to "+ c.model.getPlaylistList().get(0).getName() );
-        System.out.println("import fatto");
-       
+       // System.out.println("import fatto");
+       /*
         while (true){
         Thread.sleep(2000);
         c.audiocontrol.nextPlayer();
@@ -110,22 +112,26 @@ public class Controller implements ViewObserver {
             System.out.println("counter " + i.getReproductionsCounter());
             System.out.println("FINE");
         }
-        }
+        }*/
     }
     
     private void addSong(String songPath, MpegInfo info){
         final String unk = "";
-        this.model.addSongToLibrary(new Song.Builder()
-                .title(info.getTitle().orElse(songPath.substring(songPath.lastIndexOf(FileController.sep)+1,songPath.length()-4)))
-                .album(info.getAlbum().orElse(unk))
-                .artist(info.getArtist().orElse(unk))
-                .bitRate(info.getBitRate())
-                .genre(info.getGenre().orElse(unk))
-                .size(info.getSize())
-                .duration(info.getDurationInMinutes())
-                .path(songPath)
-                .build()
-                );
+        this.model.addSongToLibrary(
+                (info.getTitle().orElse(songPath.substring(songPath.lastIndexOf(FileController.sep)+1,songPath.length()-4)))
+               ,(info.getAlbum().orElse(unk))
+               ,(info.getArtist().orElse(unk))
+               ,(info.getGenre().orElse(unk))
+               ,(info.getDurationInMinutes())
+               ,(info.getBitRate())
+               ,(info.getSize())
+               ,(songPath)
+               ,(info.getCopyright())
+               ,(info.getChannels())
+               ,(info.getVersion())
+               ,(info.getSamplingRate())
+               ,(info.getChannelsMode())
+               );
     }
     
     /**
@@ -167,7 +173,7 @@ public class Controller implements ViewObserver {
     /**
      * {@inheritDoc}
      */
-    @Override/*
+    /*
     public void playButton(Song song) {
         this.audiocontrol.playPlayer(song);
     }
@@ -211,6 +217,6 @@ public class Controller implements ViewObserver {
      */
     @Override
     public void addSongInReproductionPlaylist(String song) {
-        this.addSongInPlaylist(song);
+        this.model.addSongInPlaylist(song);
     }
 }

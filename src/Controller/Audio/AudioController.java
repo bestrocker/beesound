@@ -6,13 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import Controller.Controller;
 import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
 import model.LibraryManager;
-import model.Playlist;
-import model.Song;
 
 public class AudioController implements BasicPlayerListener{
     
@@ -55,7 +52,6 @@ public class AudioController implements BasicPlayerListener{
         this.mp3Info = MpegInfo.getInstance();
         this.out = System.out;
       /* this.playlist = new ArrayList<>();
-        
         this.lsong = new ArrayList<>();*/
     }
     
@@ -176,7 +172,8 @@ public class AudioController implements BasicPlayerListener{
             //this.incrementSongCounter(this.lsong.get(this.counter));
             //String s = this.lsong.get(this.counter).getPath();
             String s = this.lm.getCurrentSong(this.counter);
-            this.lm.setInReproduction(this.counter);
+            this.lm.setInReproduction(s);
+            Log.INFO(s + " set as Song in reproduction");
             this.paused = false;
             this.control.open(new File(s));
             this.control.play();
@@ -277,7 +274,7 @@ public class AudioController implements BasicPlayerListener{
         display("setController : "+controller);
     }
     
-    public void incrementSongCounter(final Song song){
-        song.incrementCounter();
-    }
+//    public void incrementSongCounter(final Song song){
+//        song.incrementCounter();
+//    }
 }
