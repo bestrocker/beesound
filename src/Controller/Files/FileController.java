@@ -109,7 +109,7 @@ public  class FileController implements SystemManager{
                Log.ERROR("Can't importToLibrary, error during copy");
            }
        }
-       return pathSource;
+       return d;
     }
     
     /**
