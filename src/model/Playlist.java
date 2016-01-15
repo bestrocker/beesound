@@ -39,9 +39,9 @@ public class Playlist implements Serializable{
          * Returns the number of elements inside the reproduction queue.
          * @return the number of elements inside the reproduction queue.
          */
-        public int getQueueLenght() {
+        /* {
             return super.trackList.size();
-        }
+        }*/
         
         public Song getSongInReproduction() {
             return this.songInReproduction;
