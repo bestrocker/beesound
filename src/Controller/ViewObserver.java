@@ -23,20 +23,20 @@ public interface ViewObserver {
      * Return a list of all song in library
      * @return song list
      */
-    List<Song> showAllSong();
+    List<String> showAllSong();
     
     /**
      * Return a list of all playlist.
      * @return playlist list
      */
-    List<Playlist> showAllPlaylist();
+    List<String> showAllPlaylist();
     
     /**
      * Add the selected song to the given playlist
      * @param song
      * @param playlist
      */
-    void addSongInPlaylist(final Song song, final Playlist playlist);
+    void addSongInPlaylist(final String songName, final String playlistName);
     
     /**
      * Play.
@@ -46,9 +46,9 @@ public interface ViewObserver {
     /**
      * Play selected song.
      * @param song
-     */
-    void playButton(final Song song);
-    
+     *//*
+    void playButton(final String songName);
+    */
     /**
      * Pause.
      */
@@ -71,7 +71,7 @@ public interface ViewObserver {
      */
     void skipTo(final long toBytes);
     
-    void addSongInReproductionPlaylist(final Song song);
+    void addSongInReproductionPlaylist(final String songName);
 //    /**
 //     * Increment by one the counter of song's reproductions.
 //     * @param songPath
