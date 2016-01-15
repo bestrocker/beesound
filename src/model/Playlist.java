@@ -2,13 +2,14 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Playlist implements Serializable{
     
     private final String name;
     private final List<Song> trackList;
-    private String path;
+    private final String path;
     
     /**
      * Constructor with two parameters: the name of the playlist to create and its path in the file system.
@@ -17,11 +18,11 @@ public class Playlist implements Serializable{
      */
     public Playlist(final String name, final String path) {
         this.name = name;
-        this.trackList = new ArrayList<>();
+        this.trackList = new LinkedList<>();
         this.path = path;
     }
     
-    public class Playing extends Playlist {
+    public static class Playing extends Playlist {
         
         /**
          * 
@@ -30,8 +31,8 @@ public class Playlist implements Serializable{
         //private final String QUEUE_NAME = "Reproduction_Queue";
         private Song songInReproduction;
         
-        public Playing() {
-            super(null, null);
+        Playing() {
+            super("IN_REPRODUCTION","empty");
            
         }
         
@@ -42,7 +43,10 @@ public class Playlist implements Serializable{
         /* {
             return super.trackList.size();
         }*/
-        
+        public void setSongInReproduction(final Song song){
+            this.songInReproduction=song;
+        }
+            
         public Song getSongInReproduction() {
             return this.songInReproduction;
         }
