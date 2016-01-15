@@ -22,6 +22,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Controller.Controller;
+import Controller.ViewObserver;
 
 import java.awt.Color;
 import javax.swing.JMenuBar;
@@ -32,17 +33,17 @@ import java.awt.Component;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer.UIResource;
 
-public class GUI {
+public class GUI implements ViewInterface{
         
     private static final double PERC_HALF = 0.5;
     private static final double PERC_QUATER = 0.25;
-    private final Controller controller = new Controller();   
+    private ViewObserver controller;   
     private final JFrame frame;
     private final JScrollPane scrollPane = new JScrollPane();
     private JList<String> list;
     
         /*GUI constructor*/
-        public GUI() throws IOException {
+        public GUI(){
         	
 	            //controller.addSong();
 	                
@@ -76,7 +77,7 @@ public class GUI {
 	            button.addActionListener(new ActionListener() {					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-			            list = new JList<>(controller.getNamesFromLibrary(controller.getSongTitles()));
+//			            list = new JList<>(controller.getNamesFromLibrary(controller.getSongTitles()));
 			            createSelectableList();
 					}
 				});
@@ -88,7 +89,7 @@ public class GUI {
 	            button_1.addActionListener(new ActionListener() {					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-			            list = new JList<>(controller.getNamesFromLibrary(controller.getAlbumTitles()));
+	//		            list = new JList<>(controller.getNamesFromLibrary(controller.getAlbumTitles()));
 			            createSelectableList();
 					}
 				});
@@ -100,7 +101,7 @@ public class GUI {
             	button_2.addActionListener(new ActionListener() {					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-			            list = new JList<>(controller.getNamesFromLibrary(controller.getArtistNames()));
+//			            list = new JList<>(controller.getNamesFromLibrary(controller.getArtistNames()));
 			            createSelectableList();
 					}
             	});
@@ -112,7 +113,7 @@ public class GUI {
             	button_3.addActionListener(new ActionListener() {					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-			            list = new JList<>(controller.getNamesFromLibrary(controller.getPlaylistNames()));
+	//		            list = new JList<>(controller.getNamesFromLibrary(controller.getPlaylistNames()));
 			            createSelectableList();
 					}
             	});
@@ -124,7 +125,7 @@ public class GUI {
             	button_4.addActionListener(new ActionListener() {					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-			            list = new JList<>(controller.getNamesFromLibrary(controller.getGenreNames()));
+//			            list = new JList<>(controller.getNamesFromLibrary(controller.getGenreNames()));
 			            createSelectableList();
 					}
             	});
@@ -136,7 +137,7 @@ public class GUI {
             	button_5.addActionListener(new ActionListener() {					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-			            list = new JList<>(controller.getNamesFromLibrary(controller.getSongTitles())); //this button needs a method on library
+	//		            list = new JList<>(controller.getNamesFromLibrary(controller.getSongTitles())); //this button needs a method on library
 			            createSelectableList();
 					}
             	});
@@ -193,7 +194,7 @@ public class GUI {
                 button_6.addActionListener(new ActionListener() {					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						controller.play();					
+						controller.playButton();					
 					}
 				}); 
                 
@@ -246,22 +247,27 @@ public class GUI {
 		/*creation of the list of strings to show into listSelectionPanel*/
         private void createSelectableList() {
         	list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        	list.addListSelectionListener(new MyListSelectionHandler());
+  //      	list.addListSelectionListener(new MyListSelectionHandler());
             list.setFont(new Font("DialogInput", Font.ITALIC, 11));
             scrollPane.setViewportView(list);
         }
         
         /*valuechanged is activated by making a selection on the list, and return the index of the selected element to update() method*/
-        class MyListSelectionHandler implements ListSelectionListener {        	
+        /*class MyListSelectionHandler implements ListSelectionListener {        	
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 controller.updatePath(list.getMaxSelectionIndex());
             }           
         }
-        
+        */
         /*main*/
-        public static void main(String[] args) throws IOException {
+        /*public static void main(String[] args) throws IOException {
                                
                 new GUI();
+        }
+    */
+        @Override
+        public void setObserver(ViewObserver observer) {
+            this.controller = observer;
         }
 }
