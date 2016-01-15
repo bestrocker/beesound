@@ -30,14 +30,6 @@ public interface Manager {
     public void newPlaylist(final String name, final String path);
     
     /**
-     * Returns a song from the spiecified path.
-     * @param path - the path in which the song to find is stored.
-     * @return - the song stored in the specified path.
-     * @throws NoSuchElementException
-     */
-    public Song getSongFromPath(final Path path) throws NoSuchElementException;
-    
-    /**
      * Returns the list of the paths of the songs in the specified playlist.
      * @param playlist - the name of the playlist from which the song paths are extracted.
      * @return the list of the paths of the songs in the specified playlist.
@@ -97,6 +89,12 @@ public interface Manager {
     public String getPlaylistPath(String playlistName);
     
     /**
+     * Returns the number of elements inside the reproduction queue.
+     * @return the number of elements inside the reproduction queue.
+     */
+    public int getQueueSize();
+    
+    /**
      * Sets the playlist with the specified name as reproduction playlist.
      * @param playlistName - the name of the playlist to set as reproduction playlist.
      */
@@ -107,4 +105,10 @@ public interface Manager {
      * @param songTitle - the title of the song to set in reproduction.
      */
     public void setInReproduction(String songTitle);
+    
+    /**
+     * Sets the specified parameter as value of the fields isPaused in the song in reproduction.
+     * @param pause - the value to set in the field isPaused in the song in reproduction.
+     */
+    public void setSongPaused(boolean pause);
 }
