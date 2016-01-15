@@ -1,7 +1,7 @@
 package model;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -23,11 +23,11 @@ public final class LibraryManager implements Manager{   // this class is impleme
     private Playlist.Playing playlistInReproduction;
     
     private LibraryManager(/*String queueName, String queuePath*/) {
-        this.songList = new ArrayList<>();
-        this.albumList = new ArrayList<>();
-        this.artistList = new ArrayList<>();
-        this.genreList = new ArrayList<>();
-        this.playlistList = new ArrayList<>();
+        this.songList = new LinkedList<>();
+        this.albumList = new LinkedList<>();
+        this.artistList = new LinkedList<>();
+        this.genreList = new LinkedList<>();
+        this.playlistList = new LinkedList<>();
         this.playlistInReproduction = new Playlist.Playing(); 
     }
     
@@ -204,16 +204,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
         this.playlistList.add(playlist);
         //add serialization
     }
-    
-    private Song getSongFromPath(final Path path) throws NoSuchElementException {
-        for (final Song s : this.songList) {
-            if (s.getPath().equals(path.toString())) {
-                return s;
-            } 
-        }
-        throw new NoSuchElementException("This song is not present in the list.");
-    }
-    
+   
     /**
      * Returns a list containing the paths of the songs in the specified playlist.
      * @param playlist - the playlist from which the song paths are extracted.
@@ -223,5 +214,90 @@ public final class LibraryManager implements Manager{   // this class is impleme
         final List<String> list = new ArrayList<>();
         playlist.getTrackList().forEach(x -> list.add(x.getPath().toString()));
         return list;
+    }
+
+    @Override
+    public List<String> getSongTitles() {
+        List<String> list = new ArrayList<>();
+        this.songList.forEach(x -> list.add(x.getTitle()));
+        return list;
+    }
+
+    @Override
+    public List<String> getPlaylistNames() {
+        List<String> list = new ArrayList<>();
+        this.playlistList.forEach(x -> list.add(x.getName()));
+        return list;
+    }
+
+    @Override
+    public String getCurrentSong(int index) {
+        return this.songList.get(index).getPath();
+    }
+
+    @Override
+    public void addSongInPlaylist(String songTitle, String playlistName) { // probably this method needs to throw exception
+        Song song = getSong(songTitle);       
+        getPlaylist(playlistName).addSong(song);       
+    }
+    
+    @Override
+    public void addSongInPlaylist(String songTitle) {
+        this.playlistInReproduction.addSong(getSong(songTitle));        
+    }
+    
+    private Song getSong(String songTitle) throws NoSuchElementException {
+        for (Song s : this.songList) {
+            if (s.getTitle().equals(songTitle)) {
+                return s;
+            }            
+        }
+        throw new NoSuchElementException();
+    }
+    
+    private Playlist getPlaylist(String playlistName) throws NoSuchElementException {
+        for (Playlist p : this.playlistList) {
+            if (p.getName().equals(playlistName)) {
+                return p;
+            }           
+        }
+        throw new NoSuchElementException();
+    }
+    
+    @Override
+    public void addSongToQueue(int index) {
+        this.playlistInReproduction.addSong(this.songList.get(index));        
+    }
+
+    @Override
+    public String getSongPath(String songTitle) {
+        return getSong(songTitle).getPath();
+    }
+
+    @Override
+    public String getPlaylistPath(String playlistName) {
+        return getPlaylist(playlistName).getPath();
+    }
+
+    @Override
+    public int getQueueSize() {
+        return this.playlistInReproduction.getTrackList().size();
+    }
+
+    @Override
+    public void setReproductionPlaylist(String playlistName) {
+        this.playlistInReproduction.setTracklist(getPlaylist(playlistName).getTrackList());
+    }
+
+    @Override
+    public void setInReproduction(String songTitle) {
+        Song song = getSong(songTitle);         // with this we need to find the song only one time 
+        this.playlistInReproduction.setSongInReproduction(song);
+        song.incrementCounter();
+    }
+
+    @Override
+    public void setSongPaused(boolean pause) {
+        this.playlistInReproduction.getSongInReproduction().setSongPaused(pause);        
     }    
 }

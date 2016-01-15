@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ public class Album {
      */
     public Album(final String title) {        // this constructor is called in LibraryManager
         this.title = title;
-        this.trackList = new ArrayList<>();
+        this.trackList = new LinkedList<>();
     }
 
     /**

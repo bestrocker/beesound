@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ public class Artist {
      */
     public Artist(final String name) {
         this.name = name;
-        this.albumList = new ArrayList<>();
+        this.albumList = new LinkedList<>();
     }
 
     /**
