@@ -9,9 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -20,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Controller.Controller;
 import Controller.ViewObserver;
@@ -45,8 +48,16 @@ public class GUI implements ViewInterface{
         /*GUI constructor*/
         public GUI(){
         	
-	            //controller.addSong();
-	                
+	            controller.addSong(System.getProperty("user.home" + "rubber_bullets.mp3"));
+        	   /*JFileChooser chooser = new JFileChooser();
+        	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        	        "JPG & GIF Images", "jpg", "gif");
+        	    chooser.setFileFilter(filter);
+        	    int returnVal = chooser.s;
+        	    if(returnVal == JFileChooser.APPROVE_OPTION) {
+        	       System.out.println("You chose to open this file: " +
+        	            chooser.getSelectedFile().getName());
+        	    }  */
 	            /*THE FRAME*/   
 	            frame = new JFrame("BeeSound Player");
 	            frame.setFont(new Font("Trajan Pro", Font.PLAIN, 12));
@@ -77,7 +88,7 @@ public class GUI implements ViewInterface{
 	            button.addActionListener(new ActionListener() {					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-//			            list = new JList<>(controller.getNamesFromLibrary(controller.getSongTitles()));
+			            list = new JList<>(new Vector<>(controller.showAllSong()));
 			            createSelectableList();
 					}
 				});
@@ -194,6 +205,7 @@ public class GUI implements ViewInterface{
                 button_6.addActionListener(new ActionListener() {					
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						System.out.println(getSelectedIndex());
 						controller.playButton();					
 					}
 				}); 
@@ -247,25 +259,29 @@ public class GUI implements ViewInterface{
 		/*creation of the list of strings to show into listSelectionPanel*/
         private void createSelectableList() {
         	list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-  //      	list.addListSelectionListener(new MyListSelectionHandler());
+        	list.addListSelectionListener(new MyListSelectionHandler());
             list.setFont(new Font("DialogInput", Font.ITALIC, 11));
             scrollPane.setViewportView(list);
         }
         
+        public int getSelectedIndex() {
+        	return this.list.getMaxSelectionIndex();
+        }
+        
         /*valuechanged is activated by making a selection on the list, and return the index of the selected element to update() method*/
-        /*class MyListSelectionHandler implements ListSelectionListener {        	
+        class MyListSelectionHandler implements ListSelectionListener {        	
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                controller.updatePath(list.getMaxSelectionIndex());
+                //controller.updatePath(list.getMaxSelectionIndex());
             }           
         }
-        */
+        
         /*main*/
-        /*public static void main(String[] args) throws IOException {
+        public static void main(String[] args) throws IOException {
                                
                 new GUI();
         }
-    */
+    
         @Override
         public void setObserver(ViewObserver observer) {
             this.controller = observer;
