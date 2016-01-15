@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,8 +19,8 @@ public class Genre {
      */
     public Genre(final String name) {
         this.name = name;
-        this.albumList = new ArrayList<>();
-        this.artistList = new ArrayList<>();
+        this.albumList = new LinkedList<>();
+        this.artistList = new LinkedList<>();
     }
     
     /**

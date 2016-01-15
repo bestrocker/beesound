@@ -1,6 +1,5 @@
 package model;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -101,7 +100,7 @@ public interface Manager {
     public void setReproductionPlaylist(String playlistName);
     
     /**
-     * Sets the song with the specified title as song in reproduction. 
+     * Sets the song with the specified title as song in reproduction and increments its reproductions counter. 
      * @param songTitle - the title of the song to set in reproduction.
      */
     public void setInReproduction(String songTitle);

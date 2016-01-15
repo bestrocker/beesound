@@ -8,7 +8,7 @@ import java.util.List;
 public class Playlist implements Serializable{
     
     private final String name;
-    private final List<Song> trackList;
+    private List<Song> trackList;
     private final String path;
     
     /**
@@ -33,16 +33,13 @@ public class Playlist implements Serializable{
         
         Playing() {
             super("IN_REPRODUCTION","empty");
-           
         }
         
         /**
          * Returns the number of elements inside the reproduction queue.
          * @return the number of elements inside the reproduction queue.
          */
-        /* {
-            return super.trackList.size();
-        }*/
+
         public void setSongInReproduction(final Song song){
             this.songInReproduction=song;
         }
@@ -50,6 +47,11 @@ public class Playlist implements Serializable{
         public Song getSongInReproduction() {
             return this.songInReproduction;
         }
+        
+        public void setTracklist(List<Song> tracklist) {
+            super.trackList = tracklist;
+        }
+        
     }
 
     /**
