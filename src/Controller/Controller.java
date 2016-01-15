@@ -23,6 +23,7 @@ public class Controller implements ViewObserver {
         this.filecontrol = new FileController();
         this.audiocontrol = new AudioController(model);
         this.view = new GUI();
+        this.view.setObserver(this);
         loadInfoToLibrary();
        
     }
