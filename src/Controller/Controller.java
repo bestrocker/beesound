@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import Controller.Audio.AudioController;
 import Controller.Audio.MpegInfo;
-import Controller.Audio.AudioController.REPRODUCTION_STRATEGY;
 import Controller.Files.FileController;
+import static Controller.Files.FileController.*;
 import Controller.Files.Log;
 import model.LibraryManager;
 import view.GUI;
@@ -33,10 +33,12 @@ public class Controller implements ViewObserver {
      */
     @Override
     public void newPlaylistFile(final String name){
-        if(this.filecontrol.notExist(FileController.playlistDirPath+name+".txt")){
-            this.filecontrol.createNewFile(name, FileController.playlistDirPath);
+        final String temp = playlistDirPath+name+".txt";
+        if(this.filecontrol.notExist(temp)){
+            this.filecontrol.createNewFile(name,playlistDirPath);
+            this.model.newPlaylist(name,temp);
         }
-        this.model.newPlaylist(name,FileController.playlistDirPath + name + ".txt");
+        //AGGIUNGERE CODICE "ESISTE GIà"
     }
     
     /**
@@ -49,8 +51,7 @@ public class Controller implements ViewObserver {
        final String songPath= this.model.getSongPath(song);
        final String playlistPath = this.model.getPlaylistPath(playlist);
         try {
-            if(!this.filecontrol.getPlaylistSongs(new File(playlistPath))
-                    .contains(songPath)){
+            if(!this.filecontrol.getPlaylistSongs(new File(playlistPath)).contains(songPath)){
                 this.filecontrol.appendToFile(songPath,playlistPath);
                 Log.INFO(songPath+ " Added to playlist "+playlist);
             }
@@ -75,7 +76,7 @@ public class Controller implements ViewObserver {
     public static void main(String[] args) throws InterruptedException{
         Controller c = new Controller();
         
-        List<String> l = c.filecontrol.listAllSongPath();
+       // List<String> l = c.filecontrol.listAllSongPath();
         
     //    List<Song> lsong = c.model.getSongList();
         
@@ -116,30 +117,23 @@ public class Controller implements ViewObserver {
         }*/
     }
     
-    private void addSong(String songPath, MpegInfo info){
-        final String unk = "";
-        this.model.addSongToLibrary(
-                (info.getTitle().orElse(songPath.substring(songPath.lastIndexOf(FileController.sep)+1,songPath.length()-4)))
-               ,(info.getAlbum().orElse(unk))
-               ,(info.getArtist().orElse(unk))
-               ,(info.getGenre().orElse(unk))
-               ,(info.getDurationInMinutes())
-               ,(info.getBitRate())
-               ,(info.getSize())
-               ,(songPath)
-               ,(info.getCopyright())
-               ,(info.getChannels())
-               ,(info.getVersion())
-               ,(info.getSamplingRate())
-               ,(info.getChannelsMode())
-               );
+    private void addSong(final String songPath, final MpegInfo info){
+        final String alternativeTitle = songPath.substring(songPath.lastIndexOf(sep)+1,songPath.length()-4);
+        if(!this.model.getSongTitles().contains(alternativeTitle)){
+            this.model.addSongToLibrary(
+                     (info.getTitle().orElse(alternativeTitle)) ,(info.getAlbum().orElse("")) 
+                     ,(info.getArtist().orElse("")) ,(info.getGenre().orElse("")) ,(info.getDurationInMinutes())
+                    ,(info.getBitRate()) ,(info.getSize()) ,(songPath) ,(info.getCopyright()) ,(info.getChannels())
+                    ,(info.getVersion()),(info.getSamplingRate()),(info.getChannelsMode())
+                    );
+        }
     }
     
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addSong(String songPath) {
+    public void addSong(final String songPath) {
       //  String path =this.filecontrol.importToLibrary(songPath);
         MpegInfo info = MpegInfo.getInstance();
         info.load(new File(this.filecontrol.importToLibrary(songPath)));
@@ -201,7 +195,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void setVolumeButton(double volume) {
+    public void setVolumeButton(final double volume) {
         this.audiocontrol.setVolume(volume);
     }
     
@@ -209,7 +203,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void skipTo(long toBytes) {
+    public void skipTo(final long toBytes) {
         this.audiocontrol.seekPlayer(toBytes);
     }
     
@@ -217,7 +211,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void addSongInReproductionPlaylist(String song) {
+    public void addSongInReproductionPlaylist(final String song) {
         this.model.addSongInPlaylist(song);
     }
 }
