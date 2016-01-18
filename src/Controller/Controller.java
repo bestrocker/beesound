@@ -1,10 +1,12 @@
 package Controller;
 
 import java.io.File;
+import static Controller.Audio.AudioController.REPRODUCTION_STRATEGY.*;
 import java.io.IOException;
 import java.util.List;
 import Controller.Audio.AudioController;
 import Controller.Audio.MpegInfo;
+import Controller.Audio.AudioController.REPRODUCTION_STRATEGY;
 import Controller.Files.FileController;
 import static Controller.Files.FileController.*;
 import Controller.Files.Log;
@@ -211,7 +213,39 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void addSongInReproductionPlaylist(final String song) {
-        this.model.addSongInPlaylist(song);
+    public void addSongInReproductionPlaylist(final String song,final REPRODUCE when) {
+        this.model.addSongInPlaylist(song,when);
+        if(when.getVal()){
+            this.audiocontrol.setReproduceNowBoolean(true);
+            this.audiocontrol.playPlayer();
+        }
+    }
+    
+    public enum REPRODUCE{
+        _NOW(true),_AFTER(false);
+        
+        final private boolean val;
+        private REPRODUCE(final boolean b) {
+           this.val = b;
+        }
+        public boolean getVal(){
+            return this.val;
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setShuffleMode() {
+        this.audiocontrol.setReproductionStrategy(SHUFFLE);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void linearMode() {
+        this.audiocontrol.setReproductionStrategy(LINEAR);
     }
 }

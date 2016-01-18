@@ -2,6 +2,8 @@ package Controller;
 
 import java.util.List;
 
+import Controller.Audio.AudioController;
+import Controller.Controller.REPRODUCE;
 import model.Playlist;
 import model.Song;
 
@@ -71,7 +73,17 @@ public interface ViewObserver {
      */
     void skipTo(final long toBytes);
     
-    void addSongInReproductionPlaylist(final String songName);
+    /**
+     * Set the reproduction mode to shuffle.
+     */
+    void setShuffleMode();
+    
+    /**
+     * Set the reproduction mode to linear.
+     */
+    void linearMode();
+    
+    void addSongInReproductionPlaylist(final String songName,final REPRODUCE when);
 //    /**
 //     * Increment by one the counter of song's reproductions.
 //     * @param songPath
