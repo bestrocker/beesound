@@ -34,6 +34,24 @@ public interface ViewObserver {
     List<String> showAllPlaylist();
     
     /**
+     * List of all album.
+     * @return List<String>
+     */
+    List<String> showAllAlbum();
+    
+    /**
+     * List of all Genres.
+     * @return List<String>
+     */
+    List<String> showAllGenre();
+    
+    /**
+     * List of all Artist
+     * @return List<String>
+     */
+    List<String> showAllArtist();
+    
+    /**
      * Add the selected song to the given playlist
      * @param song
      * @param playlist

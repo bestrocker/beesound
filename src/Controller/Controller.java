@@ -248,4 +248,30 @@ public class Controller implements ViewObserver {
     public void linearMode() {
         this.audiocontrol.setReproductionStrategy(LINEAR);
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> showAllAlbum() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> showAllGenre() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> showAllArtist() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
