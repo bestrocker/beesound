@@ -2,11 +2,8 @@ package Controller.Audio;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import Controller.Controller;
 import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
 import model.LibraryManager;
@@ -17,6 +14,7 @@ public class AudioController implements BasicPlayerListener{
   /*  private List<Song> lsong;
     private List<String> playlist; */
     private int counter = 0;
+    private boolean reproduceNow;
     private boolean paused;
     private boolean strategy; /* if true linear, else shuffle */
     final private BasicPlayer player;
@@ -168,10 +166,16 @@ public class AudioController implements BasicPlayerListener{
      */
     public void playPlayer(){
         try {
+            String s = "empty";
             //String s = this.playlist.get(this.counter);
             //this.incrementSongCounter(this.lsong.get(this.counter));
             //String s = this.lsong.get(this.counter).getPath();
-            String s = this.lm.getCurrentSong(this.counter);
+            if(reproduceNow){
+                s = this.lm.getCurrentSong(0);
+                reproduceNow = false;
+            } else {
+                s = this.lm.getCurrentSong(this.counter);
+            }
             this.lm.setInReproduction(s);
             Log.INFO(s + " set as Song in reproduction");
             this.paused = false;
@@ -179,7 +183,6 @@ public class AudioController implements BasicPlayerListener{
             this.control.play();
             this.control.setGain(0.85);
             this.control.setPan(0.0);
-            
         } catch ( Exception e){
             Log.ERROR("can't perform action: playPlayer()");
             e.printStackTrace();
@@ -237,6 +240,11 @@ public class AudioController implements BasicPlayerListener{
     private void display(final String msg) {
         if (out != null) out.println(msg);
     }
+    
+    public void setReproduceNowBoolean(final boolean b){
+        this.reproduceNow = b;
+    }
+    
     /*
      * @SuppressWarnig due to the native Library implementation (non-Javadoc)
      * @see javazoom.jlgui.basicplayer.BasicPlayerListener#opened(java.lang.Object, java.util.Map)
