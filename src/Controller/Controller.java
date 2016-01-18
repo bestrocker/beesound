@@ -214,7 +214,7 @@ public class Controller implements ViewObserver {
      */
     @Override
     public void addSongInReproductionPlaylist(final String song,final REPRODUCE when) {
-        this.model.addSongInPlaylist(song,when);
+        this.model.addSongInPlaylist(song, when.getVal());
         if(when.getVal()){
             this.audiocontrol.setReproduceNowBoolean(true);
             this.audiocontrol.playPlayer();
@@ -254,7 +254,7 @@ public class Controller implements ViewObserver {
      */
     @Override
     public List<String> showAllAlbum() {
-        return null;
+        return this.model.getAlbumTitles();
     }
 
     /**
@@ -262,8 +262,7 @@ public class Controller implements ViewObserver {
      */
     @Override
     public List<String> showAllGenre() {
-        // TODO Auto-generated method stub
-        return null;
+       return this.model.getGenreNames();
     }
 
     /**
@@ -271,7 +270,6 @@ public class Controller implements ViewObserver {
      */
     @Override
     public List<String> showAllArtist() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.model.getArtistNames();
     }
 }
