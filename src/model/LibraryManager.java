@@ -246,6 +246,15 @@ public final class LibraryManager implements Manager{   // this class is impleme
         this.playlistInReproduction.addSong(getSong(songTitle));        
     }
     
+    private Song getSongByPath(String songPath) {
+        for (Song s : this.songList) {
+            if (s.getPath().equals(songPath)) {
+                return s;
+            }            
+        }
+        throw new NoSuchElementException();
+    }
+    
     private Song getSong(String songTitle) throws NoSuchElementException {
         for (Song s : this.songList) {
             if (s.getTitle().equals(songTitle)) {
@@ -290,8 +299,8 @@ public final class LibraryManager implements Manager{   // this class is impleme
     }
 
     @Override
-    public void setInReproduction(String songTitle) {
-        Song song = getSong(songTitle);         // with this we need to find the song only one time 
+    public void setInReproduction(String songPath) {
+        Song song = getSongByPath(songPath);         // with this we need to find the song only one time 
         this.playlistInReproduction.setSongInReproduction(song);
         song.incrementCounter();
     }
