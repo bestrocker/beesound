@@ -130,19 +130,19 @@ public final class LibraryManager implements Manager{   // this class is impleme
                 .build();
     }
     
-    private List<String> getAlbumTitles() {     // try to generalize these methods with interfaces and abstract classes
+    public List<String> getAlbumTitles() {     // try to generalize these methods with interfaces and abstract classes
         final List<String> list = new ArrayList<>();
         this.albumList.forEach(x -> list.add(x.getTitle()));
         return list;       
     }
     
-    private List<String> getArtistNames() {
+    public List<String> getArtistNames() {
         final List<String> list = new ArrayList<>();
         this.artistList.forEach(x -> list.add(x.getName()));
         return list;       
     }
     
-    private List<String> getGenreNames() {
+    public List<String> getGenreNames() {
         final List<String> list = new ArrayList<>();
         this.genreList.forEach(x -> list.add(x.getName()));
         return list;
@@ -242,8 +242,15 @@ public final class LibraryManager implements Manager{   // this class is impleme
     }
     
     @Override
-    public void addSongInPlaylist(String songTitle) {
-        this.playlistInReproduction.addSong(getSong(songTitle));        
+    public void addSongInPlaylist(String songTitle, boolean now) {
+        Song song = getSong(songTitle);
+        if(now) {
+            this.playlistInReproduction.getTrackList().add(0, song);
+            this.playlistInReproduction.setSongInReproduction(song);
+        }
+        else {
+            this.playlistInReproduction.addSong(song);
+        }             
     }
     
     private Song getSongByPath(String songPath) {

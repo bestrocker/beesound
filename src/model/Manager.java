@@ -65,7 +65,7 @@ public interface Manager {
      * Adds the specified song to the reproduction playlist.
      * @param songTitle - the title of the song to add to the reproduction playlist.
      */
-    public void addSongInPlaylist(String songTitle);
+    public void addSongInPlaylist(String songTitle, boolean now);
     
     /**
      * Adds the song with the specified index to the reproduction playlist.
@@ -110,4 +110,10 @@ public interface Manager {
      * @param pause - the value to set in the field isPaused in the song in reproduction.
      */
     public void setSongPaused(boolean pause);
+    
+    public List<String> getAlbumTitles();
+    
+    public List<String> getArtistNames();
+    
+    public List<String> getGenreNames();    
 }

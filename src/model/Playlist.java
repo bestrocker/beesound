@@ -51,7 +51,6 @@ public class Playlist implements Serializable{
         public void setTracklist(List<Song> tracklist) {
             super.trackList = tracklist;
         }
-        
     }
 
     /**
