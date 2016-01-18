@@ -232,7 +232,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
 
     @Override
     public String getCurrentSong(int index) {
-        return this.songList.get(index).getPath();
+        return this.playlistInReproduction.getTrackList().get(index).getPath();
     }
 
     @Override
