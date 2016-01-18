@@ -101,9 +101,9 @@ public interface Manager {
     
     /**
      * Sets the song with the specified title as song in reproduction and increments its reproductions counter. 
-     * @param songTitle - the title of the song to set in reproduction.
+     * @param songPath - the title of the song to set in reproduction.
      */
-    public void setInReproduction(String songTitle);
+    public void setInReproduction(String songPath);
     
     /**
      * Sets the specified parameter as value of the fields isPaused in the song in reproduction.
