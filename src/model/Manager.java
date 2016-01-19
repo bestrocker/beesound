@@ -115,5 +115,7 @@ public interface Manager {
     
     public List<String> getArtistNames();
     
-    public List<String> getGenreNames();    
+    public List<String> getGenreNames(); 
+    
+    void getInReproductionTitles();
 }
