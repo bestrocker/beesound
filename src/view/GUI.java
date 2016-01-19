@@ -151,6 +151,14 @@ public class GUI implements ViewInterface{
         buttonQueue.setBorder(null);
         buttonQueue.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
         buttonQueue.setBackground(new Color(102, 255, 255));
+        buttonQueue.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                list = new JList<>(new Vector<>(controller.showReproductionPlaylist()));
+                createSelectableList();
+            }
+        });
 
         leftButtonsPanel.add(button);
         leftButtonsPanel.add(button_1);
