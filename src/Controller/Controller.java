@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.List;
 import Controller.Audio.AudioController;
 import Controller.Audio.MpegInfo;
-import Controller.Audio.AudioController.REPRODUCTION_STRATEGY;
 import Controller.Files.FileController;
 import static Controller.Files.FileController.*;
 import Controller.Files.Log;
@@ -271,5 +270,15 @@ public class Controller implements ViewObserver {
     @Override
     public List<String> showAllArtist() {
         return this.model.getArtistNames();
+    }
+
+    @Override
+    public void nextTrack() {
+        this.audiocontrol.nextPlayer();
+    }
+
+    @Override
+    public void prevTrack() {
+        this.audiocontrol.prevPlayer();
     }
 }

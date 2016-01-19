@@ -1,11 +1,7 @@
 package Controller;
 
 import java.util.List;
-
-import Controller.Audio.AudioController;
 import Controller.Controller.REPRODUCE;
-import model.Playlist;
-import model.Song;
 
 public interface ViewObserver {
     
@@ -52,14 +48,14 @@ public interface ViewObserver {
     List<String> showAllArtist();
     
     /**
-     * Add the selected song to the given playlist
+     * Add the selected song to the given playlist.
      * @param song
      * @param playlist
      */
     void addSongInPlaylist(final String songName, final String playlistName);
     
     /**
-     * Play.
+     * Play Player.
      */
     void playButton();
     
@@ -78,6 +74,16 @@ public interface ViewObserver {
      * Stop player.
      */
     void stopButton();
+    
+    /**
+     * Next Track in ReproductionPlaylist.
+     */
+    void nextTrack();
+    
+    /**
+     * Previous Track in ReproductionPlaylist.
+     */
+    void prevTrack();
     
     /**
      * Set volume to the given one.
