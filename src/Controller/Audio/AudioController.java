@@ -6,11 +6,11 @@ import java.util.Map;
 import java.util.Random;
 import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
-import model.LibraryManager;
+import model.Manager;
 
 public class AudioController implements BasicPlayerListener{
     
-    final private LibraryManager lm;
+    final private Manager lm;
   /*  private List<Song> lsong;
     private List<String> playlist; */
     private int counter = 0;
@@ -41,7 +41,7 @@ public class AudioController implements BasicPlayerListener{
         }
     }
     
-    public AudioController(final LibraryManager c){
+    public AudioController(final Manager c){
         
         this.lm = c;
         this.player = new BasicPlayer();

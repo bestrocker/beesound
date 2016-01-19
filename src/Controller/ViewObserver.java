@@ -48,6 +48,12 @@ public interface ViewObserver {
     List<String> showAllArtist();
     
     /**
+     * List of the song in Reproduction.
+     * @return list<String>
+     */
+    List<String> showReproductionPlaylist();
+    
+    /**
      * Add the selected song to the given playlist.
      * @param song
      * @param playlist
