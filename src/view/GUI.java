@@ -146,6 +146,11 @@ public class GUI implements ViewInterface{
                 createSelectableList();
             }
         });
+        
+        final JButton buttonQueue = new JButton("In riproduzione");
+        buttonQueue.setBorder(null);
+        buttonQueue.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
+        buttonQueue.setBackground(new Color(102, 255, 255));
 
         leftButtonsPanel.add(button);
         leftButtonsPanel.add(button_1);
@@ -153,6 +158,7 @@ public class GUI implements ViewInterface{
         leftButtonsPanel.add(button_3);
         leftButtonsPanel.add(button_4);
         leftButtonsPanel.add(button_5);
+        leftButtonsPanel.add(buttonQueue);
 
         /*CENTER PANEL: LIST SELECTION & INFO LABEL*/
 
@@ -225,10 +231,23 @@ public class GUI implements ViewInterface{
         
         final JButton button_8 = new JButton(" << ");
         button_8.setFont(new Font("Tahoma", Font.BOLD, 11));
-        
+        button_8.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.prevTrack();               
+            }
+        });
         
         final JButton button_9 = new JButton(" >> ");
         button_9.setFont(new Font("Tahoma", Font.BOLD, 11));
+        button_9.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.nextTrack();           
+            }
+        });
 
         playerButtonsPanel.add(button_8);
         playerButtonsPanel.add(button_7);

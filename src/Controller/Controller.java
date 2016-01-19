@@ -10,11 +10,12 @@ import Controller.Files.FileController;
 import static Controller.Files.FileController.*;
 import Controller.Files.Log;
 import model.LibraryManager;
+import model.Manager;
 import view.GUI;
 
 public class Controller implements ViewObserver {
 
-    private final LibraryManager model;
+    private final Manager model;
     private final GUI view;
     private final AudioController audiocontrol;
     private final FileController filecontrol;
@@ -280,5 +281,10 @@ public class Controller implements ViewObserver {
     @Override
     public void prevTrack() {
         this.audiocontrol.prevPlayer();
+    }
+
+    @Override
+    public List<String> showReproductionPlaylist() {
+        return this.model.getInReproductionTitles();
     }
 }
