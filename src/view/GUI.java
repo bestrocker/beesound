@@ -20,7 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 
 import Controller.Controller.REPRODUCE;
 import Controller.ViewObserver;
@@ -33,6 +35,8 @@ import javax.swing.JMenuItem;
 import java.awt.Component;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer.UIResource;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class GUI implements ViewInterface{
 
@@ -79,7 +83,7 @@ public class GUI implements ViewInterface{
         final FlowLayout playerButtonsLayout = new FlowLayout();
         final JPanel playerButtonsPanel = new JPanel(playerButtonsLayout);
 
-        final JButton button_6 = new JButton(" ► ");
+        final JButton button_6 = new JButton(" ▶ ");
         button_6.setForeground(new Color(0, 128, 0));
         button_6.addActionListener(new ActionListener() {
             
@@ -130,12 +134,24 @@ public class GUI implements ViewInterface{
                 controller.nextTrack();           
             }
         });
-
+        
+        final JLabel volumeLabel = new JLabel(" volume: ");
+        final JSlider volume = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
+        volume.addChangeListener(new ChangeListener() {
+            
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                System.out.println((double)volume.getValue());
+                controller.setVolumeButton((double)volume.getValue() / 100);                
+            }
+        });
+        
         playerButtonsPanel.add(button_8);
         playerButtonsPanel.add(button_7);
         playerButtonsPanel.add(button_6);
         playerButtonsPanel.add(button_9);
-
+        playerButtonsPanel.add(volumeLabel);
+        playerButtonsPanel.add(volume);
         
         /*left buttons*/
         
@@ -369,7 +385,6 @@ public class GUI implements ViewInterface{
     /*creation of the list of strings to show into listSelectionPanel*/
     private void createSelectableList() {
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      //list.addListSelectionListener(new MyListSelectionHandler());
         list.setFont(new Font("DialogInput", Font.ITALIC, 11));
         scrollPane.setViewportView(list);
     }
@@ -383,46 +398,12 @@ public class GUI implements ViewInterface{
         this.controller = observer;
     }
     
-    /*class SongMouseListener implements MouseListener {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if(e.getClickCount() == 2) {
-               controller.addSongInReproductionPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
-            }
-            
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            // TODO Auto-generated method stub            
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            // TODO Auto-generated method stub            
-        }        
-        
-    }*/
-    
     private void updatePlayButton(JButton button) {
         if (playing) {
             button.setText(" ▮▮ ");
         }
         else {
-            button.setText(" ► ");
+            button.setText(" ▶ ");
         }        
     }
 
