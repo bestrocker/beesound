@@ -118,4 +118,8 @@ public interface Manager {
     public List<String> getGenreNames(); 
     
     List<String> getInReproductionTitles();
+    
+    void removeSong(String songPath);
+    
+    void removeSongFromQueue(String songPath);
 }

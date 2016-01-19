@@ -26,13 +26,21 @@ public class TryModel {
                             .build();
         
         LibraryManager library = LibraryManager.getInstance();
-        //library.addSongToLibrary(song);
-        library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));
-                
+        library.addSongToLibrary("Trains", "In Absentia", "Porcupine Tree", "Progressive Rock", duration, 192, 80000,
+                "ciao", true, 0, null, 0, "Stereo");
+        library.addSongToLibrary("Money", "The Dark Side of The Moon", "Pink FLoyd", "Progressive Rock", duration, 192, 80000,
+                "salve", true, 0, null, 0, "Stereo");
+        /*library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));
+        library.getSongList().forEach(x -> System.out.println(x.getTitle()));        
+        library.removeSong("salve");
+        library.getSongList().forEach(x -> System.out.println(x.getTitle()));
+        library.getAlbumList().forEach(x -> x.getTrackList().forEach(y -> System.out.println(y.getTitle())));
+        library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));*/
         
+        library.addSongInPlaylist("Trains", true);
+        library.addSongInPlaylist("Money", true);
+        library.removeSongFromQueue("salve");
+        library.getInReproductionTitles().forEach(x -> System.out.println(x));
         
-        
-        
-       
     }
 }
