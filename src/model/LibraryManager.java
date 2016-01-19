@@ -83,9 +83,11 @@ public final class LibraryManager implements Manager{   // this class is impleme
     public void addSongToLibrary(String title, String album, String artist, String genre,
             Duration duration, int bitRate, long size, String path, boolean copyright, int channel,
             String version, int rate, String channelsMode) {   // raw version, try to improve
-        
         Song song = createSong(title, album, artist, genre, duration, bitRate, size, path, copyright, channel, 
                                 version, rate, channelsMode);
+        if (isSongPresent(title)) {            
+            return;
+        }
         boolean albumCheck = false;
         boolean artistCheck = false;
         this.songList.add(song);
@@ -94,7 +96,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
             albumCheck = true;
         }
         this.getAlbumFromList(song.getAlbum()).addSong(song);
-        if (!this.getArtistNames().contains(song.getArtist())) {      // this method seems not to use equals.
+        if (!this.getArtistNames().contains(song.getArtist())) {      
             this.newArtist(song.getArtist());
             artistCheck = true;
         }
@@ -321,5 +323,18 @@ public final class LibraryManager implements Manager{   // this class is impleme
         List<String> list = new ArrayList<>();
         this.playlistInReproduction.getTrackList().forEach(x -> list.add(x.getTitle()));
         return list;
-    }    
+    }
+    
+    private boolean isSongPresent(String songTitle) {
+        boolean present = false;
+        for (Song s : this.songList) {
+            if (s.getTitle().equals(songTitle)) {
+                present = true;
+            }
+        }
+        return present;
+    }
+    
+    
+    
 }
