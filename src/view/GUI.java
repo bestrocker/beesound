@@ -43,6 +43,8 @@ public class GUI implements ViewInterface{
     private final JScrollPane scrollPane = new JScrollPane();
     private JFileChooser chooser = new JFileChooser(); 
     private JList<String> list;
+    private boolean playing = false;
+    private boolean stopped = true;
 
     /*GUI constructor*/
     public GUI() {
@@ -71,7 +73,70 @@ public class GUI implements ViewInterface{
 
         final JPanel leftButtonsPanel = new JPanel(new GridLayout(0, 1, 0, 0));
         leftButtonsPanel.setPreferredSize(new Dimension(85, 0));
+        
+        /*SOUTH PANEL: CONTROL PLAYER'S BUTTONS*/
 
+        final FlowLayout playerButtonsLayout = new FlowLayout();
+        final JPanel playerButtonsPanel = new JPanel(playerButtonsLayout);
+
+        final JButton button_6 = new JButton(" ► ");
+        button_6.setForeground(new Color(0, 128, 0));
+        button_6.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (stopped) {
+                    controller.playButton();
+                    playing = true;
+                }
+                else {
+                    controller.pauseButton();
+                    playing = !playing;
+                }
+                stopped = false;
+                updatePlayButton(button_6);
+            }
+        }); 
+
+        final JButton button_7 = new JButton(" ■ ");
+        button_7.setForeground(new Color(0, 0, 0));
+        button_7.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.stopButton();
+                stopped = true;
+                playing = false;
+                updatePlayButton(button_6);
+            }
+        });
+        
+        final JButton button_8 = new JButton(" << ");
+        button_8.setFont(new Font("Tahoma", Font.BOLD, 11));
+        button_8.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.prevTrack();               
+            }
+        });
+        
+        final JButton button_9 = new JButton(" >> ");
+        button_9.setFont(new Font("Tahoma", Font.BOLD, 11));
+        button_9.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.nextTrack();           
+            }
+        });
+
+        playerButtonsPanel.add(button_8);
+        playerButtonsPanel.add(button_7);
+        playerButtonsPanel.add(button_6);
+        playerButtonsPanel.add(button_9);
+
+        
         /*left buttons*/
         
         final JButton button = new JButton("All Songs");
@@ -82,7 +147,31 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 list = new JList<>(new Vector<>(controller.showAllSong()));
-                list.addMouseListener(new SongMouseListener());
+                list.addMouseListener(new MouseListener() {
+                    
+                    @Override
+                    public void mouseReleased(MouseEvent e) {}                    
+                    
+                    @Override
+                    public void mousePressed(MouseEvent e) {}
+                                      
+                    @Override
+                    public void mouseExited(MouseEvent e) {}
+                    
+                    @Override
+                    public void mouseEntered(MouseEvent e) {}
+                    
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if(e.getClickCount() == 2) {
+                            controller.addSongInReproductionPlaylist(list.getModel()
+                                    .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
+                            playing = true;
+                            stopped = false;
+                            updatePlayButton(button_6);
+                        }                        
+                    }
+                });                
                 createSelectableList();
             }
         });
@@ -210,58 +299,7 @@ public class GUI implements ViewInterface{
 
         rightPanel.add(imageLabel);     
         rightPanel.add(currentSongInfo);   
-
-        /*SOUTH PANEL: CONTROL PLAYER'S BUTTONS*/
-
-        final FlowLayout playerButtonsLayout = new FlowLayout();
-        final JPanel playerButtonsPanel = new JPanel(playerButtonsLayout);
-
-        final JButton button_6 = new JButton(" ► ");
-        button_6.setForeground(new Color(0, 128, 0));
-        button_6.addActionListener(new ActionListener() {
-            
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.playButton();
-                //controller.addSongInReproductionPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);                                      
-            }
-        }); 
-
-        final JButton button_7 = new JButton(" ■ ");
-        button_7.setForeground(new Color(0, 0, 0));
-        button_7.addActionListener(new ActionListener() {
-            
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.stopButton();
-            }
-        });
         
-        final JButton button_8 = new JButton(" << ");
-        button_8.setFont(new Font("Tahoma", Font.BOLD, 11));
-        button_8.addActionListener(new ActionListener() {
-            
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.prevTrack();               
-            }
-        });
-        
-        final JButton button_9 = new JButton(" >> ");
-        button_9.setFont(new Font("Tahoma", Font.BOLD, 11));
-        button_9.addActionListener(new ActionListener() {
-            
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.nextTrack();           
-            }
-        });
-
-        playerButtonsPanel.add(button_8);
-        playerButtonsPanel.add(button_7);
-        playerButtonsPanel.add(button_6);
-        playerButtonsPanel.add(button_9);
-
         /*TOP MENU*/
 
         final JMenuBar menuBar = new JMenuBar();
@@ -279,7 +317,7 @@ public class GUI implements ViewInterface{
 
         /*add choice menu(JMenuItem)*/
 
-        final JMenuItem menuChoiceImport = new JMenuItem("Add to Playlist");
+        final JMenuItem menuChoiceImport = new JMenuItem("Add to Library");
         menuChoiceImport.setFont(new Font("Dialog", Font.PLAIN, 11));
         menuChoiceImport.addActionListener(new ActionListener() {
             @Override
@@ -294,10 +332,25 @@ public class GUI implements ViewInterface{
 
         final JMenuItem menuChoiceOpen = new JMenuItem("Add to reproduction list");
         menuChoiceOpen.setFont(new Font("Dialog", Font.PLAIN, 11));
+        menuChoiceOpen.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.addSongInReproductionPlaylist(list.getModel()
+                        .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._AFTER);
+            }
+        });
         menuFile.add(menuChoiceOpen);    
 
         final JMenuItem menuChoiceExit = new JMenuItem("Exit Program");
         menuChoiceExit.setFont(new Font("Dialog", Font.PLAIN, 11));
+        menuChoiceExit.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
         menuFile.add(menuChoiceExit);
 
         final JMenuItem menuChoiceInfo = new JMenuItem("Info Beesound");
@@ -330,7 +383,7 @@ public class GUI implements ViewInterface{
         this.controller = observer;
     }
     
-    class SongMouseListener implements MouseListener {
+    /*class SongMouseListener implements MouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -354,16 +407,23 @@ public class GUI implements ViewInterface{
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            // TODO Auto-generated method stub
-            
+            // TODO Auto-generated method stub            
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            // TODO Auto-generated method stub
-            
+            // TODO Auto-generated method stub            
         }        
         
+    }*/
+    
+    private void updatePlayButton(JButton button) {
+        if (playing) {
+            button.setText(" ▮▮ ");
+        }
+        else {
+            button.setText(" ► ");
+        }        
     }
 
 }
