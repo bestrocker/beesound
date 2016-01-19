@@ -315,5 +315,11 @@ public final class LibraryManager implements Manager{   // this class is impleme
     @Override
     public void setSongPaused(boolean pause) {
         this.playlistInReproduction.getSongInReproduction().setSongPaused(pause);        
+    }
+    
+    public List<String> getInReproductionTitles() {
+        List<String> list = new ArrayList<>();
+        this.playlistInReproduction.getTrackList().forEach(x -> list.add(x.getTitle()));
+        return list;
     }    
 }
