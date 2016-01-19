@@ -83,11 +83,11 @@ public final class LibraryManager implements Manager{   // this class is impleme
     public void addSongToLibrary(String title, String album, String artist, String genre,
             Duration duration, int bitRate, long size, String path, boolean copyright, int channel,
             String version, int rate, String channelsMode) {   // raw version, try to improve
-        Song song = createSong(title, album, artist, genre, duration, bitRate, size, path, copyright, channel, 
-                                version, rate, channelsMode);
         if (isSongPresent(title)) {            
             return;
         }
+        Song song = createSong(title, album, artist, genre, duration, bitRate, size, path, copyright, channel, 
+                                version, rate, channelsMode);
         boolean albumCheck = false;
         boolean artistCheck = false;
         this.songList.add(song);
@@ -335,6 +335,17 @@ public final class LibraryManager implements Manager{   // this class is impleme
         return present;
     }
     
+    @Override
+    public void removeSong(String songPath) {
+        Song song = this.getSongByPath(songPath);
+        this.playlistInReproduction.removeSong(song);
+        this.getAlbumFromList(song.getAlbum()).removeSong(song);
+        this.playlistList.forEach(x -> x.removeSong(song));
+        this.songList.remove(song);
+    }
     
-    
+    @Override
+    public void removeSongFromQueue(String songPath) {
+        this.playlistInReproduction.removeSong(getSongByPath(songPath));
+    }
 }
