@@ -204,24 +204,35 @@ public class GUI implements ViewInterface{
 
         final JButton button_6 = new JButton(" ► ");
         button_6.setForeground(new Color(0, 128, 0));
-        button_6.addActionListener(new ActionListener() {                                       
+        button_6.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(getSelectedIndex());
-                controller.playButton();                                        
+                controller.playButton();
+                //controller.addSongInReproductionPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);                                      
             }
         }); 
 
         final JButton button_7 = new JButton(" ■ ");
-        button_7.setForeground(new Color(0, 0, 0));              
+        button_7.setForeground(new Color(0, 0, 0));
+        button_7.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.stopButton();
+            }
+        });
+        
         final JButton button_8 = new JButton(" << ");
-        button_8.setFont(new Font("Tahoma", Font.BOLD, 11));                         
+        button_8.setFont(new Font("Tahoma", Font.BOLD, 11));
+        
+        
         final JButton button_9 = new JButton(" >> ");
         button_9.setFont(new Font("Tahoma", Font.BOLD, 11));
 
-        playerButtonsPanel.add(button_6);
-        playerButtonsPanel.add(button_7);
         playerButtonsPanel.add(button_8);
+        playerButtonsPanel.add(button_7);
+        playerButtonsPanel.add(button_6);
         playerButtonsPanel.add(button_9);
 
         /*TOP MENU*/
