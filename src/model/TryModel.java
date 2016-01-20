@@ -39,7 +39,8 @@ public class TryModel {
         
         library.addSongInPlaylist("Trains", true);
         library.addSongInPlaylist("Money", true);
-        library.removeSongFromQueue("salve");
+        //library.removeSong("Money");
+        library.removeSongFromQueue("Money");
         library.getInReproductionTitles().forEach(x -> System.out.println(x));
         
     }

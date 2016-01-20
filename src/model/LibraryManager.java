@@ -336,8 +336,8 @@ public final class LibraryManager implements Manager{   // this class is impleme
     }
     
     @Override
-    public void removeSong(String songPath) {
-        Song song = this.getSongByPath(songPath);
+    public void removeSong(String songTitle) {
+        Song song = this.getSong(songTitle);
         this.playlistInReproduction.removeSong(song);
         this.getAlbumFromList(song.getAlbum()).removeSong(song);
         this.playlistList.forEach(x -> x.removeSong(song));
@@ -345,7 +345,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
     }
     
     @Override
-    public void removeSongFromQueue(String songPath) {
-        this.playlistInReproduction.removeSong(getSongByPath(songPath));
+    public void removeSongFromQueue(String songTitle) {
+        this.playlistInReproduction.removeSong(getSong(songTitle));
     }
 }
