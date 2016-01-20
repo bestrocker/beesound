@@ -119,7 +119,7 @@ public interface Manager {
     
     List<String> getInReproductionTitles();
     
-    void removeSong(String songPath);
+    void removeSong(String songTitle);
     
-    void removeSongFromQueue(String songPath);
+    void removeSongFromQueue(String songTitle);
 }
