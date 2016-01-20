@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.ListSelectionModel;
@@ -38,6 +39,8 @@ import javax.swing.DefaultListCellRenderer.UIResource;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.sun.jmx.mbeanserver.JmxMBeanServer;
+
 public class GUI implements ViewInterface{
 
     private static final double PERC_HALF = 0.5;
@@ -54,7 +57,7 @@ public class GUI implements ViewInterface{
     public GUI() {
 
         /*THE FRAME*/
-        
+
         frame = new JFrame("BeeSound Player");
         frame.setFont(new Font("Trajan Pro", Font.PLAIN, 12));
         final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -77,7 +80,7 @@ public class GUI implements ViewInterface{
 
         final JPanel leftButtonsPanel = new JPanel(new GridLayout(0, 1, 0, 0));
         leftButtonsPanel.setPreferredSize(new Dimension(85, 0));
-        
+
         /*SOUTH PANEL: CONTROL PLAYER'S BUTTONS*/
 
         final FlowLayout playerButtonsLayout = new FlowLayout();
@@ -86,7 +89,7 @@ public class GUI implements ViewInterface{
         final JButton button_6 = new JButton(" ▶ ");
         button_6.setForeground(new Color(0, 128, 0));
         button_6.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (stopped) {
@@ -105,7 +108,7 @@ public class GUI implements ViewInterface{
         final JButton button_7 = new JButton(" ■ ");
         button_7.setForeground(new Color(0, 0, 0));
         button_7.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.stopButton();
@@ -114,71 +117,81 @@ public class GUI implements ViewInterface{
                 updatePlayButton(button_6);
             }
         });
-        
+
         final JButton button_8 = new JButton(" << ");
         button_8.setFont(new Font("Tahoma", Font.BOLD, 11));
         button_8.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.prevTrack();               
             }
         });
-        
+
         final JButton button_9 = new JButton(" >> ");
         button_9.setFont(new Font("Tahoma", Font.BOLD, 11));
         button_9.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.nextTrack();           
             }
         });
-        
+
         final JLabel volumeLabel = new JLabel(" volume: ");
         final JSlider volume = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
         volume.addChangeListener(new ChangeListener() {
-            
+
             @Override
             public void stateChanged(ChangeEvent e) {
-                System.out.println((double)volume.getValue());
+                //System.out.println((double)volume.getValue());
                 controller.setVolumeButton((double)volume.getValue() / 100);                
             }
         });
-        
+
         playerButtonsPanel.add(button_8);
         playerButtonsPanel.add(button_7);
         playerButtonsPanel.add(button_6);
         playerButtonsPanel.add(button_9);
         playerButtonsPanel.add(volumeLabel);
         playerButtonsPanel.add(volume);
-        
+
         /*left buttons*/
-        
+
         final JButton button = new JButton("All Songs");
         button.setBorder(null);
         button.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
         button.setBackground(new Color(255, 255, 204));              
-        button.addActionListener(new ActionListener() {                                 
+        button.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 list = new JList<>(new Vector<>(controller.showAllSong()));
+
                 list.addMouseListener(new MouseListener() {
-                    
+
                     @Override
                     public void mouseReleased(MouseEvent e) {}                    
-                    
+
                     @Override
-                    public void mousePressed(MouseEvent e) {}
-                                      
+                    public void mousePressed(MouseEvent e) {
+
+                        JPopupMenu menu = buildStandardPopup();
+                        if(e.isPopupTrigger()) {
+                            menu.show(e.getComponent(), e.getX(), e.getY());
+                        }                       
+                    }
+
                     @Override
                     public void mouseExited(MouseEvent e) {}
-                    
+
                     @Override
                     public void mouseEntered(MouseEvent e) {}
-                    
+
                     @Override
                     public void mouseClicked(MouseEvent e) {
+
                         if(e.getClickCount() == 2) {
                             controller.addSongInReproductionPlaylist(list.getModel()
                                     .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
@@ -251,16 +264,40 @@ public class GUI implements ViewInterface{
                 createSelectableList();
             }
         });
-        
+
         final JButton buttonQueue = new JButton("In riproduzione");
         buttonQueue.setBorder(null);
         buttonQueue.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
         buttonQueue.setBackground(new Color(102, 255, 255));
         buttonQueue.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 list = new JList<>(new Vector<>(controller.showReproductionPlaylist()));
+                list.addMouseListener(new MouseListener() {
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {}                    
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+
+                        JPopupMenu menu = buildStandardPopup();
+                        if(e.isPopupTrigger()) {
+                            menu.show(e.getComponent(), e.getX(), e.getY());
+                        }                       
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {}
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {}
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {}                        
+                   
+                });                
                 createSelectableList();
             }
         });
@@ -315,7 +352,7 @@ public class GUI implements ViewInterface{
 
         rightPanel.add(imageLabel);     
         rightPanel.add(currentSongInfo);   
-        
+
         /*TOP MENU*/
 
         final JMenuBar menuBar = new JMenuBar();
@@ -349,7 +386,7 @@ public class GUI implements ViewInterface{
         final JMenuItem menuChoiceOpen = new JMenuItem("Add to reproduction list");
         menuChoiceOpen.setFont(new Font("Dialog", Font.PLAIN, 11));
         menuChoiceOpen.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.addSongInReproductionPlaylist(list.getModel()
@@ -361,7 +398,7 @@ public class GUI implements ViewInterface{
         final JMenuItem menuChoiceExit = new JMenuItem("Exit Program");
         menuChoiceExit.setFont(new Font("Dialog", Font.PLAIN, 11));
         menuChoiceExit.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
@@ -385,7 +422,7 @@ public class GUI implements ViewInterface{
     /*creation of the list of strings to show into listSelectionPanel*/
     private void createSelectableList() {
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setFont(new Font("DialogInput", Font.ITALIC, 11));
+        list.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         scrollPane.setViewportView(list);
     }
 
@@ -397,7 +434,7 @@ public class GUI implements ViewInterface{
     public void setObserver(ViewObserver observer) {
         this.controller = observer;
     }
-    
+
     private void updatePlayButton(JButton button) {
         if (playing) {
             button.setText(" ▮▮ ");
@@ -405,6 +442,41 @@ public class GUI implements ViewInterface{
         else {
             button.setText(" ▶ ");
         }        
+    }
+
+    private JPopupMenu buildStandardPopup() {
+        final JPopupMenu menu = new JPopupMenu();
+        final JMenuItem itemAddToReproductionList = new JMenuItem("Add to reproduction Playlist");
+        itemAddToReproductionList.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.addSongInReproductionPlaylist(list.getModel()
+                        .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._AFTER);
+            }
+        });
+        final JMenuItem itemRemoveFromReproductionList = new JMenuItem("Remove from reproduction Playlist");
+        itemRemoveFromReproductionList.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                /*controller.removeSongFromQueue(list.getModel()
+                        .getElementAt(list.getMaxSelectionIndex()));*/                        
+            }
+        });   
+        final JMenuItem itemRemoveFromLibrary = new JMenuItem("Remove from Library");
+        itemRemoveFromLibrary.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //controller.removeSongFromLibrary(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+            }
+        });
+        menu.add(itemRemoveFromLibrary);
+        menu.add(itemAddToReproductionList);
+        menu.add(itemRemoveFromReproductionList);
+
+        return menu;
     }
 
 }
