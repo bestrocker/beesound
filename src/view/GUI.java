@@ -53,7 +53,6 @@ public class GUI implements ViewInterface{
     private boolean playing = false;
     private boolean stopped = true;
 
-    /*GUI constructor*/
     public GUI() {
 
         /*THE FRAME*/
@@ -93,7 +92,8 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (stopped) {
-                    controller.playButton();
+                    controller.addSongInReproductionPlaylist(list.getModel()
+                            .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
                     playing = true;
                 }
                 else {
@@ -150,6 +150,7 @@ public class GUI implements ViewInterface{
             }
         });
         
+        /*linear and shuffle mode buttons*/
         final JButton bShuffle = new JButton("Shuffle");
         bShuffle.setFont(new Font("Droid Sans", Font.PLAIN, 9));
         bShuffle.addActionListener(new ActionListener() {
@@ -169,7 +170,7 @@ public class GUI implements ViewInterface{
                 controller.linearMode();                
             }
         });
-
+        
         playerButtonsPanel.add(button_8);
         playerButtonsPanel.add(button_7);
         playerButtonsPanel.add(button_6);
@@ -461,7 +462,7 @@ public class GUI implements ViewInterface{
 
     private void updatePlayButton(JButton button) {
         if (playing) {
-            button.setText(" ▮▮ ");
+            button.setText(" || ");
         }
         else {
             button.setText(" ▶ ");
