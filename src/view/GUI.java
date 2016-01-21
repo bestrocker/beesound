@@ -138,14 +138,35 @@ public class GUI implements ViewInterface{
             }
         });
 
-        final JLabel volumeLabel = new JLabel(" volume: ");
+        final JLabel volumeLabel = new JLabel(" Volume ");
         final JSlider volume = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
+        volumeLabel.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         volume.addChangeListener(new ChangeListener() {
 
             @Override
             public void stateChanged(ChangeEvent e) {
                 //System.out.println((double)volume.getValue());
                 controller.setVolumeButton((double)volume.getValue() / 100);                
+            }
+        });
+        
+        final JButton bShuffle = new JButton("Shuffle");
+        bShuffle.setFont(new Font("Droid Sans", Font.PLAIN, 9));
+        bShuffle.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.setShuffleMode();                
+            }
+        });
+        
+        final JButton bLinear = new JButton("Linear");
+        bLinear.setFont(new Font("Droid Sans", Font.PLAIN, 9));
+        bLinear.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.linearMode();                
             }
         });
 
@@ -155,6 +176,8 @@ public class GUI implements ViewInterface{
         playerButtonsPanel.add(button_9);
         playerButtonsPanel.add(volumeLabel);
         playerButtonsPanel.add(volume);
+        playerButtonsPanel.add(bShuffle);
+        playerButtonsPanel.add(bLinear);
 
         /*left buttons*/
 
@@ -168,6 +191,7 @@ public class GUI implements ViewInterface{
             public void actionPerformed(ActionEvent e) {
 
                 list = new JList<>(new Vector<>(controller.showAllSong()));
+                list.setSelectedIndex(0);
 
                 list.addMouseListener(new MouseListener() {
 
@@ -339,7 +363,7 @@ public class GUI implements ViewInterface{
 
         final URL ImgURL = UIResource.class.getResource("/zutons.jpg");
         final JLabel imageLabel = new JLabel(new ImageIcon(ImgURL));            
-        imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.5), 0));
+        imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 0));
         imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         /*label with current song's info*/
@@ -347,7 +371,7 @@ public class GUI implements ViewInterface{
         final JLabel currentSongInfo = new JLabel("Current Song's Info");
         currentSongInfo.setFont(new Font("Dialog", Font.PLAIN, 11));
         currentSongInfo.setBackground(Color.WHITE);
-        currentSongInfo.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.5), (int)(frame.getHeight() * 0.3)));
+        currentSongInfo.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), (int)(frame.getHeight() * 0.3)));
         currentSongInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         rightPanel.add(imageLabel);     
