@@ -99,7 +99,7 @@ public class GUI implements ViewInterface{
 
                 if (stopped) {
                     controller.addSongInReproductionPlaylist(list.getModel()
-                            .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
+                            .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                     Agent agent = new Agent(seek);
                     agent.start();
                     playing = true;
@@ -238,7 +238,7 @@ public class GUI implements ViewInterface{
                         if(e.getClickCount() == 2) {
                             
                             controller.addSongInReproductionPlaylist(list.getModel()
-                                    .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
+                                    .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                             Agent agent = new Agent(seek);
                             agent.start();
                             playing = true;
@@ -333,7 +333,7 @@ public class GUI implements ViewInterface{
 
                                     if(e.getClickCount() == 2) {
                                         controller.addSongInReproductionPlaylist(list.getModel()
-                                                .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
+                                                .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                                         Agent agent = new Agent(seek);
                                         agent.start();
                                         playing = true;
@@ -501,7 +501,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.addSongInReproductionPlaylist(list.getModel()
-                        .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._AFTER);
+                        .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
             }
         });
         menuFile.add(menuChoiceOpen);
@@ -597,7 +597,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.addSongInReproductionPlaylist(list.getModel()
-                        .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._AFTER);
+                        .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
             }
         });
         final JMenuItem itemRemoveFromReproductionList = new JMenuItem("Remove from reproduction Playlist");
