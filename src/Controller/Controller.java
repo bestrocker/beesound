@@ -170,14 +170,6 @@ public class Controller implements ViewObserver {
     /**
      * {@inheritDoc}
      */
-    /*
-    public void playButton(Song song) {
-        this.audiocontrol.playPlayer(song);
-    }
-    */
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void pauseButton() {
         this.audiocontrol.togglePause();
@@ -311,5 +303,10 @@ public class Controller implements ViewObserver {
     @Override
     public void removeSongFromQueue(final String songTitle) {
         this.model.removeSongFromQueue(songTitle);
+    }
+
+    @Override
+    public List<String> showPlaylistSong(String playlistName) {
+        this.model.showPlaylistSong(playlistName);
     }
 }
