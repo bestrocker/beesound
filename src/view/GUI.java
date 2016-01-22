@@ -307,7 +307,10 @@ public class GUI implements ViewInterface{
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if(e.getClickCount() == 2) {
-                            list = new JList<>(new Vector<>(controller.showAllSong()));
+                            System.out.println(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                            list = new JList<>(new Vector<>(controller.showPlaylistSong(list.getModel().getElementAt(list.getMaxSelectionIndex()))));
+                            createSelectableList();
+                            
                             list.addMouseListener(new MouseListener() {
 
                                 @Override
