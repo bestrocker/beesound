@@ -605,8 +605,8 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*controller.removeSongFromQueue(list.getModel()
-                        .getElementAt(list.getMaxSelectionIndex()));*/                        
+                controller.removeSongFromQueue(list.getModel()
+                        .getElementAt(list.getMaxSelectionIndex()));                       
             }
         });   
         final JMenuItem itemRemoveFromLibrary = new JMenuItem("Remove from Library");
@@ -614,7 +614,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                //controller.removeSongFromLibrary(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                controller.removeSong(list.getModel().getElementAt(list.getMaxSelectionIndex()));
             }
         });
         
