@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import Controller.Audio.MpegInfo.Duration;
@@ -124,9 +125,8 @@ public interface Manager {
     void removeSongFromQueue(String songTitle);
     
     /**
-     * Returns a list containing string representation of info about the song in reproduction:
-     * size (index 0), duration (index 1), title (index 2).
-     * @return a list containing string representation of info about the song in reproduction
+     * Returns a map containing info about the song in reproduction: title, size and duration.
+     * @return a map containing info about the song in reproduction.
      */
-    List<String> getCurrentSongInfo();
+    Map<String, Object> getCurrentSongInfo();
 }
