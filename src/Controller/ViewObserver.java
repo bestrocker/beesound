@@ -113,10 +113,30 @@ public interface ViewObserver {
      */
     void linearMode();
     
+    /**
+     * Remove phisically the song from library.
+     * @param songTitle
+     */
+    void removeSong(final String songTitle);
+    
+    /**
+     * Remove the selected song from the reproduction queue.
+     * @param songTitle
+     */
+    void removeSongFromQueue(final String songTitle);
+    
+    /**
+     * Add the selected song in reproduction Playlist.
+     * REPRODUCE will be NOW or AFTER
+     * @param songName
+     * @param when (NOW/AFTER)
+     */
     void addSongInReproductionPlaylist(final String songName,final REPRODUCE when);
-//    /**
-//     * Increment by one the counter of song's reproductions.
-//     * @param songPath
-//     */
-//    void incrementSongCounter(final String songPath);
+    
+    /**
+     * Show all song in the given Playlist.
+     * @param playlistName
+     * @return
+     */
+    List<String> showPlaylistSong(final String playlistName);
 }

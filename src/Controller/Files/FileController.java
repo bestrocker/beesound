@@ -19,7 +19,6 @@ public  class FileController implements SystemManager{
     public static final String propPath = libraryPath+"properties.txt";
     public static final String musicDirPath = libraryPath + "Music"+sep;
     public static final String playlistDirPath = libraryPath + "Playlist"+sep;
-    
     private  PrintWriter writer;
     
     /**
@@ -132,11 +131,7 @@ public  class FileController implements SystemManager{
             this.writer = new PrintWriter(new FileWriter(new File(path),true),true);
             this.writer.println(msg);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
-         
     }
-    
 }
