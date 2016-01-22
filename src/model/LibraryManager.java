@@ -348,4 +348,13 @@ public final class LibraryManager implements Manager{   // this class is impleme
     public void removeSongFromQueue(String songTitle) {
         this.playlistInReproduction.removeSong(getSong(songTitle));
     }
+    
+    public List<String> getCurrentSongInfo() {
+        List<String> list = new ArrayList<>();
+        Song song = this.playlistInReproduction.getSongInReproduction();
+        list.add(String.valueOf(song.getSize()));
+        list.add(String.valueOf(song.getDuration()));
+        list.add(song.getTitle());
+        return list;
+    }    
 }

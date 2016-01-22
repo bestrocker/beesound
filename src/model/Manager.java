@@ -122,4 +122,11 @@ public interface Manager {
     void removeSong(String songTitle);
     
     void removeSongFromQueue(String songTitle);
+    
+    /**
+     * Returns a list containing string representation of info about the song in reproduction:
+     * size (index 0), duration (index 1), title (index 2).
+     * @return a list containing string representation of info about the song in reproduction
+     */
+    List<String> getCurrentSongInfo();
 }
