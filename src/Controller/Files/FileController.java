@@ -63,13 +63,9 @@ public  class FileController implements SystemManager{
         }*/
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> listAllSongPath(final File directory) {        
+    private List<String> listAllSongPath(final File directory, final String filter) {        
         return Arrays.asList(directory.listFiles()).stream()
-                .filter(i->i.getAbsolutePath().endsWith("mp3"))
+                .filter(i->i.getAbsolutePath().endsWith(filter))
                 .map(i->i.getAbsolutePath())
                 .collect(Collectors.toList());
     }
@@ -78,8 +74,16 @@ public  class FileController implements SystemManager{
      * {@inheritDoc}
      */
     @Override
+    public List<String> listAllPlaylist(){
+        return listAllSongPath(new File(playlistDirPath),".txt");
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<String> listAllSongPath(){
-        return listAllSongPath(new File(musicDirPath));
+        return listAllSongPath(new File(musicDirPath),".mp3");
     }
     
     /**
@@ -123,7 +127,7 @@ public  class FileController implements SystemManager{
             e.printStackTrace();
             return;
         }
-        Log.PROGRAM("New file "+name+" created : "+name+dstPath);
+        Log.PROGRAM("New file "+name+" created : "+dstPath+name+".txt");
     }
     
     public void appendToFile(final String msg, final String path){
