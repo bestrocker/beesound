@@ -1,8 +1,10 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import Controller.Audio.MpegInfo.Duration;
@@ -349,12 +351,11 @@ public final class LibraryManager implements Manager{   // this class is impleme
         this.playlistInReproduction.removeSong(getSong(songTitle));
     }
     
-    public List<String> getCurrentSongInfo() {
-        List<String> list = new ArrayList<>();
-        Song song = this.playlistInReproduction.getSongInReproduction();
-        list.add(String.valueOf(song.getSize()));
-        list.add(String.valueOf(song.getDuration()));
-        list.add(song.getTitle());
-        return list;
+    public Map<String, Object> getCurrentSongInfo() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("Title", this.playlistInReproduction.getSongInReproduction().getTitle());
+        map.put("Size", this.playlistInReproduction.getSongInReproduction().getSize());
+        map.put("Duration", this.playlistInReproduction.getSongInReproduction().getDuration());
+        return map;       
     }    
 }
