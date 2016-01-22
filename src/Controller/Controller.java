@@ -24,9 +24,9 @@ public class Controller implements ViewObserver {
         this.model = LibraryManager.getInstance();        
         this.filecontrol = new FileController();
         this.audiocontrol = new AudioController(model);
+        loadInfoToLibrary();
         this.view = new GUI();
         this.view.setObserver(this);
-        loadInfoToLibrary();
        
     }
     
@@ -222,7 +222,7 @@ public class Controller implements ViewObserver {
     }
     
     public enum REPRODUCE{
-        _NOW(true),_AFTER(false);
+        NOW(true),AFTER(false);
         
         final private boolean val;
         private REPRODUCE(final boolean b) {
@@ -273,18 +273,43 @@ public class Controller implements ViewObserver {
         return this.model.getArtistNames();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void nextTrack() {
         this.audiocontrol.nextPlayer();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void prevTrack() {
         this.audiocontrol.prevPlayer();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> showReproductionPlaylist() {
         return this.model.getInReproductionTitles();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeSong(final String songTitle) {
+        this.model.removeSong(songTitle);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeSongFromQueue(final String songTitle) {
+        this.model.removeSongFromQueue(songTitle);
     }
 }

@@ -22,16 +22,12 @@ package Controller.Audio;
  *----------------------------------------------------------------------
  */
 
-
-import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Optional;
-
 import javax.sound.sampled.UnsupportedAudioFileException;
-
 import Controller.Audio.MpegInfo.Duration;
 
 /**

@@ -9,8 +9,7 @@ import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.List;  
 
 public class Log {
 
