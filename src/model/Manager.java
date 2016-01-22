@@ -129,4 +129,11 @@ public interface Manager {
      * @return a map containing info about the song in reproduction.
      */
     Map<String, Object> getCurrentSongInfo();
+    
+    /**
+     * Returns a list containing the titles of the songs in the specified playlist.
+     * @param playlistName - the specified name of the playlist.
+     * @return a list containing the titles of the songs in the specified playlist
+     */
+    List<String> showPlaylistSong(String playlistName);
 }
