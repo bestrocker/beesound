@@ -351,6 +351,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
         this.playlistInReproduction.removeSong(getSong(songTitle));
     }
     
+    @Override
     public Map<String, Object> getCurrentSongInfo() {
         Map<String, Object> map = new HashMap<>();
         map.put("Title", this.playlistInReproduction.getSongInReproduction().getTitle());
@@ -358,4 +359,11 @@ public final class LibraryManager implements Manager{   // this class is impleme
         map.put("Duration", this.playlistInReproduction.getSongInReproduction().getDuration());
         return map;       
     }    
+    
+    @Override
+    public List<String> showPlaylistSong(String playlistName) {
+        List<String> list = new ArrayList<>();
+        this.getPlaylist(playlistName).getTrackList().forEach(x -> list.add(x.getTitle()));
+        return list;
+    }
 }
