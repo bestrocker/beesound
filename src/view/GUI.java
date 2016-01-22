@@ -9,8 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -27,12 +27,10 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import javax.swing.SwingUtilities;
 
 import Controller.Controller.REPRODUCE;
 import Controller.ViewObserver;
-
 import java.awt.Color;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -46,8 +44,6 @@ import javax.swing.DefaultListCellRenderer.UIResource;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.sun.jmx.mbeanserver.JmxMBeanServer;
-
 public class GUI implements ViewInterface{
 
     private static final double PERC_HALF = 0.5;
@@ -60,6 +56,7 @@ public class GUI implements ViewInterface{
     private boolean playing = false;
     private boolean stopped = true;
     private String songName;
+    private JSlider seek = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
 
     public GUI() {
 
@@ -99,9 +96,12 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 if (stopped) {
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
+                    Agent agent = new Agent(seek);
+                    agent.start();
                     playing = true;
                 }
                 else {
@@ -119,7 +119,8 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.stopButton();
+                
+                controller.stopButton();              
                 stopped = true;
                 playing = false;
                 updatePlayButton(button_6);
@@ -132,6 +133,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 controller.prevTrack();               
             }
         });
@@ -142,6 +144,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 controller.nextTrack();           
             }
         });
@@ -154,6 +157,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void stateChanged(ChangeEvent e) {
+                
                 controller.setVolumeButton((double)volume.getValue() / 100);                
             }
         });
@@ -165,6 +169,7 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 controller.setShuffleMode();                
             }
         });
@@ -175,6 +180,7 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 controller.linearMode();                
             }
         });
@@ -190,7 +196,6 @@ public class GUI implements ViewInterface{
         playerButtonsPanel.add(button_7);
         playerButtonsPanel.add(button_6);
         playerButtonsPanel.add(button_9);
-
 
         /*left buttons*/
 
@@ -231,8 +236,11 @@ public class GUI implements ViewInterface{
                     public void mouseClicked(MouseEvent e) {
 
                         if(e.getClickCount() == 2) {
+                            
                             controller.addSongInReproductionPlaylist(list.getModel()
                                     .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
+                            Agent agent = new Agent(seek);
+                            agent.start();
                             playing = true;
                             stopped = false;
                             updatePlayButton(button_6);
@@ -247,9 +255,11 @@ public class GUI implements ViewInterface{
         button_1.setBorder(null);
         button_1.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
         button_1.setBackground(new Color(255, 255, 153));
-        button_1.addActionListener(new ActionListener() {                                       
+        button_1.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 list = new JList<>(new Vector<>(controller.showAllAlbum()));
                 createSelectableList();
             }
@@ -259,9 +269,11 @@ public class GUI implements ViewInterface{
         button_2.setBorder(null);
         button_2.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
         button_2.setBackground(new Color(255, 255, 102));
-        button_2.addActionListener(new ActionListener() {                                       
+        button_2.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 list = new JList<>(new Vector<>(controller.showAllArtist()));
                 createSelectableList();
             }
@@ -274,33 +286,23 @@ public class GUI implements ViewInterface{
         button_3.addActionListener(new ActionListener() {                                       
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 list = new JList<>(new Vector<>(controller.showAllPlaylist()));
                 createSelectableList();
+                
                 list.addMouseListener(new MouseListener() {
                     
                     @Override
-                    public void mouseReleased(MouseEvent e) {
-                        // TODO Auto-generated method stub
-                        
-                    }
+                    public void mouseReleased(MouseEvent e) {}
                     
                     @Override
-                    public void mousePressed(MouseEvent e) {
-                        // TODO Auto-generated method stub
-                        
-                    }
+                    public void mousePressed(MouseEvent e) {}
                     
                     @Override
-                    public void mouseExited(MouseEvent e) {
-                        // TODO Auto-generated method stub
-                        
-                    }
+                    public void mouseExited(MouseEvent e) {}
                     
                     @Override
-                    public void mouseEntered(MouseEvent e) {
-                        // TODO Auto-generated method stub
-                        
-                    }
+                    public void mouseEntered(MouseEvent e) {}
                     
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -332,6 +334,8 @@ public class GUI implements ViewInterface{
                                     if(e.getClickCount() == 2) {
                                         controller.addSongInReproductionPlaylist(list.getModel()
                                                 .getElementAt(list.getMaxSelectionIndex()), REPRODUCE._NOW);
+                                        Agent agent = new Agent(seek);
+                                        agent.start();
                                         playing = true;
                                         stopped = false;
                                         updatePlayButton(button_6);
@@ -437,8 +441,10 @@ public class GUI implements ViewInterface{
 
         final JPanel rightPanel = new JPanel();
         rightPanel.setBackground(new Color(153, 204, 102));
-        rightPanel.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));         
+        rightPanel.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        seek.setMaximumSize(new Dimension(280, 20));
+        rightPanel.add(seek);
 
         /*album image*/
 
@@ -456,7 +462,7 @@ public class GUI implements ViewInterface{
         currentSongInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         rightPanel.add(imageLabel);     
-        rightPanel.add(currentSongInfo);   
+        rightPanel.add(currentSongInfo);
 
         /*TOP MENU*/
 
@@ -475,7 +481,7 @@ public class GUI implements ViewInterface{
 
         /*add choice menu(JMenuItem)*/
 
-        final JMenuItem menuChoiceImport = new JMenuItem("Add to Library");
+        final JMenuItem menuChoiceImport = new JMenuItem("Add file to Library");
         menuChoiceImport.setFont(new Font("Dialog", Font.PLAIN, 11));
         menuChoiceImport.addActionListener(new ActionListener() {
             @Override
@@ -613,6 +619,7 @@ public class GUI implements ViewInterface{
         });
         
         final JMenuItem itemAddToPlaylist = new JMenuItem("Add song to Playlist");
+        
         itemAddToPlaylist.addActionListener(new ActionListener() {
             
             @Override
@@ -620,10 +627,13 @@ public class GUI implements ViewInterface{
                 list = new JList<>(new Vector<>(controller.showAllPlaylist()));
                 createSelectableList();
                 String[] array = new String[list.getModel().getSize()];
+                
                 for(int i = 0; i < array.length; i++ ) {
+                    
                     array[i] = (String)(list.getModel().getElementAt(i));
                     //System.out.println("array: " + array[i]);
                 }
+                
                 final JFrame frame2 = new JFrame("Your Playlist");
                 final JPanel panel = new JPanel();
                 final JLabel label = new JLabel("Select a playlist");
@@ -648,8 +658,7 @@ public class GUI implements ViewInterface{
                 panel.add(button);
                 frame2.add(panel);
                 frame2.setSize(350, 65);
-                frame2.setVisible(true);
-                
+                frame2.setVisible(true);                
             }
         });
         
@@ -659,6 +668,42 @@ public class GUI implements ViewInterface{
         menu.add(itemRemoveFromReproductionList);
 
         return menu;
+    }
+    
+    private class Agent extends Thread {
+        
+        private JSlider seek;
+        private volatile boolean running = true;
+        
+        public Agent(JSlider seek) {
+            this.seek = seek;
+            this.seek.setValue(0);
+        }
+            
+        @Override
+        public void run() {
+                        
+            while(seek.getValue() < 100 && running == true) {
+                
+                try {
+                   SwingUtilities.invokeAndWait(new Runnable() {
+                       
+                       @Override
+                       public void run() {
+                           
+                           try {
+                               Thread.sleep(200);
+                           } catch (InterruptedException e) {
+                               e.printStackTrace();
+                           }
+                           seek.setValue(seek.getValue() + 1);
+                       }
+                   });
+               } catch (InvocationTargetException | InterruptedException e) {
+                   e.printStackTrace();
+               }
+            }
+        }
     }
 
 }
