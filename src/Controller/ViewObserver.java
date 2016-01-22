@@ -133,4 +133,10 @@ public interface ViewObserver {
      */
     void addSongInReproductionPlaylist(final String songName,final REPRODUCE when);
     
+    /**
+     * Show all song in the given Playlist.
+     * @param playlistName
+     * @return
+     */
+    List<String> showPlaylistSong(final String playlistName);
 }
