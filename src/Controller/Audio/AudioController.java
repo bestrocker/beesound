@@ -11,8 +11,6 @@ import model.Manager;
 public class AudioController implements BasicPlayerListener{
     
     final private Manager lm;
-  /*  private List<Song> lsong;
-    private List<String> playlist; */
     private int counter = 0;
     private boolean reproduceNow;
     private boolean paused;
@@ -49,8 +47,6 @@ public class AudioController implements BasicPlayerListener{
         this.player.addBasicPlayerListener(this);
         this.mp3Info = MpegInfo.getInstance();
         this.out = System.out;
-      /* this.playlist = new ArrayList<>();
-        this.lsong = new ArrayList<>();*/
     }
     
     /**
@@ -60,19 +56,6 @@ public class AudioController implements BasicPlayerListener{
     public MpegInfo getMpegInfo(){
         return this.mp3Info;
     }
-    /*
-    
-     * Set the current Playlist to play to the given one.
-     * Be sure to pass an ArrayList.
-     * @param playlist
-    
-    public void setPlaylist(final Playlist playlist){
-        this.lsong.addAll(playlist.getTrackList());
-       // this.playlist.clear();
-       // playlist.getTrackList().stream().forEach(i->this.playlist.add(i.getPath()));
-        //this.playlist = playlist;
-        Log.INFO("New current playing playlist set ");
-    }*/
     
     public void togglePause(){
         try{
@@ -90,27 +73,7 @@ public class AudioController implements BasicPlayerListener{
         }
         this.lm.setSongPaused(this.paused);
     }
-    /**
-     * Add a song manually to the current playing Playlist.
-     * Must specify its absolute path.
-     * @param song
-     *//*
-    public void addSongInPlaylist(final Song song){
-      //  this.playlist.add(songPath);
-        this.lsong.add(song);
-        Log.INFO(song.getPath() +" added to current playlist");
-        
-    }*/
     
-    /**
-     * Obtain the current playlist.
-     * @return a List<String> representing the current playlist
-     *//*
-    public List<Song> getPlaylist(){
-       // return this.playlist;
-        return this.lsong;
-    }
-    */
     /**
      * Skip the song to the given number of bytes.
      * @param nbytes
@@ -188,13 +151,7 @@ public class AudioController implements BasicPlayerListener{
             e.printStackTrace();
         }
     }
-    /*
-    public void playPlayer(final Song song){
-       // this.lsong.add(song);
-      //  this.counter = this.lsong.indexOf((Song)(song));
-        
-        this.playPlayer();
-    }*/
+    
     /**
      * Set the strategy for reproducing the next tracks.
      * @param strategy
@@ -217,17 +174,12 @@ public class AudioController implements BasicPlayerListener{
             ++this.counter;
         } else {
             int c;
-            //while ( (c=rnd.nextInt(this.playlist.size()) ) == this.counter ){}
             while ( (c=rnd.nextInt(this.lm.getQueueSize()) ) == this.counter ){}
             this.counter = c;
         }
         this.playPlayer();
     }
-    /*
-    private void shuffleReproducing(){
-        this.counter = rnd.nextInt(this.playlist.size()-1);
-        this.play();
-    }*/
+    
     public void setVolume(final double volume){
         try {
             this.control.setGain(volume);
@@ -281,8 +233,4 @@ public class AudioController implements BasicPlayerListener{
     public void setController(final BasicController controller) {
         display("setController : "+controller);
     }
-    
-//    public void incrementSongCounter(final Song song){
-//        song.incrementCounter();
-//    }
 }
