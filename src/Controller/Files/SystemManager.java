@@ -7,11 +7,10 @@ import java.util.List;
 public interface SystemManager {
     
     /**
-     * Return a list of string representing the absolute path of every mp3 song in the given directory.
-     * @param directory
+     * Return a list of string representing the absolute path of every playlist.
      * @return a List<String>
      */
-    List<String> listAllSongPath(final File directory);
+    List<String> listAllPlaylist();
     
     /**
      * Return a list of string representing the absolute path of every mp3 song in the default Music directory

@@ -158,6 +158,11 @@ public class AudioController implements BasicPlayerListener{
      */
     public void setReproductionStrategy(final REPRODUCTION_STRATEGY strategy){
         this.strategy = strategy.getVal();
+        if(strategy.getVal()){
+            Log.INFO("Reproduction set to Linear.");
+        } else {
+            Log.INFO("Reproduction set to Shuffle.");
+        }
     }
     
     /**

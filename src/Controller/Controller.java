@@ -4,6 +4,8 @@ import java.io.File;
 import static Controller.Audio.AudioController.REPRODUCTION_STRATEGY.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
+
 import Controller.Audio.AudioController;
 import Controller.Audio.MpegInfo;
 import Controller.Files.FileController;
@@ -49,7 +51,6 @@ public class Controller implements ViewObserver {
     @Override
     public void addSongInPlaylist(final String song, final String playlist){
        this.model.addSongInPlaylist(song,playlist);
-        /* playlist.addSong(song);*/
        final String songPath= this.model.getSongPath(song);
        final String playlistPath = this.model.getPlaylistPath(playlist);
         try {
@@ -73,10 +74,23 @@ public class Controller implements ViewObserver {
                              }
                          });
         Log.INFO("Mpeg tag succesfully loaded into the library.");
+        this.filecontrol.listAllPlaylist()
+                        .stream()
+                        .forEach(i->{
+                            String plname = i.substring(i.lastIndexOf(sep)+1,i.length()-4);
+                            this.model.newPlaylist(plname, i);
+                            try {
+                                this.filecontrol.getPlaylistSongs(new File(i)).stream()
+                                    .forEach(j->this.model.addSongInPlaylist(j.substring(j.lastIndexOf(sep)+1,j.length()-4), plname));
+                            } catch (Exception e) {
+                                Log.ERROR("Can't load PLAYLIST to library.");
+                            }
+                         });
+        Log.INFO("Playlist succesfully loaded into the library.");
     }
     
     public static void main(String[] args) throws InterruptedException{
-        Controller c = new Controller();
+        new Controller();
         
        // List<String> l = c.filecontrol.listAllSongPath();
         
