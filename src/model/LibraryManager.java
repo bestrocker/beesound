@@ -367,8 +367,8 @@ public final class LibraryManager implements Manager{   // this class is impleme
         return list;
     }
     
-    public Map<String, Object> getLibraryInfo() {
-        Map<String, Object> map = new HashMap<>();        
+    public Map<String, Integer> getLibraryInfo() {
+        Map<String, Integer> map = new HashMap<>();        
         int min = 0;
         int sec = 0;
         for (Song s : this.songList) {

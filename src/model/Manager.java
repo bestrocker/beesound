@@ -141,5 +141,5 @@ public interface Manager {
      * Returns a map containing info about total number of songs and total audio time in library.
      * @return a map containing info about total number of songs and total audio time in library.
      */
-    Map<String, Object> getLibraryInfo();
+    Map<String, Integer> getLibraryInfo();
 }
