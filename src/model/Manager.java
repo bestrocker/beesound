@@ -142,4 +142,10 @@ public interface Manager {
      * @return a map containing info about total number of songs and total audio time in library.
      */
     Map<String, Integer> getLibraryInfo();
+    
+    /**
+     * Returns a list containing the most listened song titles.
+     * @return a list containing the most listened song titles.
+     */
+    List<String> getMostListened();
 }

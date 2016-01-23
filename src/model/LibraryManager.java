@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,7 @@ import Controller.Audio.MpegInfo.Duration;
 public final class LibraryManager implements Manager{   // this class is implemented using the singleton pattern
     
     private static final LibraryManager INSTANCE = new LibraryManager();
+    private static final int MAX_FAVOURITE = 9;
     
     private final List<Song> songList;
     private final List<Album> albumList;
@@ -379,5 +381,19 @@ public final class LibraryManager implements Manager{   // this class is impleme
         map.put("min", min);
         map.put("sec", sec);
         return map;
-    }   
+    }
+    
+    public List<String> getMostListened() {
+        List<Song> list = this.songList;
+        list.sort(new Comparator<Song>() {
+
+            @Override
+            public int compare(Song o1, Song o2) {
+                return o1.getReproductionsCounter() - o2.getReproductionsCounter();
+            }
+        });
+        List<String> titles = new ArrayList<>();
+        list.forEach(x -> titles.add(x.getTitle()));
+        return  titles.subList(0, this.MAX_FAVOURITE);       
+    }
 }
