@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -29,8 +30,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import Controller.Audio.MpegInfo.*;
 import Controller.Controller.REPRODUCE;
 import Controller.ViewObserver;
+
 import java.awt.Color;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -58,6 +61,7 @@ public class GUI implements ViewInterface{
     private String songName;
     private JSlider seek = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
     private Integer colorVal = 0;
+    private Map<Object, Long> labelMap;
 
     public GUI() {
 
@@ -104,6 +108,24 @@ public class GUI implements ViewInterface{
         rightPanel.add(imageLabel);     
         rightPanel.add(infoTitle);
 
+        /* CENTER PANEL: LIST SELECTION & INFO LABEL */
+
+        final JPanel listSelectionPanel = new JPanel();
+        listSelectionPanel.setLayout(new BoxLayout(listSelectionPanel, BoxLayout.Y_AXIS));                  
+
+        /*information panel about list selection*/
+
+        final JPanel counterPanel = new JPanel();
+        counterPanel.setBackground(Color.DARK_GRAY);
+        counterPanel.setMaximumSize(new Dimension(32767, 30));
+        final JLabel counterLabel = new JLabel("Numero brani + minutaggio: ");
+        counterLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
+        counterLabel.setForeground(new Color(51, 204, 51));
+
+        listSelectionPanel.add(scrollPane);
+        listSelectionPanel.add(counterPanel);                               
+        counterPanel.add(counterLabel);
+
 
         /*LEFT PANEL & BUTTONS*/
         /*panel for left buttons*/
@@ -122,15 +144,17 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if (stopped) {
-                    setInfoLabel(infoTitle, "titolo", "durata");                        //need controller method
+                if (stopped) {                   
+                    
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                     Agent agent = new Agent(seek);
                     agent.start();
                     playing = true;
+                    setInfoLabel(infoTitle, controller.getCurrentSongInfo());
                 }
                 else {
+                    
                     controller.pauseButton();
                     playing = !playing;
                 }
@@ -203,12 +227,13 @@ public class GUI implements ViewInterface{
         
         final JButton bLinear = new JButton("Linear");
         bLinear.setFont(new Font("Droid Sans", Font.PLAIN, 9));
+        bLinear.setEnabled(true);
         bLinear.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                controller.linearMode();                
+                controller.linearMode();              
             }
         });
         
@@ -236,6 +261,8 @@ public class GUI implements ViewInterface{
                 list = new JList<>(new Vector<>(controller.showAllSong()));
                 list.setSelectedIndex(0);
                 songName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                //labelMap = showTitleAndDuration();
+                //setSumDuration(labelMap, counterLabel);
 
                 list.addMouseListener(new MouseListener() {
 
@@ -270,6 +297,7 @@ public class GUI implements ViewInterface{
                             playing = true;
                             stopped = false;
                             updatePlayButton(button_6);
+                            setInfoLabel(infoTitle, controller.getCurrentSongInfo());
                         }                        
                     }
                 });                
@@ -365,6 +393,7 @@ public class GUI implements ViewInterface{
                                         playing = true;
                                         stopped = false;
                                         updatePlayButton(button_6);
+                                        setInfoLabel(infoTitle, controller.getCurrentSongInfo());
                                     }                        
                                 }
                             }); 
@@ -444,24 +473,6 @@ public class GUI implements ViewInterface{
         leftButtonsPanel.add(button_5);
         leftButtonsPanel.add(buttonQueue);
 
-        /* CENTER PANEL: LIST SELECTION & INFO LABEL */
-
-        final JPanel listSelectionPanel = new JPanel();
-        listSelectionPanel.setLayout(new BoxLayout(listSelectionPanel, BoxLayout.Y_AXIS));                  
-
-        /*information panel about list selection*/
-
-        final JPanel counterPanel = new JPanel();
-        counterPanel.setBackground(Color.DARK_GRAY);
-        counterPanel.setMaximumSize(new Dimension(32767, 30));
-        final JLabel counterLabel = new JLabel("Numero brani + minutaggio: ");
-        counterLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
-        counterLabel.setForeground(new Color(51, 204, 51));
-
-        listSelectionPanel.add(scrollPane);
-        listSelectionPanel.add(counterPanel);                               
-        counterPanel.add(counterLabel);
-
         /* TOP MENU */
 
         final JMenuBar menuBar = new JMenuBar();
@@ -498,6 +509,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 controller.addSongInReproductionPlaylist(list.getModel()
                         .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
             }
@@ -565,7 +577,24 @@ public class GUI implements ViewInterface{
         frame.setVisible(true);        
     }
     
-///////////////////////////  METHODS  ///////////////////////////////////
+///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
+    
+    /**
+     * Set information into a label about number of song and their total time duration
+     * @param map
+     * @param label
+     */
+    /*private void setSumDuration(Map<String, Object> map, JLabel label) {
+        
+        long sum = 0;
+        int count = 0;
+        
+        for(Map.Entry<St, Long> entry : map.entrySet()) {
+            sum = sum + entry.getValue();
+            count ++;
+        }
+        label.setText("n° brani: " + count + "durata: " + sum);
+    }*/
     
     /**
      * Set left button Layout. Set a value from 0 to 86 to show a different range of colors
@@ -574,6 +603,7 @@ public class GUI implements ViewInterface{
      * @param button
      */
     private void setLeftButtons(final JButton button) {
+        
         int a = 33, b = 255, c = b - (a * colorVal);
         if(c > 0) {
             button.setBackground(new Color(255, 255, c));
@@ -589,6 +619,7 @@ public class GUI implements ViewInterface{
      * Create a selectable list to be shown into GUI
      */
     private void createSelectableList() {
+        
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         scrollPane.setViewportView(list);
@@ -599,6 +630,7 @@ public class GUI implements ViewInterface{
      * @return
      */
     public int getSelectedIndex() {
+        
         return this.list.getMaxSelectionIndex();
     }
     
@@ -608,6 +640,7 @@ public class GUI implements ViewInterface{
      */
     @Override
     public void setObserver(ViewObserver observer) {
+        
         this.controller = observer;
     }
     
@@ -616,6 +649,7 @@ public class GUI implements ViewInterface{
      * @param button
      */
     private void updatePlayButton(JButton button) {
+        
         if (playing) {
             button.setText(" || ");
         }
@@ -627,11 +661,12 @@ public class GUI implements ViewInterface{
     /**
      * Set lable's text to show title and song duration
      * @param label
-     * @param title
-     * @param duration
+     * @param Map
      */
-    private void setInfoLabel(JLabel label, String title, String duration) {
-        label.setText(title + " - " + duration);
+    private void setInfoLabel(JLabel label, Map<String, Object> map) {
+        
+        Duration duration = (Duration)(map.get("Duration"));
+        label.setText(map.get("Title") + " - " + duration.getMin() + ":" + duration.getSec());
     }
     
     /**
@@ -647,6 +682,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 controller.addSongInReproductionPlaylist(list.getModel()
                         .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
             }
