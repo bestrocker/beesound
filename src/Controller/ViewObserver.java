@@ -1,6 +1,8 @@
 package Controller;
 
 import java.util.List;
+import java.util.Map;
+
 import Controller.Controller.REPRODUCE;
 
 public interface ViewObserver {
@@ -139,4 +141,7 @@ public interface ViewObserver {
      * @return
      */
     List<String> showPlaylistSong(final String playlistName);
+    
+    Map<String, Object> getCurrentSongInfo();
+    
 }
