@@ -366,4 +366,18 @@ public final class LibraryManager implements Manager{   // this class is impleme
         this.getPlaylist(playlistName).getTrackList().forEach(x -> list.add(x.getTitle()));
         return list;
     }
+    
+    public Map<String, Object> getLibraryInfo() {
+        Map<String, Object> map = new HashMap<>();        
+        int min = 0;
+        int sec = 0;
+        for (Song s : this.songList) {
+            min += s.getDuration().getMin();
+            sec += s.getDuration().getSec();            
+        }
+        map.put("nSongs", this.songList.size());
+        map.put("min", min);
+        map.put("sec", sec);
+        return map;
+    }   
 }

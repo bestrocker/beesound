@@ -37,11 +37,14 @@ public class TryModel {
         library.getAlbumList().forEach(x -> x.getTrackList().forEach(y -> System.out.println(y.getTitle())));
         library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));*/
         
-        library.addSongInPlaylist("Trains", true);
+        /*library.addSongInPlaylist("Trains", true);
         library.addSongInPlaylist("Money", true);
         //library.removeSong("Money");
         library.removeSongFromQueue("Money");
-        library.getInReproductionTitles().forEach(x -> System.out.println(x));
+        library.getInReproductionTitles().forEach(x -> System.out.println(x));*/
         
+        System.out.println(library.getLibraryInfo().get("nSongs"));
+        System.out.println(library.getLibraryInfo().get("min"));
+        System.out.println(library.getLibraryInfo().get("sec"));
     }
 }
