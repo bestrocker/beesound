@@ -57,6 +57,7 @@ public class GUI implements ViewInterface{
     private boolean stopped = true;
     private String songName;
     private JSlider seek = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
+    private Integer colorVal = 0;
 
     public GUI() {
 
@@ -78,6 +79,31 @@ public class GUI implements ViewInterface{
         final JPanel landingPanel = new JPanel();
         final BorderLayout landingLayout = new BorderLayout();
         landingPanel.setLayout(landingLayout);
+        
+        /*RIGHT PANEL FOR IMAGE AND INFO CURRENT SONG*/
+
+        final JPanel rightPanel = new JPanel();
+        rightPanel.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        seek.setMaximumSize(new Dimension(280, 20));
+        rightPanel.add(seek);
+
+        /*album image*/
+
+        final URL ImgURL = UIResource.class.getResource("/zutons.jpg");
+        final JLabel imageLabel = new JLabel(new ImageIcon(ImgURL));            
+        imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 0));
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        final JLabel infoTitle = new JLabel("Info Title");
+        infoTitle.setFont(new Font("Dialog", Font.PLAIN, 11));
+        infoTitle.setBackground(new Color(200, 230, 230));
+        infoTitle.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), (int)(frame.getHeight() * 0.1)));
+        infoTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        rightPanel.add(imageLabel);     
+        rightPanel.add(infoTitle);
+
 
         /*LEFT PANEL & BUTTONS*/
         /*panel for left buttons*/
@@ -91,13 +117,13 @@ public class GUI implements ViewInterface{
         final JPanel playerButtonsPanel = new JPanel(playerButtonsLayout);
 
         final JButton button_6 = new JButton(" ▶ ");
-        button_6.setForeground(new Color(0, 128, 0));
         button_6.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 if (stopped) {
+                    setInfoLabel(infoTitle, "titolo", "durata");                        //need controller method
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                     Agent agent = new Agent(seek);
@@ -128,7 +154,7 @@ public class GUI implements ViewInterface{
         });
 
         final JButton button_8 = new JButton(" << ");
-        button_8.setFont(new Font("Tahoma", Font.BOLD, 11));
+        button_8.setFont(new Font("Droid Sans", Font.BOLD, 11));
         button_8.addActionListener(new ActionListener() {
 
             @Override
@@ -139,7 +165,7 @@ public class GUI implements ViewInterface{
         });
 
         final JButton button_9 = new JButton(" >> ");
-        button_9.setFont(new Font("Tahoma", Font.BOLD, 11));
+        button_9.setFont(new Font("Droid Sans", Font.BOLD, 11));
         button_9.addActionListener(new ActionListener() {
 
             @Override
@@ -163,6 +189,7 @@ public class GUI implements ViewInterface{
         });
         
         /*linear and shuffle mode buttons*/
+        
         final JButton bShuffle = new JButton("Shuffle");
         bShuffle.setFont(new Font("Droid Sans", Font.PLAIN, 9));
         bShuffle.addActionListener(new ActionListener() {
@@ -200,9 +227,7 @@ public class GUI implements ViewInterface{
         /*left buttons*/
 
         final JButton button = new JButton("All Songs");
-        button.setBorder(null);
-        button.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
-        button.setBackground(new Color(255, 255, 204));              
+        setLeftButtons(button);
         button.addActionListener(new ActionListener() {
 
             @Override
@@ -223,6 +248,7 @@ public class GUI implements ViewInterface{
                         JPopupMenu menu = buildStandardPopup();
                         if(e.isPopupTrigger()) {
                             menu.show(e.getComponent(), e.getX(), e.getY());
+                            songName = list.getModel().getElementAt(list.getMaxSelectionIndex());
                         }                       
                     }
 
@@ -252,9 +278,7 @@ public class GUI implements ViewInterface{
         });
 
         final JButton button_1 = new JButton("Albums");
-        button_1.setBorder(null);
-        button_1.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
-        button_1.setBackground(new Color(255, 255, 153));
+        setLeftButtons(button_1);
         button_1.addActionListener(new ActionListener() {
             
             @Override
@@ -266,9 +290,7 @@ public class GUI implements ViewInterface{
         });
 
         final JButton button_2 = new JButton("Artists");
-        button_2.setBorder(null);
-        button_2.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
-        button_2.setBackground(new Color(255, 255, 102));
+        setLeftButtons(button_2);
         button_2.addActionListener(new ActionListener() {
             
             @Override
@@ -280,9 +302,7 @@ public class GUI implements ViewInterface{
         });
 
         final JButton button_3 = new JButton("Yuor Playlists");
-        button_3.setBorder(null);
-        button_3.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
-        button_3.setBackground(new Color(255, 255, 51));
+        setLeftButtons(button_3);
         button_3.addActionListener(new ActionListener() {                                       
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -306,9 +326,11 @@ public class GUI implements ViewInterface{
                     
                     @Override
                     public void mouseClicked(MouseEvent e) {
+                        
                         if(e.getClickCount() == 2) {
-                            System.out.println(list.getModel().getElementAt(list.getMaxSelectionIndex()));
-                            list = new JList<>(new Vector<>(controller.showPlaylistSong(list.getModel().getElementAt(list.getMaxSelectionIndex()))));
+                            
+                            list = new JList<>(new Vector<>(controller.showPlaylistSong(list.getModel()
+                                    .getElementAt(list.getMaxSelectionIndex()))));
                             createSelectableList();
                             
                             list.addMouseListener(new MouseListener() {
@@ -335,6 +357,7 @@ public class GUI implements ViewInterface{
                                 public void mouseClicked(MouseEvent e) {
 
                                     if(e.getClickCount() == 2) {
+                                        
                                         controller.addSongInReproductionPlaylist(list.getModel()
                                                 .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                                         Agent agent = new Agent(seek);
@@ -354,37 +377,36 @@ public class GUI implements ViewInterface{
         });
 
         final JButton button_4 = new JButton("Music Genre");
-        button_4.setBorder(null);
-        button_4.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
-        button_4.setBackground(new Color(204, 255, 255));
-        button_4.addActionListener(new ActionListener() {                                       
+        setLeftButtons(button_4);
+        button_4.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 list = new JList<>(new Vector<>(controller.showAllGenre()));
                 createSelectableList();
             }
         });
 
         final JButton button_5 = new JButton("Più ascoltati");
-        button_5.setBorder(null);
-        button_5.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
-        button_5.setBackground(new Color(153, 255, 255));
-        button_5.addActionListener(new ActionListener() {                                       
+        setLeftButtons(button_5);
+        button_5.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
-                //list = new JList<>(new Vector<>(controller.showCurrentPlaylist()));
+                
+                //list = new JList<>(new Vector<>(controller.showFavorites()));
                 createSelectableList();
             }
         });
 
         final JButton buttonQueue = new JButton("In riproduzione");
-        buttonQueue.setBorder(null);
-        buttonQueue.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
-        buttonQueue.setBackground(new Color(102, 255, 255));
+        setLeftButtons(buttonQueue);
         buttonQueue.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 list = new JList<>(new Vector<>(controller.showReproductionPlaylist()));
                 list.addMouseListener(new MouseListener() {
 
@@ -422,7 +444,7 @@ public class GUI implements ViewInterface{
         leftButtonsPanel.add(button_5);
         leftButtonsPanel.add(buttonQueue);
 
-        /*CENTER PANEL: LIST SELECTION & INFO LABEL*/
+        /* CENTER PANEL: LIST SELECTION & INFO LABEL */
 
         final JPanel listSelectionPanel = new JPanel();
         listSelectionPanel.setLayout(new BoxLayout(listSelectionPanel, BoxLayout.Y_AXIS));                  
@@ -440,40 +462,13 @@ public class GUI implements ViewInterface{
         listSelectionPanel.add(counterPanel);                               
         counterPanel.add(counterLabel);
 
-        /*RIGHT PANEL FOR IMAGE AND INFO CURRENT SONG*/
-
-        final JPanel rightPanel = new JPanel();
-        rightPanel.setBackground(new Color(153, 204, 102));
-        rightPanel.setFont(new Font("SansSerif", Font.PLAIN, 11));
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        seek.setMaximumSize(new Dimension(280, 20));
-        rightPanel.add(seek);
-
-        /*album image*/
-
-        final URL ImgURL = UIResource.class.getResource("/zutons.jpg");
-        final JLabel imageLabel = new JLabel(new ImageIcon(ImgURL));            
-        imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 0));
-        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        /*label with current song's info*/
-
-        final JLabel currentSongInfo = new JLabel("Current Song's Info");
-        currentSongInfo.setFont(new Font("Dialog", Font.PLAIN, 11));
-        currentSongInfo.setBackground(Color.WHITE);
-        currentSongInfo.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), (int)(frame.getHeight() * 0.3)));
-        currentSongInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        rightPanel.add(imageLabel);     
-        rightPanel.add(currentSongInfo);
-
-        /*TOP MENU*/
+        /* TOP MENU */
 
         final JMenuBar menuBar = new JMenuBar();
         menuBar.setBorder(null);
         frame.setJMenuBar(menuBar);  
 
-        /*jmenu buttons: file, help. Jmenu can contains jmenu items*/
+        /*jmenu buttons: file, help*/
 
         final JMenu menuFile = new JMenu("File");
         menuFile.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -515,6 +510,7 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 final JFrame frame2 = new JFrame("Your Playlist");
                 final JPanel panel = new JPanel();
                 final JLabel label = new JLabel("Insert playlist name  ");
@@ -527,6 +523,7 @@ public class GUI implements ViewInterface{
                     
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        
                         controller.newPlaylistFile(area.getText());
                         frame2.dispose();
                     }
@@ -563,26 +560,61 @@ public class GUI implements ViewInterface{
         landingPanel.add(leftButtonsPanel, BorderLayout.WEST);
         landingPanel.add(playerButtonsPanel, BorderLayout.SOUTH);
         landingPanel.add(rightPanel, BorderLayout.EAST);
+        
         frame.getContentPane().add(landingPanel);
         frame.setVisible(true);        
     }
-
-    /*creation of the list of strings to show into listSelectionPanel*/
+    
+///////////////////////////  METHODS  ///////////////////////////////////
+    
+    /**
+     * Set left button Layout. Set a value from 0 to 86 to show a different range of colors
+     * Set 0 < a < 41 for monocromatic look
+     * Set 42 < a < 86 for a bicromatic look
+     * @param button
+     */
+    private void setLeftButtons(final JButton button) {
+        int a = 33, b = 255, c = b - (a * colorVal);
+        if(c > 0) {
+            button.setBackground(new Color(255, 255, c));
+        } else {
+            button.setBackground(new Color(255 + c, 255, 255));
+        }
+        colorVal++;
+        button.setBorder(null);
+        button.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
+    }
+    
+    /**
+     * Create a selectable list to be shown into GUI
+     */
     private void createSelectableList() {
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         scrollPane.setViewportView(list);
     }
-
+    
+    /**
+     * Return the actual list selection index
+     * @return
+     */
     public int getSelectedIndex() {
         return this.list.getMaxSelectionIndex();
     }
-
+    
+    /**
+     * Set the controller as the observer
+     * @param observer
+     */
     @Override
     public void setObserver(ViewObserver observer) {
         this.controller = observer;
     }
-
+    
+    /**
+     * Switch between play/pause button
+     * @param button
+     */
     private void updatePlayButton(JButton button) {
         if (playing) {
             button.setText(" || ");
@@ -591,10 +623,26 @@ public class GUI implements ViewInterface{
             button.setText(" ▶ ");
         }        
     }
-
+    
+    /**
+     * Set lable's text to show title and song duration
+     * @param label
+     * @param title
+     * @param duration
+     */
+    private void setInfoLabel(JLabel label, String title, String duration) {
+        label.setText(title + " - " + duration);
+    }
+    
+    /**
+     * Build a popup menu on the right mouse click, with options to choose 
+     * @return JPopupMenu
+     */
     private JPopupMenu buildStandardPopup() {
+        
         final JPopupMenu menu = new JPopupMenu();
         final JMenuItem itemAddToReproductionList = new JMenuItem("Add to reproduction Playlist");
+        
         itemAddToReproductionList.addActionListener(new ActionListener() {
 
             @Override
@@ -634,7 +682,6 @@ public class GUI implements ViewInterface{
                 for(int i = 0; i < array.length; i++ ) {
                     
                     array[i] = (String)(list.getModel().getElementAt(i));
-                    //System.out.println("array: " + array[i]);
                 }
                 
                 final JFrame frame2 = new JFrame("Your Playlist");
@@ -650,7 +697,7 @@ public class GUI implements ViewInterface{
                     
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //System.out.println(songName);
+                        
                         controller.addSongInPlaylist(songName, combo.getSelectedItem().toString());
                         frame2.dispose();
                     }
@@ -673,6 +720,11 @@ public class GUI implements ViewInterface{
         return menu;
     }
     
+    /**
+     * This class create and start a new thread for running the seekbar media
+     * Seekbar listens and works as a new thread until the song is playing.
+     *
+     */
     private class Agent extends Thread {
         
         private JSlider seek;
