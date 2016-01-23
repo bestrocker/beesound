@@ -129,6 +129,7 @@ public class AudioController implements BasicPlayerListener{
      */
     public void playPlayer(){
         try {
+            System.out.println("counter "+this.counter + "qsize " +this.lm.getQueueSize());
             String s = "empty";
             //String s = this.playlist.get(this.counter);
             //this.incrementSongCounter(this.lsong.get(this.counter));

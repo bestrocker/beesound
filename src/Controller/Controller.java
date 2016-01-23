@@ -4,8 +4,7 @@ import java.io.File;
 import static Controller.Audio.AudioController.REPRODUCTION_STRATEGY.*;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Stream;
-
+import java.util.Map;
 import Controller.Audio.AudioController;
 import Controller.Audio.MpegInfo;
 import Controller.Files.FileController;
@@ -321,6 +320,11 @@ public class Controller implements ViewObserver {
 
     @Override
     public List<String> showPlaylistSong(String playlistName) {
-        this.model.showPlaylistSong(playlistName);
+        return this.model.showPlaylistSong(playlistName);
+    }
+
+    @Override
+    public Map<String, Object> getCurrentSongInfo() {
+        return this.model.getCurrentSongInfo();
     }
 }
