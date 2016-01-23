@@ -61,7 +61,6 @@ public class GUI implements ViewInterface{
     private String songName;
     private JSlider seek = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
     private Integer colorVal = 0;
-    private Map<Object, Long> labelMap;
 
     public GUI() {
 
@@ -94,7 +93,7 @@ public class GUI implements ViewInterface{
 
         /*album image*/
 
-        final URL ImgURL = UIResource.class.getResource("/zutons.jpg");
+        final URL ImgURL = UIResource.class.getResource("/beeSound3.jpg");
         final JLabel imageLabel = new JLabel(new ImageIcon(ImgURL));            
         imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 0));
         imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -148,6 +147,7 @@ public class GUI implements ViewInterface{
                     
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
+
                     Agent agent = new Agent(seek);
                     agent.start();
                     playing = true;
@@ -773,8 +773,11 @@ public class GUI implements ViewInterface{
             
         @Override
         public void run() {
+            
+            final Duration duration = (Duration) controller.getCurrentSongInfo().get("Duration");
+            seek.setMaximum(duration.getSec() + duration.getMin() * 60);
                         
-            while(seek.getValue() < 100 && running == true) {
+            while(seek.getValue() < (duration.getSec() + duration.getMin() * 60)) {
                 
                 try {
                    SwingUtilities.invokeAndWait(new Runnable() {
@@ -783,7 +786,7 @@ public class GUI implements ViewInterface{
                        public void run() {
                            
                            try {
-                               Thread.sleep(200);
+                               Thread.sleep(1000);
                            } catch (InterruptedException e) {
                                e.printStackTrace();
                            }
