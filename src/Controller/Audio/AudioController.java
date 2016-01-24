@@ -38,7 +38,10 @@ public class AudioController implements BasicPlayerListener{
             return this.val;
         }
     }
-    
+    /**
+     * Audio Controller for mp3 songs.
+     * @param Manager c
+     */
     public AudioController(final Manager c){
         
         this.lm = c;
@@ -57,14 +60,20 @@ public class AudioController implements BasicPlayerListener{
         return this.mp3Info;
     }
     
+    /**
+     * Set pause if in reproduction.
+     * Set in reproduction if Paused.
+     */
     public void togglePause(){
         try{
             if(!this.paused){
                 this.control.pause();
+                Log.INFO("Song paused.");
                 this.paused = true;
                 
             } else {
                 this.control.resume();
+                Log.INFO("Song resumed.");
                 this.paused = false;
             }
         } catch (BasicPlayerException e){
@@ -91,12 +100,13 @@ public class AudioController implements BasicPlayerListener{
      */
     public void nextPlayer(){
         try {
-            control.stop();;
+            control.stop();
+            nextSongPlayer();
         } catch (BasicPlayerException e) {
             Log.ERROR("cannot stop, next() failed");
             e.printStackTrace();
         }
-        nextSongPlayer();
+        
     }
     
     /**
@@ -105,12 +115,13 @@ public class AudioController implements BasicPlayerListener{
     public void prevPlayer(){
         try {
             control.stop();
+            this.counter--;
+            this.playPlayer();
         } catch (BasicPlayerException e) {
-            // TODO Auto-generated catch block
+            Log.ERROR("prevPlayer FAILED.");
             e.printStackTrace();
         }
-        this.counter--;
-        this.playPlayer();
+        
     }
     
     /**
@@ -171,7 +182,6 @@ public class AudioController implements BasicPlayerListener{
      */
     private void nextSongPlayer(){
         if(strategy) {
-           // if(this.counter + 1 > this.playlist.size()-1){
             if(this.counter + 1 > this.lm.getQueueSize() -1 ){
                 this.stopPlayer();
                 Log.INFO("playlist finished");
@@ -189,6 +199,7 @@ public class AudioController implements BasicPlayerListener{
     public void setVolume(final double volume){
         try {
             this.control.setGain(volume);
+            Log.PROGRAM("GAIN set to "+volume);
         } catch (BasicPlayerException e) {
             Log.ERROR("impossible to change volume, error in setVolume");
             e.printStackTrace();

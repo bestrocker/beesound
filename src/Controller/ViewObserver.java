@@ -142,6 +142,21 @@ public interface ViewObserver {
      */
     List<String> showPlaylistSong(final String playlistName);
     
+    /**
+     * Returns a map with current song info.
+     * @return
+     */
     Map<String, Object> getCurrentSongInfo();
     
+    /**
+     * Remove Playlist from library.
+     * @param namePlaylist
+     */
+    void removePlaylit(String namePlaylist);
+    
+    /**
+     * Returns a List of favorites.
+     * @return List<String>
+     */
+    List<String>showFavorites();
 }
