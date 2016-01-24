@@ -64,7 +64,7 @@ public class GUI implements ViewInterface{
 
     public GUI() {
 
-        /*THE FRAME*/
+        /* FRAME AND PANEL */
 
         frame = new JFrame("BeeSound Player");
         frame.setFont(new Font("Trajan Pro", Font.PLAIN, 12));
@@ -74,33 +74,30 @@ public class GUI implements ViewInterface{
         frame.setSize((int) (dimension.getWidth() * 0.5), (int) (dimension.getHeight() * 0.5));
         frame.setLocation(x, y);                
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);           
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setMinimumSize(new Dimension(200, 100));
-
-        /*THE PRINCIPAL BORDERLAYOUT PANEL*/
 
         final JPanel landingPanel = new JPanel();
         final BorderLayout landingLayout = new BorderLayout();
         landingPanel.setLayout(landingLayout);
         
-        /*RIGHT PANEL FOR IMAGE AND INFO CURRENT SONG*/
+        /* RIGHT PANEL FOR IMAGE AND INFO CURRENT SONG */
 
         final JPanel rightPanel = new JPanel();
         rightPanel.setFont(new Font("SansSerif", Font.PLAIN, 11));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        seek.setMaximumSize(new Dimension(280, 20));
         rightPanel.add(seek);
 
-        /*album image*/
+        /* beesound logo */
 
-        final URL ImgURL = UIResource.class.getResource("/beeSound3.jpg");
-        final JLabel imageLabel = new JLabel(new ImageIcon(ImgURL));            
-        imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 0));
+        final URL ImgURL = UIResource.class.getResource("/sorrow.jpg");
+        final JLabel imageLabel = new JLabel();
+        imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 250));
+        imageLabel.setIcon(new ImageIcon(ImgURL));
         imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         final JLabel infoTitle = new JLabel("Info Title");
         infoTitle.setFont(new Font("Dialog", Font.PLAIN, 11));
-        infoTitle.setBackground(new Color(200, 230, 230));
         infoTitle.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), (int)(frame.getHeight() * 0.1)));
         infoTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -110,29 +107,22 @@ public class GUI implements ViewInterface{
         /* CENTER PANEL: LIST SELECTION & INFO LABEL */
 
         final JPanel listSelectionPanel = new JPanel();
-        listSelectionPanel.setLayout(new BoxLayout(listSelectionPanel, BoxLayout.Y_AXIS));                  
+        listSelectionPanel.setLayout(new BoxLayout(listSelectionPanel, BoxLayout.Y_AXIS));
 
-        /*information panel about list selection*/
+        /* information panel about list selection */
 
         final JPanel counterPanel = new JPanel();
-        counterPanel.setBackground(Color.DARK_GRAY);
         counterPanel.setMaximumSize(new Dimension(32767, 30));
         final JLabel counterLabel = new JLabel("Numero brani + minutaggio: ");
-        counterLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
-        counterLabel.setForeground(new Color(51, 204, 51));
-
+        counterPanel.setBackground(new Color(100, 100, 230));
+        //setLibraryInfo(counterLabel, controller.setLibraryInfo());
+        
+        //scrollPane.setBorder(null);
         listSelectionPanel.add(scrollPane);
         listSelectionPanel.add(counterPanel);                               
         counterPanel.add(counterLabel);
 
-
-        /*LEFT PANEL & BUTTONS*/
-        /*panel for left buttons*/
-
-        final JPanel leftButtonsPanel = new JPanel(new GridLayout(0, 1, 0, 0));
-        leftButtonsPanel.setPreferredSize(new Dimension(85, 0));
-
-        /*SOUTH PANEL: CONTROL PLAYER'S BUTTONS*/
+        /* SOUTH PANEL: CONTROL PLAYER'S BUTTONS */
 
         final FlowLayout playerButtonsLayout = new FlowLayout();
         final JPanel playerButtonsPanel = new JPanel(playerButtonsLayout);
@@ -147,9 +137,8 @@ public class GUI implements ViewInterface{
                     
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
-
                     Agent agent = new Agent(seek);
-                    agent.start();
+                    //agent.start();
                     playing = true;
                     setInfoLabel(infoTitle, controller.getCurrentSongInfo());
                 }
@@ -164,7 +153,6 @@ public class GUI implements ViewInterface{
         }); 
 
         final JButton button_7 = new JButton(" ■ ");
-        button_7.setForeground(new Color(0, 0, 0));
         button_7.addActionListener(new ActionListener() {
 
             @Override
@@ -216,15 +204,16 @@ public class GUI implements ViewInterface{
         
         final JButton bShuffle = new JButton("Shuffle");
         bShuffle.setFont(new Font("Droid Sans", Font.PLAIN, 9));
+        bShuffle.setEnabled(false);;
         bShuffle.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                controller.setShuffleMode();                
+                controller.setShuffleMode();
             }
         });
-        
+  
         final JButton bLinear = new JButton("Linear");
         bLinear.setFont(new Font("Droid Sans", Font.PLAIN, 9));
         bLinear.setEnabled(true);
@@ -233,10 +222,12 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                controller.linearMode();              
+                controller.linearMode();
+                bShuffle.setEnabled(true);
+
             }
         });
-        
+ 
         playerButtonsPanel.add(bShuffle);
         playerButtonsPanel.add(Box.createRigidArea(new Dimension()));
         playerButtonsPanel.add(bLinear);
@@ -248,6 +239,11 @@ public class GUI implements ViewInterface{
         playerButtonsPanel.add(button_7);
         playerButtonsPanel.add(button_6);
         playerButtonsPanel.add(button_9);
+
+        /* LEFT PANEL & BUTTONS */
+
+        final JPanel leftButtonsPanel = new JPanel(new GridLayout(0, 1, 0, 0));
+        leftButtonsPanel.setPreferredSize(new Dimension(85, 0));
 
         /*left buttons*/
 
@@ -261,8 +257,6 @@ public class GUI implements ViewInterface{
                 list = new JList<>(new Vector<>(controller.showAllSong()));
                 list.setSelectedIndex(0);
                 songName = list.getModel().getElementAt(list.getMaxSelectionIndex());
-                //labelMap = showTitleAndDuration();
-                //setSumDuration(labelMap, counterLabel);
 
                 list.addMouseListener(new MouseListener() {
 
@@ -272,7 +266,7 @@ public class GUI implements ViewInterface{
                     @Override
                     public void mousePressed(MouseEvent e) {
 
-                        JPopupMenu menu = buildStandardPopup();
+                        JPopupMenu menu = buildStandardPopup(button);
                         if(e.isPopupTrigger()) {
                             menu.show(e.getComponent(), e.getX(), e.getY());
                             songName = list.getModel().getElementAt(list.getMaxSelectionIndex());
@@ -293,7 +287,7 @@ public class GUI implements ViewInterface{
                             controller.addSongInReproductionPlaylist(list.getModel()
                                     .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                             Agent agent = new Agent(seek);
-                            agent.start();
+                            //agent.start();
                             playing = true;
                             stopped = false;
                             updatePlayButton(button_6);
@@ -331,7 +325,9 @@ public class GUI implements ViewInterface{
 
         final JButton button_3 = new JButton("Yuor Playlists");
         setLeftButtons(button_3);
-        button_3.addActionListener(new ActionListener() {                                       
+        
+        button_3.addActionListener(new ActionListener() {           
+            
             @Override
             public void actionPerformed(ActionEvent e) {
                 
@@ -369,7 +365,7 @@ public class GUI implements ViewInterface{
                                 @Override
                                 public void mousePressed(MouseEvent e) {
 
-                                    JPopupMenu menu = buildStandardPopup();
+                                    JPopupMenu menu = buildStandardPopup(button);
                                     if(e.isPopupTrigger()) {
                                         menu.show(e.getComponent(), e.getX(), e.getY());
                                     }                       
@@ -389,7 +385,7 @@ public class GUI implements ViewInterface{
                                         controller.addSongInReproductionPlaylist(list.getModel()
                                                 .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                                         Agent agent = new Agent(seek);
-                                        agent.start();
+                                        //agent.start();
                                         playing = true;
                                         stopped = false;
                                         updatePlayButton(button_6);
@@ -445,7 +441,7 @@ public class GUI implements ViewInterface{
                     @Override
                     public void mousePressed(MouseEvent e) {
 
-                        JPopupMenu menu = buildStandardPopup();
+                        JPopupMenu menu = buildStandardPopup(buttonQueue);
                         if(e.isPopupTrigger()) {
                             menu.show(e.getComponent(), e.getX(), e.getY());
                         }                       
@@ -479,7 +475,7 @@ public class GUI implements ViewInterface{
         menuBar.setBorder(null);
         frame.setJMenuBar(menuBar);  
 
-        /*jmenu buttons: file, help*/
+        /* jmenu buttons: file, help */
 
         final JMenu menuFile = new JMenu("File");
         menuFile.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -488,7 +484,7 @@ public class GUI implements ViewInterface{
         menuHelp.setFont(new Font("SansSerif", Font.PLAIN, 11));
         menuBar.add(menuHelp);
 
-        /*add choice menu(JMenuItem)*/
+        /* choice menu(JMenuItem) */
 
         final JMenuItem menuChoiceImport = new JMenuItem("Add file to Library");
         menuChoiceImport.setFont(new Font("Dialog", Font.PLAIN, 11));
@@ -498,6 +494,7 @@ public class GUI implements ViewInterface{
                 int returnVal = chooser.showOpenDialog(menuFile);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                     controller.addSong(chooser.getSelectedFile().getAbsolutePath());
+                    frame.revalidate();
                 }
             }
         });
@@ -566,8 +563,29 @@ public class GUI implements ViewInterface{
         final JMenuItem menuChoiceInfo = new JMenuItem("Info Beesound");
         menuChoiceInfo.setFont(new Font("Dialog", Font.PLAIN, 11));
         menuHelp.add(menuChoiceInfo);
+        menuChoiceInfo.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                System.out.println("aosimdcoasdmioc");
+                final JFrame infoFrame = new JFrame("Beesound members");
+                JTextArea textArea = new JTextArea("\nThis Program has been realized by: \n"
+                        + "\nTiziano De Cristofaro : model\n"
+                        + "Carlo Alberto Scola: controller\n"
+                        + "Gianluca Cincinelli: view\n");
+                textArea.setFont(new Font("Dialog", Font.BOLD, 13));
+                textArea.setForeground(new Color(20, 40, 150));
+                textArea.setEditable(false);
+                textArea.setLineWrap(true);
+                infoFrame.add(textArea);
+                infoFrame.setSize(300, 120);
+                infoFrame.setVisible(true);
+            }
+        });
 
-        /*adding components*/
+        /* adding components */
+        
         landingPanel.add(listSelectionPanel, BorderLayout.CENTER);                  
         landingPanel.add(leftButtonsPanel, BorderLayout.WEST);
         landingPanel.add(playerButtonsPanel, BorderLayout.SOUTH);
@@ -580,21 +598,28 @@ public class GUI implements ViewInterface{
 ///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
     
     /**
-     * Set information into a label about number of song and their total time duration
+     * Set information into a label about all songs in the library and their total time duration in minutes
      * @param map
      * @param label
      */
-    /*private void setSumDuration(Map<String, Object> map, JLabel label) {
+    private void setLibraryInfo(JLabel label, Map<String, Integer> map) {
         
-        long sum = 0;
-        int count = 0;
+        label.setText("Songs in library: " + map.get("nSongs") + " - Minuti totali: " + map.get("min"));
+        label.setFont(new Font("Dialog", Font.PLAIN, 11));
+        label.setBackground(new Color(20, 20, 150));
+        label.setForeground(new Color(51, 204, 51));
+    }
+    
+    /**
+     * Set lable's text to show title and song duration
+     * @param label
+     * @param Map
+     */
+    private void setInfoLabel(JLabel label, Map<String, Object> map) {
         
-        for(Map.Entry<St, Long> entry : map.entrySet()) {
-            sum = sum + entry.getValue();
-            count ++;
-        }
-        label.setText("n° brani: " + count + "durata: " + sum);
-    }*/
+        Duration duration = (Duration)(map.get("Duration"));
+        label.setText(map.get("Title") + " - " + duration.getMin() + ":" + duration.getSec());
+    }
     
     /**
      * Set left button Layout. Set a value from 0 to 86 to show a different range of colors
@@ -604,7 +629,7 @@ public class GUI implements ViewInterface{
      */
     private void setLeftButtons(final JButton button) {
         
-        int a = 33, b = 255, c = b - (a * colorVal);
+        int a = 30, b = 255, c = b - (a * colorVal);
         if(c > 0) {
             button.setBackground(new Color(255, 255, c));
         } else {
@@ -659,21 +684,10 @@ public class GUI implements ViewInterface{
     }
     
     /**
-     * Set lable's text to show title and song duration
-     * @param label
-     * @param Map
-     */
-    private void setInfoLabel(JLabel label, Map<String, Object> map) {
-        
-        Duration duration = (Duration)(map.get("Duration"));
-        label.setText(map.get("Title") + " - " + duration.getMin() + ":" + duration.getSec());
-    }
-    
-    /**
      * Build a popup menu on the right mouse click, with options to choose 
      * @return JPopupMenu
      */
-    private JPopupMenu buildStandardPopup() {
+    private JPopupMenu buildStandardPopup(JButton button) {
         
         final JPopupMenu menu = new JPopupMenu();
         final JMenuItem itemAddToReproductionList = new JMenuItem("Add to reproduction Playlist");
@@ -685,6 +699,7 @@ public class GUI implements ViewInterface{
                 
                 controller.addSongInReproductionPlaylist(list.getModel()
                         .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
+                button.doClick();
             }
         });
         final JMenuItem itemRemoveFromReproductionList = new JMenuItem("Remove from reproduction Playlist");
@@ -693,8 +708,10 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.removeSongFromQueue(list.getModel()
-                        .getElementAt(list.getMaxSelectionIndex()));                       
+                        .getElementAt(list.getMaxSelectionIndex()));              
+                button.doClick();
             }
+       
         });   
         final JMenuItem itemRemoveFromLibrary = new JMenuItem("Remove from Library");
         itemRemoveFromLibrary.addActionListener(new ActionListener() {
@@ -702,6 +719,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.removeSong(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                button.doClick();
             }
         });
         
@@ -711,8 +729,8 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 list = new JList<>(new Vector<>(controller.showAllPlaylist()));
-                createSelectableList();
                 String[] array = new String[list.getModel().getSize()];
                 
                 for(int i = 0; i < array.length; i++ ) {
@@ -764,20 +782,22 @@ public class GUI implements ViewInterface{
     private class Agent extends Thread {
         
         private JSlider seek;
-        private volatile boolean running = true;
+        private Duration duration;
+        private int totSec;
         
         public Agent(JSlider seek) {
+            
+            duration = (Duration) controller.getCurrentSongInfo().get("Duration"); 
+            this.totSec = (duration.getSec() + duration.getMin() * 60);
             this.seek = seek;
-            this.seek.setValue(0);
+            this.seek.setValue(0);                      
+            seek.setMaximum(totSec);                     
         }
             
         @Override
-        public void run() {
+        public void run() {            
             
-            final Duration duration = (Duration) controller.getCurrentSongInfo().get("Duration");
-            seek.setMaximum(duration.getSec() + duration.getMin() * 60);
-                        
-            while(seek.getValue() < (duration.getSec() + duration.getMin() * 60)) {
+            while(seek.getValue() < totSec) {
                 
                 try {
                    SwingUtilities.invokeAndWait(new Runnable() {
