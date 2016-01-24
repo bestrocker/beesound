@@ -90,7 +90,7 @@ public class GUI implements ViewInterface{
 
         /* beesound logo */
 
-        final URL ImgURL = UIResource.class.getResource("/sorrow.jpg");
+        final URL ImgURL = UIResource.class.getResource("/zutons.jpg");
         final JLabel imageLabel = new JLabel();
         imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 250));
         imageLabel.setIcon(new ImageIcon(ImgURL));
@@ -202,31 +202,27 @@ public class GUI implements ViewInterface{
         
         /*linear and shuffle mode buttons*/
         
-        final JButton bLinear = new JButton("Linear");
         final JButton bShuffle = new JButton("Shuffle");
-        bShuffle.setEnabled(false);;
-        bLinear.setEnabled(true);
-        
         bShuffle.setFont(new Font("Droid Sans", Font.PLAIN, 9));
+        bShuffle.setEnabled(false);;
         bShuffle.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 
                 controller.setShuffleMode();
-                bShuffle.setEnabled(false);
-                bLinear.setEnabled(true);
             }
         });
-          
+  
+        final JButton bLinear = new JButton("Linear");
         bLinear.setFont(new Font("Droid Sans", Font.PLAIN, 9));
+        bLinear.setEnabled(true);
         bLinear.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 
                 controller.linearMode();
-                bLinear.setEnabled(false);
                 bShuffle.setEnabled(true);
 
             }
@@ -344,7 +340,14 @@ public class GUI implements ViewInterface{
                     public void mouseReleased(MouseEvent e) {}
                     
                     @Override
-                    public void mousePressed(MouseEvent e) {}
+                    public void mousePressed(MouseEvent e) {
+                        
+                        JPopupMenu menu = buildStandardPopup(button_3);
+                        if(e.isPopupTrigger()) {
+                            menu.show(e.getComponent(), e.getX(), e.getY());
+                            songName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                        }               
+                    }
                     
                     @Override
                     public void mouseExited(MouseEvent e) {}
@@ -727,6 +730,16 @@ public class GUI implements ViewInterface{
             }
         });
         
+        final JMenuItem itemRemovePlaylist = new JMenuItem("Remove playlist");
+        itemRemovePlaylist.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //controller.removePlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                button.doClick();
+            }
+        });
+        
         final JMenuItem itemAddToPlaylist = new JMenuItem("Add song to Playlist");
         
         itemAddToPlaylist.addActionListener(new ActionListener() {
@@ -771,6 +784,7 @@ public class GUI implements ViewInterface{
         });
         
         menu.add(itemAddToPlaylist);
+        menu.add(itemRemovePlaylist);
         menu.add(itemRemoveFromLibrary);
         menu.add(itemAddToReproductionList);
         menu.add(itemRemoveFromReproductionList);
