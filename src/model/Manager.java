@@ -148,4 +148,10 @@ public interface Manager {
      * @return a list containing the most listened song titles.
      */
     List<String> getMostListened();
+    
+    /**
+     * Removes the playlist with the specified name from the library.
+     * @param playlistName - the name of the playlist to remove.
+     */
+    void removePlaylist(String playlistName);
 }

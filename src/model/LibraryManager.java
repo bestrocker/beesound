@@ -396,4 +396,9 @@ public final class LibraryManager implements Manager{   // this class is impleme
         list.forEach(x -> titles.add(x.getTitle()));
         return  titles.subList(0, this.MAX_FAVOURITE);       
     }
+    
+    @Override
+    public void removePlaylist(String playlistName) {
+        this.playlistList.remove(getPlaylist(playlistName));       
+    }   
 }
