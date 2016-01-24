@@ -45,4 +45,10 @@ public interface SystemManager {
      * @param dstPath, name
      */
     void createNewFile(final String name,final String dstPath);
+    
+    /**
+     * Delete the selected file.
+     * @param pathFile
+     */
+    void delete(final String pathFile);
 }

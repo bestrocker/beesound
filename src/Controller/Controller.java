@@ -149,7 +149,6 @@ public class Controller implements ViewObserver {
      */
     @Override
     public void addSong(final String songPath) {
-      //  String path =this.filecontrol.importToLibrary(songPath);
         MpegInfo info = MpegInfo.getInstance();
         info.load(new File(this.filecontrol.importToLibrary(songPath)));
         this.addSong(songPath, info);
@@ -220,6 +219,7 @@ public class Controller implements ViewObserver {
     @Override
     public void addSongInReproductionPlaylist(final String song,final REPRODUCE when) {
         this.model.addSongInPlaylist(song, when.getVal());
+        Log.INFO(song + " added in reproduction playlist.");
         if(when.getVal()){
             this.audiocontrol.setReproduceNowBoolean(true);
             this.audiocontrol.playPlayer();
@@ -308,6 +308,7 @@ public class Controller implements ViewObserver {
     @Override
     public void removeSong(final String songTitle) {
         this.model.removeSong(songTitle);
+        this.filecontrol.delete(musicDirPath+songTitle+".mp3");
     }
 
     /**
@@ -316,15 +317,39 @@ public class Controller implements ViewObserver {
     @Override
     public void removeSongFromQueue(final String songTitle) {
         this.model.removeSongFromQueue(songTitle);
+        Log.INFO(songTitle + " Removed from reproduction Queue");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> showPlaylistSong(String playlistName) {
         return this.model.showPlaylistSong(playlistName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, Object> getCurrentSongInfo() {
         return this.model.getCurrentSongInfo();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removePlaylit(String namePlaylist) {
+        this.model.removePlaylist(namePlaylist);
+        this.filecontrol.delete(playlistDirPath+namePlaylist+".txt");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> showFavorites() {
+        return this.model.getMostListened();
     }
 }

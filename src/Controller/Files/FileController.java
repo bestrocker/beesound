@@ -53,14 +53,6 @@ public  class FileController implements SystemManager{
         if (notExist(propPath)){
             createNewFile("" ,propPath);
         }
-        /*
-        try {
-            //this.propertiesRead = new BufferedReader(new FileReader(this.properties));
-            
-        } catch (IOException e) {
-            Log.ERROR("Buffer and logger not set, error in FileController constructor");
-            e.printStackTrace();
-        }*/
     }
 
     private List<String> listAllSongPath(final File directory, final String filter) {        
@@ -135,6 +127,21 @@ public  class FileController implements SystemManager{
             this.writer = new PrintWriter(new FileWriter(new File(path),true),true);
             this.writer.println(msg);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param pathFile
+     */
+    @Override
+    public void delete(String pathFile) {
+        try {
+            Files.deleteIfExists(Paths.get(pathFile));
+            Log.PROGRAM(pathFile + " Deleted.");
+        } catch (IOException e) {
+            Log.ERROR("Can't remove " + pathFile);
             e.printStackTrace();
         }
     }
