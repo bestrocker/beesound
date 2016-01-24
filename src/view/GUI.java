@@ -202,27 +202,31 @@ public class GUI implements ViewInterface{
         
         /*linear and shuffle mode buttons*/
         
+        final JButton bLinear = new JButton("Linear");
         final JButton bShuffle = new JButton("Shuffle");
-        bShuffle.setFont(new Font("Droid Sans", Font.PLAIN, 9));
         bShuffle.setEnabled(false);;
+        bLinear.setEnabled(true);
+        
+        bShuffle.setFont(new Font("Droid Sans", Font.PLAIN, 9));
         bShuffle.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 
                 controller.setShuffleMode();
+                bShuffle.setEnabled(false);
+                bLinear.setEnabled(true);
             }
         });
-  
-        final JButton bLinear = new JButton("Linear");
+          
         bLinear.setFont(new Font("Droid Sans", Font.PLAIN, 9));
-        bLinear.setEnabled(true);
         bLinear.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 
                 controller.linearMode();
+                bLinear.setEnabled(false);
                 bShuffle.setEnabled(true);
 
             }
