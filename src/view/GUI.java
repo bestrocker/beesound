@@ -115,7 +115,7 @@ public class GUI implements ViewInterface{
         counterPanel.setMaximumSize(new Dimension(32767, 30));
         final JLabel counterLabel = new JLabel("Numero brani + minutaggio: ");
         counterPanel.setBackground(new Color(100, 100, 230));
-        //setLibraryInfo(counterLabel, controller.setLibraryInfo());
+        //setLibraryInfo(counterLabel, controller.showInfoLibrary());
         
         //scrollPane.setBorder(null);
         listSelectionPanel.add(scrollPane);
@@ -428,7 +428,7 @@ public class GUI implements ViewInterface{
             public void actionPerformed(ActionEvent e) {
                 
                 //list = new JList<>(new Vector<>(controller.showFavorites()));
-                createSelectableList();
+                //createSelectableList();
             }
         });
 
@@ -501,7 +501,7 @@ public class GUI implements ViewInterface{
                 int returnVal = chooser.showOpenDialog(menuFile);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                     controller.addSong(chooser.getSelectedFile().getAbsolutePath());
-                    frame.revalidate();
+                    button.doClick();
                 }
             }
         });
@@ -735,7 +735,7 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                //controller.removePlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                controller.removePlaylit(list.getModel().getElementAt(list.getMaxSelectionIndex()));
                 button.doClick();
             }
         });
