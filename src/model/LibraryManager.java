@@ -369,18 +369,18 @@ public final class LibraryManager implements Manager{   // this class is impleme
         return list;
     }
     
-    public Map<String, Integer> getLibraryInfo() {
-        Map<String, Integer> map = new HashMap<>();        
+    public List<Integer> getLibraryInfo() {
+        List<Integer> list = new ArrayList<>();        
         int min = 0;
         int sec = 0;
         for (Song s : this.songList) {
             min += s.getDuration().getMin();
             sec += s.getDuration().getSec();            
         }
-        map.put("nSongs", this.songList.size());
-        map.put("min", min);
-        map.put("sec", sec);
-        return map;
+        list.add(this.songList.size()) ;
+        list.add(min);
+        list.add(sec);        
+        return list;
     }
     
     public List<String> getMostListened() {
