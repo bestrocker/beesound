@@ -18,7 +18,8 @@ public final class LibraryManager implements Manager{   // this class is impleme
     
     private static final LibraryManager INSTANCE = new LibraryManager();
     private static final int MAX_FAVOURITE = 9;
-    
+    private static final String CLEAR = "[^a-zA-Z0-9 -]";
+            
     private final List<Song> songList;
     private final List<Album> albumList;
     private final List<Artist> artistList;
@@ -87,11 +88,11 @@ public final class LibraryManager implements Manager{   // this class is impleme
     public void addSongToLibrary(String title, String album, String artist, String genre,
             Duration duration, int bitRate, long size, String path, boolean copyright, int channel,
             String version, int rate, String channelsMode) {   // raw version, try to improve
-        if (isSongPresent(title)) {            
+        if (isSongPresent(clearText(title))) {            
             return;
         }
-        Song song = createSong(title, album, artist, genre, duration, bitRate, size, path, copyright, channel, 
-                                version, rate, channelsMode);
+        Song song = createSong(clearText(title), clearText(album), clearText(artist), clearText(genre), duration, bitRate,
+                size, path, copyright, channel, version, rate, channelsMode);
         boolean albumCheck = false;
         boolean artistCheck = false;
         this.songList.add(song);
@@ -400,5 +401,9 @@ public final class LibraryManager implements Manager{   // this class is impleme
     @Override
     public void removePlaylist(String playlistName) {
         this.playlistList.remove(getPlaylist(playlistName));       
+    }
+    
+    private String clearText(String text) {
+        return text.replaceAll(CLEAR, "").trim();        
     }   
 }
