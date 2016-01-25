@@ -74,7 +74,6 @@ public class GUI implements ViewInterface{
         frame.setSize((int) (dimension.getWidth() * 0.5), (int) (dimension.getHeight() * 0.5));
         frame.setLocation(x, y);                
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);           
-        frame.setResizable(true);
         frame.setMinimumSize(new Dimension(200, 100));
 
         final JPanel landingPanel = new JPanel();
@@ -84,7 +83,6 @@ public class GUI implements ViewInterface{
         /* RIGHT PANEL FOR IMAGE AND INFO CURRENT SONG */
 
         final JPanel rightPanel = new JPanel();
-        rightPanel.setFont(new Font("SansSerif", Font.PLAIN, 11));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(seek);
 
@@ -97,7 +95,6 @@ public class GUI implements ViewInterface{
         imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         final JLabel infoTitle = new JLabel("Info Title");
-        infoTitle.setFont(new Font("Dialog", Font.PLAIN, 11));
         infoTitle.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), (int)(frame.getHeight() * 0.1)));
         infoTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -114,10 +111,9 @@ public class GUI implements ViewInterface{
         final JPanel counterPanel = new JPanel();
         counterPanel.setMaximumSize(new Dimension(32767, 30));
         final JLabel counterLabel = new JLabel("Numero brani + minutaggio: ");
-        counterPanel.setBackground(new Color(100, 100, 230));
+        counterPanel.setBackground(new Color(100, 100, 255));
         //setLibraryInfo(counterLabel, controller.showInfoLibrary());
         
-        //scrollPane.setBorder(null);
         listSelectionPanel.add(scrollPane);
         listSelectionPanel.add(counterPanel);                               
         counterPanel.add(counterLabel);
@@ -166,7 +162,6 @@ public class GUI implements ViewInterface{
         });
 
         final JButton button_8 = new JButton(" << ");
-        button_8.setFont(new Font("Droid Sans", Font.BOLD, 11));
         button_8.addActionListener(new ActionListener() {
 
             @Override
@@ -177,7 +172,6 @@ public class GUI implements ViewInterface{
         });
 
         final JButton button_9 = new JButton(" >> ");
-        button_9.setFont(new Font("Droid Sans", Font.BOLD, 11));
         button_9.addActionListener(new ActionListener() {
 
             @Override
@@ -190,7 +184,6 @@ public class GUI implements ViewInterface{
         final JLabel volumeLabel = new JLabel(" volume ");
         final JSlider volume = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
         volume.setPreferredSize(new Dimension(150, 20));
-        volumeLabel.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         volume.addChangeListener(new ChangeListener() {
 
             @Override
@@ -203,7 +196,6 @@ public class GUI implements ViewInterface{
         /*linear and shuffle mode buttons*/
         
         final JButton bShuffle = new JButton("Shuffle");
-        bShuffle.setFont(new Font("Droid Sans", Font.PLAIN, 9));
         bShuffle.setEnabled(false);;
         bShuffle.addActionListener(new ActionListener() {
             
@@ -215,7 +207,6 @@ public class GUI implements ViewInterface{
         });
   
         final JButton bLinear = new JButton("Linear");
-        bLinear.setFont(new Font("Droid Sans", Font.PLAIN, 9));
         bLinear.setEnabled(true);
         bLinear.addActionListener(new ActionListener() {
             
@@ -485,16 +476,13 @@ public class GUI implements ViewInterface{
         /* jmenu buttons: file, help */
 
         final JMenu menuFile = new JMenu("File");
-        menuFile.setFont(new Font("SansSerif", Font.PLAIN, 11));
         menuBar.add(menuFile);
-        final JMenu menuHelp = new JMenu("Info");
-        menuHelp.setFont(new Font("SansSerif", Font.PLAIN, 11));
-        menuBar.add(menuHelp);
+        final JMenu menuInfo = new JMenu("Info");
+        menuBar.add(menuInfo);
 
         /* choice menu(JMenuItem) */
 
         final JMenuItem menuChoiceImport = new JMenuItem("Add file to Library");
-        menuChoiceImport.setFont(new Font("Dialog", Font.PLAIN, 11));
         menuChoiceImport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -507,9 +495,8 @@ public class GUI implements ViewInterface{
         });
         menuFile.add(menuChoiceImport);
 
-        final JMenuItem menuChoiceOpen = new JMenuItem("Add to reproduction list");
-        menuChoiceOpen.setFont(new Font("Dialog", Font.PLAIN, 11));
-        menuChoiceOpen.addActionListener(new ActionListener() {
+        final JMenuItem menuChoiceToReproduction = new JMenuItem("Add to reproduction list");
+        menuChoiceToReproduction.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -518,30 +505,29 @@ public class GUI implements ViewInterface{
                         .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
             }
         });
-        menuFile.add(menuChoiceOpen);
+        menuFile.add(menuChoiceToReproduction);
         
         final JMenuItem menuCreatePlaylist = new JMenuItem("Create new Playlist");
-        menuCreatePlaylist.setFont(new Font("Dialog", Font.PLAIN, 11));
         menuCreatePlaylist.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                final JFrame frame2 = new JFrame("Your Playlist");
+                final JFrame frameChoosePlaylist = new JFrame("Your Playlist");
                 final JPanel panel = new JPanel();
+                
                 final JLabel label = new JLabel("Insert playlist name  ");
-                label.setFont(new Font("Dialog", Font.PLAIN, 12));
                 final JTextArea area = new JTextArea(1, 10);
+                
                 final JButton button = new JButton("ok");
                 button.setBackground(new Color(200, 200, 255));
-                button.setFont(new Font("Dialog", Font.BOLD, 12));
                 button.addActionListener(new ActionListener() {
                     
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         
                         controller.newPlaylistFile(area.getText());
-                        frame2.dispose();
+                        frameChoosePlaylist.dispose();
                     }
                 });
                 
@@ -549,15 +535,14 @@ public class GUI implements ViewInterface{
                 panel.add(area);
                 panel.add(Box.createRigidArea(new Dimension(5, 0)));
                 panel.add(button);
-                frame2.add(panel);
-                frame2.setSize(400, 40);
-                frame2.setVisible(true);
+                frameChoosePlaylist.add(panel);
+                frameChoosePlaylist.setSize(400, 40);
+                frameChoosePlaylist.setVisible(true);
             }
         });
         menuFile.add(menuCreatePlaylist);
 
         final JMenuItem menuChoiceExit = new JMenuItem("Exit Program");
-        menuChoiceExit.setFont(new Font("Dialog", Font.PLAIN, 11));
         menuChoiceExit.addActionListener(new ActionListener() {
 
             @Override
@@ -568,30 +553,33 @@ public class GUI implements ViewInterface{
         menuFile.add(menuChoiceExit);
 
         final JMenuItem menuChoiceInfo = new JMenuItem("Info Beesound");
-        menuChoiceInfo.setFont(new Font("Dialog", Font.PLAIN, 11));
-        menuHelp.add(menuChoiceInfo);
+        menuInfo.add(menuChoiceInfo);
         menuChoiceInfo.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                System.out.println("aosimdcoasdmioc");
                 final JFrame infoFrame = new JFrame("Beesound members");
                 JTextArea textArea = new JTextArea("\nThis Program has been realized by: \n"
                         + "\nTiziano De Cristofaro : model\n"
                         + "Carlo Alberto Scola: controller\n"
                         + "Gianluca Cincinelli: view\n");
-                textArea.setFont(new Font("Dialog", Font.BOLD, 13));
                 textArea.setForeground(new Color(20, 40, 150));
                 textArea.setEditable(false);
                 textArea.setLineWrap(true);
                 infoFrame.add(textArea);
                 infoFrame.setSize(300, 120);
+                infoFrame.setLocationRelativeTo(frame);
                 infoFrame.setVisible(true);
             }
         });
 
         /* adding components */
+        
+        final Component[] compArray = new Component[]{menuChoiceExit, menuChoiceImport, menuChoiceToReproduction
+                ,menuCreatePlaylist, menuFile, menuInfo, menuBar, bLinear, bShuffle, button, button_1, button_2
+                ,button_3, button_4, button_5, buttonQueue, counterLabel, counterPanel, infoTitle};
+        setComponentFont(compArray);
         
         landingPanel.add(listSelectionPanel, BorderLayout.CENTER);                  
         landingPanel.add(leftButtonsPanel, BorderLayout.WEST);
@@ -599,10 +587,22 @@ public class GUI implements ViewInterface{
         landingPanel.add(rightPanel, BorderLayout.EAST);
         
         frame.getContentPane().add(landingPanel);
-        frame.setVisible(true);        
+        frame.setVisible(true);
     }
     
+    
 ///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
+    
+    /**
+     * Sets font for a component
+     * @param comp[]
+     */
+    private void setComponentFont(Component[] comp){
+        
+        for(Component var: comp) {
+            var.setFont(new Font("Droid Sans", Font.PLAIN, 11));
+        }
+    }
     
     /**
      * Set information into a label about all songs in the library and their total time duration in minutes
@@ -644,7 +644,6 @@ public class GUI implements ViewInterface{
         }
         colorVal++;
         button.setBorder(null);
-        button.setFont(new Font("Trajan Pro", Font.PLAIN, 11));
     }
     
     /**
@@ -755,31 +754,32 @@ public class GUI implements ViewInterface{
                     array[i] = (String)(list.getModel().getElementAt(i));
                 }
                 
-                final JFrame frame2 = new JFrame("Your Playlist");
-                final JPanel panel = new JPanel();
-                final JLabel label = new JLabel("Select a playlist");
-                label.setFont(new Font("Dialog", Font.PLAIN, 12));
+                final JFrame frameChoosePlaylist = new JFrame("Your Playlist");
+                final JPanel panelChoosePlaylist = new JPanel();
+                final JLabel labelChoosePlaylist = new JLabel("Select a playlist");
+                
+                labelChoosePlaylist.setFont(new Font("Dialog", Font.PLAIN, 12));
                 final JComboBox<String> combo = new JComboBox<>(array);
                 combo.setPreferredSize(new Dimension(100, 20));
-                final JButton button = new JButton("ok");
-                button.setBackground(new Color(200, 200, 255));
-                button.setFont(new Font("Dialog", Font.BOLD, 12));
-                button.addActionListener(new ActionListener() {
+                final JButton buttonChoosePlaylist = new JButton("ok");
+                buttonChoosePlaylist.setBackground(new Color(200, 200, 255));
+                buttonChoosePlaylist.setFont(new Font("Dialog", Font.BOLD, 12));
+                buttonChoosePlaylist.addActionListener(new ActionListener() {
                     
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         
                         controller.addSongInPlaylist(songName, combo.getSelectedItem().toString());
-                        frame2.dispose();
+                        frameChoosePlaylist.dispose();
                     }
                 });
                 
-                panel.add(label);
-                panel.add(combo);
-                panel.add(button);
-                frame2.add(panel);
-                frame2.setSize(350, 65);
-                frame2.setVisible(true);                
+                panelChoosePlaylist.add(labelChoosePlaylist);
+                panelChoosePlaylist.add(combo);
+                panelChoosePlaylist.add(buttonChoosePlaylist);
+                frameChoosePlaylist.add(panelChoosePlaylist);
+                frameChoosePlaylist.setSize(350, 65);
+                frameChoosePlaylist.setVisible(true);                
             }
         });
         
