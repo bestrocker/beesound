@@ -28,7 +28,7 @@ public class TryModel {
         LibraryManager library = LibraryManager.getInstance();
         library.addSongToLibrary("Trains", "In Absentia", "Porcupine Tree", "Progressive Rock", duration, 192, 80000,
                 "ciao", true, 0, null, 0, "Stereo");
-        library.addSongToLibrary("Money", "The Dark Side of The Moon", "Pink FLoyd", "Progressive Rock", duration, 192, 80000,
+        library.addSongToLibrary("Money", "In Absentia @ # ", "Pink FLoyd", "Progressive Rock", duration, 192, 80000,
                 "salve", true, 0, null, 0, "Stereo");
         /*library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));
         library.getSongList().forEach(x -> System.out.println(x.getTitle()));        
@@ -47,14 +47,18 @@ public class TryModel {
         System.out.println(library.getLibraryInfo().get("min"));
         System.out.println(library.getLibraryInfo().get("sec"));*/
         
-        library.newPlaylist("tiziano", "ciao");
+        /*library.newPlaylist("tiziano", "ciao");
         library.newPlaylist("salve", "ciao");
         
         library.removePlaylist("tiziano");
         
-        library.getPlaylistList().forEach(x -> System.out.println(x.getName()));  
+        library.getPlaylistList().forEach(x -> System.out.println(x.getName()));*/
         
+        library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));
         
+        /*String s = "yo-dude: like, ... []{}this is a string";
+        s = s.replaceAll("[^a-zA-Z0-9 ]", "");
+        System.out.println(s);*/
         
         
     }
