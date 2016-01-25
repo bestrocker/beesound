@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import Controller.Audio.MpegInfo.Duration;
 
@@ -385,7 +386,12 @@ public final class LibraryManager implements Manager{   // this class is impleme
     }
     
     public List<String> getMostListened() {
-        List<Song> list = new LinkedList<>(this.songList);
+        List<Song> list = new LinkedList<>();
+        for (Song s : this.songList) {
+            if (s.getReproductionsCounter() > 0) {
+                list.add(s);
+            }
+        }        
         list.sort(new Comparator<Song>() {
 
             @Override
@@ -399,7 +405,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
                 return titles;
             }           
             titles.add(list.get(i).getTitle());
-        }       
+        }
         return  titles;       
     }
     
