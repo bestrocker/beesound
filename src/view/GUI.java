@@ -26,26 +26,24 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-
-import Controller.Audio.MpegInfo.*;
-import Controller.Controller.REPRODUCE;
-import Controller.ViewObserver;
-
+import javax.swing.DefaultListCellRenderer.UIResource;
 import java.awt.Color;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import java.awt.Font;
 import javax.swing.JMenuItem;
 import java.awt.Component;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListCellRenderer.UIResource;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import Controller.Audio.MpegInfo.Duration;
+import Controller.Controller.REPRODUCE;
+import Controller.ViewObserver;
 
 public class GUI implements ViewInterface{
 
@@ -86,8 +84,6 @@ public class GUI implements ViewInterface{
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(seek);
 
-        /* beesound logo */
-
         final URL ImgURL = UIResource.class.getResource("/zutons.jpg");
         final JLabel imageLabel = new JLabel();
         imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 250));
@@ -105,8 +101,6 @@ public class GUI implements ViewInterface{
 
         final JPanel listSelectionPanel = new JPanel();
         listSelectionPanel.setLayout(new BoxLayout(listSelectionPanel, BoxLayout.Y_AXIS));
-
-        /* information panel about list selection */
 
         final JPanel counterPanel = new JPanel();
         counterPanel.setMaximumSize(new Dimension(32767, 30));
@@ -132,7 +126,6 @@ public class GUI implements ViewInterface{
         
         final JSlider volume = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
         final JLabel volumeLabel = new JLabel(" volume ");
-
 
         button_6.addActionListener(new ActionListener() {
 
@@ -198,19 +191,19 @@ public class GUI implements ViewInterface{
             }
         });
 
-        /*linear and shuffle mode buttons*/
-
-        bShuffle.setEnabled(false);;
+        bShuffle.setEnabled(true);;
         bShuffle.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 controller.setShuffleMode();
+                bShuffle.setEnabled(false);
+                bLinear.setEnabled(true);
             }
         });
 
-        bLinear.setEnabled(true);
+        bLinear.setEnabled(false);
         bLinear.addActionListener(new ActionListener() {
 
             @Override
@@ -218,7 +211,7 @@ public class GUI implements ViewInterface{
 
                 controller.linearMode();
                 bShuffle.setEnabled(true);
-
+                bLinear.setEnabled(false);
             }
         });
 
@@ -238,8 +231,6 @@ public class GUI implements ViewInterface{
 
         final JPanel leftButtonsPanel = new JPanel(new GridLayout(0, 1, 0, 0));
         leftButtonsPanel.setPreferredSize(new Dimension(85, 0));
-
-        /*left buttons*/
         
         final JButton button = new JButton("All Songs");
         final JButton button_1 = new JButton("Albums");
@@ -248,7 +239,6 @@ public class GUI implements ViewInterface{
         final JButton button_4 = new JButton("Music Genre");
         final JButton button_5 = new JButton("Più ascoltati");
         final JButton buttonQueue = new JButton("In riproduzione");
-
 
         setLeftButtons(button);
         button.addActionListener(new ActionListener() {
@@ -530,10 +520,8 @@ public class GUI implements ViewInterface{
 
                 final JFrame frameChoosePlaylist = new JFrame("Your Playlist");
                 final JPanel panel = new JPanel();
-
                 final JLabel label = new JLabel("Insert playlist name  ");
                 final JTextArea area = new JTextArea(1, 10);
-
                 final JButton button = new JButton("ok");
                 button.setBackground(new Color(200, 200, 255));
                 button.addActionListener(new ActionListener() {
@@ -724,6 +712,7 @@ public class GUI implements ViewInterface{
                 button.doClick();
             }
         });
+        
         final JMenuItem itemRemoveFromReproductionList = new JMenuItem("Remove from reproduction Playlist");
         itemRemoveFromReproductionList.addActionListener(new ActionListener() {
 
@@ -734,7 +723,8 @@ public class GUI implements ViewInterface{
                 button.doClick();
             }
 
-        });   
+        });
+        
         final JMenuItem itemRemoveFromLibrary = new JMenuItem("Remove from Library");
         itemRemoveFromLibrary.addActionListener(new ActionListener() {
 
