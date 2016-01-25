@@ -418,8 +418,8 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                //list = new JList<>(new Vector<>(controller.showFavorites()));
-                //createSelectableList();
+                list = new JList<>(new Vector<>(controller.showFavorites()));
+                createSelectableList();
             }
         });
 
@@ -537,6 +537,7 @@ public class GUI implements ViewInterface{
                 panel.add(button);
                 frameChoosePlaylist.add(panel);
                 frameChoosePlaylist.setSize(400, 40);
+                frameChoosePlaylist.setLocationRelativeTo(frame);
                 frameChoosePlaylist.setVisible(true);
             }
         });
@@ -574,11 +575,11 @@ public class GUI implements ViewInterface{
             }
         });
 
-        /* adding components */
+        /* array whit all components */
         
         final Component[] compArray = new Component[]{menuChoiceExit, menuChoiceImport, menuChoiceToReproduction
                 ,menuCreatePlaylist, menuFile, menuInfo, menuBar, bLinear, bShuffle, button, button_1, button_2
-                ,button_3, button_4, button_5, buttonQueue, counterLabel, counterPanel, infoTitle};
+                ,button_3, button_4, button_5, button_8, button_9, buttonQueue, counterLabel, counterPanel, infoTitle};
         setComponentFont(compArray);
         
         landingPanel.add(listSelectionPanel, BorderLayout.CENTER);                  
@@ -588,8 +589,7 @@ public class GUI implements ViewInterface{
         
         frame.getContentPane().add(landingPanel);
         frame.setVisible(true);
-    }
-    
+    }   
     
 ///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
     
@@ -770,6 +770,7 @@ public class GUI implements ViewInterface{
                     public void actionPerformed(ActionEvent e) {
                         
                         controller.addSongInPlaylist(songName, combo.getSelectedItem().toString());
+                        button.doClick();
                         frameChoosePlaylist.dispose();
                     }
                 });
