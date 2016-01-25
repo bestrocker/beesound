@@ -17,7 +17,7 @@ import Controller.Audio.MpegInfo.Duration;
 public final class LibraryManager implements Manager{   // this class is implemented using the singleton pattern
     
     private static final LibraryManager INSTANCE = new LibraryManager();
-    private static final int MAX_FAVOURITE = 9;
+    private static final int MAX_FAVOURITE = 10;
     private static final String CLEAR = "[^a-zA-Z0-9 -]";
             
     private final List<Song> songList;
@@ -385,17 +385,22 @@ public final class LibraryManager implements Manager{   // this class is impleme
     }
     
     public List<String> getMostListened() {
-        List<Song> list = this.songList;
+        List<Song> list = new LinkedList<>(this.songList);
         list.sort(new Comparator<Song>() {
 
             @Override
             public int compare(Song o1, Song o2) {
-                return o1.getReproductionsCounter() - o2.getReproductionsCounter();
+                return o2.getReproductionsCounter() - o1.getReproductionsCounter();
             }
         });
         List<String> titles = new ArrayList<>();
-        list.forEach(x -> titles.add(x.getTitle()));
-        return  titles.subList(0, this.MAX_FAVOURITE);       
+        for (int i = 0; i < MAX_FAVOURITE; i ++) {
+            if (list.size() == i) {
+                return titles;
+            }           
+            titles.add(list.get(i).getTitle());
+        }       
+        return  titles;       
     }
     
     @Override
