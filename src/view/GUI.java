@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Vector;
@@ -37,7 +36,6 @@ import java.awt.Font;
 import javax.swing.JMenuItem;
 import java.awt.Component;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -55,7 +53,8 @@ public class GUI implements ViewInterface{
     private JList<String> list;
     private boolean playing = false;
     private boolean stopped = true;
-    private String songName;
+    private String selectedSongName;
+    private String selectedPlaylistName;
     private JSlider seekBar = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
     private Integer deltaColor = 0;
 
@@ -245,7 +244,7 @@ public class GUI implements ViewInterface{
 
                 if(list.getModel().getSize() > 0) {
                     list.setSelectedIndex(0);
-                    songName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                    selectedSongName = list.getModel().getElementAt(list.getMaxSelectionIndex());
                 }
                 createSelectableList();
 
@@ -263,7 +262,7 @@ public class GUI implements ViewInterface{
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
-                                songName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                                selectedSongName = list.getModel().getElementAt(list.getMaxSelectionIndex());
                             }
                         }
                     }
@@ -344,7 +343,7 @@ public class GUI implements ViewInterface{
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
-                                songName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                                selectedSongName = list.getModel().getElementAt(list.getMaxSelectionIndex());
                             }
                         }
                     }
@@ -359,9 +358,10 @@ public class GUI implements ViewInterface{
                     public void mouseClicked(MouseEvent e) {
 
                         if(e.getClickCount() == 2 && list.getModel().getSize() > 0) {
-
-                            list = new JList<>(new Vector<>(controller.showPlaylistSong(list.getModel()
-                                    .getElementAt(list.getMaxSelectionIndex()))));
+                            
+                            selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                            System.out.println(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                            list = new JList<>(new Vector<>(controller.showPlaylistSong(list.getModel().getElementAt(list.getMaxSelectionIndex()))));
                             createSelectableList();
 
                             list.addMouseListener(new MouseListener() {
@@ -374,7 +374,7 @@ public class GUI implements ViewInterface{
 
                                     if(list.getModel().getSize() > 0) {
 
-                                        JPopupMenu menu = buildStandardPopup(btReproduction, true, false, true, false, false, false, true);
+                                        JPopupMenu menu = buildStandardPopup(btPlaylist, true, false, true, false, false, false, true);
                                         if(e.isPopupTrigger()) {
 
                                             menu.show(e.getComponent(), e.getX(), e.getY());
@@ -785,7 +785,7 @@ public class GUI implements ViewInterface{
                     @Override
                     public void actionPerformed(ActionEvent e) {
 
-                        controller.addSongInPlaylist(songName, combo.getSelectedItem().toString());
+                        controller.addSongInPlaylist(selectedSongName, combo.getSelectedItem().toString());
                         button.doClick();
                         frameChoosePlaylist.dispose();
                     }
@@ -816,8 +816,8 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                //controller.removeFromPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
-                button.doClick();                
+                controller.removeSongFromPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()), selectedPlaylistName);
+                button.doClick();
             }
         });
         
