@@ -54,11 +54,9 @@ public class TryModel {
         
         library.getPlaylistList().forEach(x -> System.out.println(x.getName()));*/
         
-        library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));
+        //library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));
         
-        /*String s = "yo-dude: like, ... []{}this is a string";
-        s = s.replaceAll("[^a-zA-Z0-9 ]", "");
-        System.out.println(s);*/
+        library.fetchSongs("Money").forEach(x -> System.out.println(x));
         
         
     }

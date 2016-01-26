@@ -154,4 +154,16 @@ public interface Manager {
      * @param playlistName - the name of the playlist to remove.
      */
     void removePlaylist(String playlistName);
+    
+    /**
+     * Removes all the information contained in the library.
+     */
+    void resetLibrary();
+        
+    /**
+     * Returns a list containing the titles of the songs which match with the specified string.
+     * @param songTitle - the string to which the song titles have to match.
+     * @return a list containing the titles of the songs which match with the specified string
+     */
+    List<String> fetchSongs(String songTitle);    
 }
