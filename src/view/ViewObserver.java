@@ -180,5 +180,5 @@ public interface ViewObserver {
      * Remove this song from the current playlist
      * @param songName
      */
-    void removeFromPlaylist(String songName);
+    void removeSongFromPlaylist(String songName, String playlistName);
 }
