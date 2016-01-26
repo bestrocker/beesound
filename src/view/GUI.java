@@ -590,7 +590,10 @@ public class GUI implements ViewInterface{
         landingPanel.add(rightPanel, BorderLayout.EAST);
 
         frame.getContentPane().add(landingPanel);
-        frame.setVisible(true);
+        /*
+         * Decide il controller quando far vedere la view.
+         */
+        // frame.setVisible(true);
     }   
 
     ///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
@@ -858,6 +861,18 @@ public class GUI implements ViewInterface{
                 }
             }
         }
+    }
+
+
+    @Override
+    public void refreshView() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setVisible(final boolean visible) {
+        this.frame.setVisible(visible);
     }
 
 }
