@@ -379,6 +379,7 @@ public class Controller implements ViewObserver {
     @Override
     public void playPlaylist(String playlistName) {
         this.model.setReproductionPlaylist(playlistName);
+        this.audiocontrol.playPlayer();
     }
 
     @Override
