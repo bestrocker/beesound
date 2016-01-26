@@ -163,4 +163,10 @@ public interface ViewObserver {
      * @return List<String>
      */
     List<String>showFavorites();
+    
+    /**
+     * Create a full new Library in the specified path. If already existing, it will reload all its containing.
+     * @param pathNewLibrary
+     */
+    void newLibrary(final String pathNewLibrary);
 }
