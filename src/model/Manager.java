@@ -165,5 +165,12 @@ public interface Manager {
      * @param songTitle - the string to which the song titles have to match.
      * @return a list containing the titles of the songs which match with the specified string
      */
-    List<String> fetchSongs(String songTitle);    
+    List<String> fetchSongs(String songTitle);   
+    
+    /**
+     * Removes the specified song from the specified playlist.
+     * @param songTitle - the title of the song to remove.
+     * @param playlistName - the name of the playlist from which the song is removed.
+     */
+    void removeSongFromPlaylist(String songTitle, String playlistName);
 }

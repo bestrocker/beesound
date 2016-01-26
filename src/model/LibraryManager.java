@@ -310,7 +310,9 @@ public final class LibraryManager implements Manager{   // this class is impleme
 
     @Override
     public void setReproductionPlaylist(String playlistName) {
-        this.playlistInReproduction.setTracklist(getPlaylist(playlistName).getTrackList());
+        List<Song> trackList = getPlaylist(playlistName).getTrackList();
+        this.playlistInReproduction.setTracklist(trackList);
+        this.setInReproduction(trackList.get(0).getPath());
     }
 
     @Override
@@ -430,5 +432,9 @@ public final class LibraryManager implements Manager{   // this class is impleme
             }
         }
         return list;       
-    }   
+    }
+    
+    public void removeSongFromPlaylist(String songTitle, String playlistName) {
+        getPlaylist(playlistName).removeSong(getSong(songTitle));        
+    }
 }
