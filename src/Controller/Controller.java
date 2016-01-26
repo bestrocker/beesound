@@ -352,7 +352,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void removePlaylit(String namePlaylist) {
+    public void removePlaylist(String namePlaylist) {
         this.model.removePlaylist(namePlaylist);
         this.filecontrol.delete(playlistDirPath+namePlaylist+".txt");
     }
@@ -374,5 +374,15 @@ public class Controller implements ViewObserver {
         this.filecontrol = new FileController(pathNewLibrary);
         loadInfoToLibrary();
         this.view.refreshView(); 
+    }
+
+    @Override
+    public void playPlaylist(String playlistName) {
+        this.model.setReproductionPlaylist(playlistName);
+    }
+
+    @Override
+    public void removeSongFromPlaylist(String songName, String playlistName) {
+        this.model.removeSongFromPlaylist(songName, playlistName);
     }
 }
