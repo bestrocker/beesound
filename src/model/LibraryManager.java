@@ -17,7 +17,7 @@ import Controller.Audio.MpegInfo.Duration;
  */
 public final class LibraryManager implements Manager{   // this class is implemented using the singleton pattern
     
-    private static final LibraryManager INSTANCE = new LibraryManager();
+    private static LibraryManager INSTANCE = new LibraryManager();
     private static final int MAX_FAVOURITE = 10;
     private static final String CLEAR = "[^a-zA-Z0-9 -]";
             
@@ -28,7 +28,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
     private final List<Playlist> playlistList;        // try to find a better name for this field
     private Playlist.Playing playlistInReproduction;
     
-    private LibraryManager(/*String queueName, String queuePath*/) {
+    private LibraryManager() {
         this.songList = new LinkedList<>();
         this.albumList = new LinkedList<>();
         this.artistList = new LinkedList<>();
@@ -416,5 +416,19 @@ public final class LibraryManager implements Manager{   // this class is impleme
     
     private String clearText(String text) {
         return text.replaceAll(CLEAR, "").trim();        
+    }  
+    
+    public void resetLibrary() {
+        this.INSTANCE = new LibraryManager();       
+    }
+    
+    public List<String> fetchSongs(String songTitle) {
+        List<String> list = new ArrayList<>();
+        for (Song s : this.songList) {
+            if (clearText(s.getTitle()).toLowerCase().matches(songTitle.toLowerCase())) {
+                list.add(s.getTitle());
+            }
+        }
+        return list;       
     }   
 }
