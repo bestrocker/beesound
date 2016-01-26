@@ -72,12 +72,6 @@ public interface ViewObserver {
     void playButton();
     
     /**
-     * Play selected song.
-     * @param song
-     *//*
-    void playButton(final String songName);
-    */
-    /**
      * Pause.
      */
     void pauseButton();

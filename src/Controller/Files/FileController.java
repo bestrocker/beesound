@@ -48,6 +48,7 @@ public  class FileController implements SystemManager{
     private void initialize() {
         if (notExist(libraryPath)){
             new File(libraryPath).mkdirs();
+            Log.PROGRAM(libraryPath +" created.");
         }
         Log.initializeLogger();
         Log.PROGRAM("Root Library folder loaded. STARTING PROGRAM");
@@ -107,7 +108,7 @@ public  class FileController implements SystemManager{
                Files.copy(Paths.get(pathSource),
                    Paths.get(d),
                    StandardCopyOption.COPY_ATTRIBUTES);
-               Log.INFO(pathSource +" added to library");
+               Log.INFO("Added to library "+pathSource);
                return d;
            } catch (Exception e){
                e.printStackTrace();

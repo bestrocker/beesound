@@ -25,7 +25,6 @@ package Controller.Audio;
 import org.tritonus.share.sampled.file.TAudioFileFormat;
 
 import Controller.Files.Log;
-
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -33,7 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
@@ -69,31 +67,6 @@ public class MpegInfo implements TagInfo {
     
     public static MpegInfo getInstance(){
         return MpegInfo.SINGLEINSTANCE;
-    }
-    
-    private Map<String,Object> infoSong = new HashMap<String, Object>();
-    
-    public Map<String,Object> getInfo(){
-        this.infoSong.put("title", this.title);
-        this.infoSong.put("artist", this.artist);
-        this.infoSong.put("album", this.album);
-        this.infoSong.put("genre", this.genre);
-        this.infoSong.put("year", this.year);
-        this.infoSong.put("size", this.size);
-        this.infoSong.put("location", this.location);
-        this.infoSong.put("duration ", this.total);
-        this.infoSong.put("Layer ", this.layer);
-        this.infoSong.put("version ", this.version);
-        this.infoSong.put("Channels ", this.channels);
-        this.infoSong.put("Channelsmode ", this.channelsMode); //Stereo
-        this.infoSong.put("Copyright ", this.copyright);
-        this.infoSong.put("emphasis ", this.emphasis);
-        this.infoSong.put("NominalBitrare ", this.nominalbitrate);
-        this.infoSong.put("Rate", this.rate); //HZ Stereo
-        this.infoSong.put("Version ", this.version);
-        this.infoSong.put("Dur min: ", this.durationInMinutes.getMin());
-        this.infoSong.put("Dur sec ", this.durationInMinutes.getSec());
-        return this.infoSong;
     }
     
     /**

@@ -44,6 +44,7 @@ public class Controller implements ViewObserver {
             this.filecontrol.createNewFile(name,playlistDirPath);
             this.model.newPlaylist(name,temp);
         }
+        this.view.refreshView();
     }
     
     /**
@@ -94,50 +95,6 @@ public class Controller implements ViewObserver {
         Log.INFO("Playlist succesfully loaded into the library.");
     }
     
-    public static void main(String[] args) throws InterruptedException{
-        //new Controller();
-        
-       // List<String> l = c.filecontrol.listAllSongPath();
-        
-    //    List<Song> lsong = c.model.getSongList();
-        
-       // c.audiocontrol.addSongInPlaylist("/home/bestrocker221/Dropbox/Musica/holdbacktheriver.mp3");
-      //  c.audiocontrol.setReproductionStrategy(REPRODUCTION_STRATEGY.SHUFFLE);
-    //    c.audiocontrol.setPlaylist(c.model.getPlaylistList().get(0));
-       /* 
-        c.newPlaylistFile("bella");
-        System.out.println("CREATED : " +c.model.getPlaylistList().get(0).getPath());
-        
-       c.addSongInPlaylist(c.model.getSongList().get(0), c.model.getPlaylistList().get(0));
-       
-        System.out.println("TRYING TO SET PLAYLIST "+c.model.getPlaylistList().get(0).getPath());*/
-        //c.audiocontrol.setPlaylist(c.model.getPlaylistList().get(0));
-       
-        //c.audiocontrol.playPlayer();
-       // Thread.sleep(10000);
-      //  c.playButton(c.model.getSongList().get(3));
-      //  System.out.println(c.model.getSongList().get(0).getTitle() + " added to "+ c.model.getPlaylistList().get(0).getName() );
-       // System.out.println("import fatto");
-       /*
-        while (true){
-        Thread.sleep(2000);
-        c.audiocontrol.nextPlayer();
-        for(Song i : c.model.getSongList()){
-            System.out.println("INIZIO");
-            System.out.println(i.getPath());
-            System.out.println("title "+i.getTitle());
-            System.out.println("album" + i.getAlbum());
-            System.out.println("artist "+i.getArtist());
-            System.out.println("bitrate "+i.getBitRate());
-            System.out.println("genre "+i.getGenre());
-            System.out.println("size "+i.getSize());
-            System.out.println("duration "+i.getDuration().getMin()+":"+ i.getDuration().getSec());
-            System.out.println("counter " + i.getReproductionsCounter());
-            System.out.println("FINE");
-        }
-        }*/
-    }
-    
     private void addSong(final String songPath, final MpegInfo info){
         final String alternativeTitle = songPath.substring(songPath.lastIndexOf(sep)+1,songPath.length()-4);
         if(!this.model.getSongTitles().contains(alternativeTitle)){
@@ -158,7 +115,7 @@ public class Controller implements ViewObserver {
         MpegInfo info = MpegInfo.getInstance();
         info.load(new File(this.filecontrol.importToLibrary(songPath)));
         this.addSong(songPath, info);
-        
+        this.view.refreshView();
     }
     
     /**
@@ -321,6 +278,7 @@ public class Controller implements ViewObserver {
     public void removeSong(final String songTitle) {
         this.model.removeSong(songTitle);
         this.filecontrol.delete(musicDirPath+songTitle+".mp3");
+        this.view.refreshView();
     }
 
     /**
@@ -330,6 +288,7 @@ public class Controller implements ViewObserver {
     public void removeSongFromQueue(final String songTitle) {
         this.model.removeSongFromQueue(songTitle);
         Log.INFO(songTitle + " Removed from reproduction Queue");
+        this.view.refreshView();
     }
 
     /**
@@ -355,6 +314,7 @@ public class Controller implements ViewObserver {
     public void removePlaylist(String namePlaylist) {
         this.model.removePlaylist(namePlaylist);
         this.filecontrol.delete(playlistDirPath+namePlaylist+".txt");
+        this.view.refreshView();
     }
 
     /**
@@ -375,15 +335,22 @@ public class Controller implements ViewObserver {
         loadInfoToLibrary();
         this.view.refreshView(); 
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void playPlaylist(String playlistName) {
         this.model.setReproductionPlaylist(playlistName);
         this.audiocontrol.playPlayer();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeSongFromPlaylist(String songName, String playlistName) {
         this.model.removeSongFromPlaylist(songName, playlistName);
+        this.view.refreshView();
     }
 }
