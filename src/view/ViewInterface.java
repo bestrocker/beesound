@@ -13,4 +13,14 @@ public interface ViewInterface {
      * @return
      */
     int getSelectedIndex();
+    
+    /**
+     * Method called by Controller to notify the view to be refreshed.
+     */
+    void refreshView();
+    
+    /**
+     * Set the visibility of the view.
+     */
+    void setVisible(final boolean visible);
 }

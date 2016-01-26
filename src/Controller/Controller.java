@@ -29,7 +29,9 @@ public class Controller implements ViewObserver {
         this.filecontrol = new FileController();
         this.audiocontrol = new AudioController(model);
         loadInfoToLibrary();
+        this.view.refreshView();
         this.view.setObserver(this);
+        this.view.setVisible(true);
     }
     
     /**
