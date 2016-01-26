@@ -156,7 +156,7 @@ public interface ViewObserver {
      * Remove Playlist from library.
      * @param namePlaylist
      */
-    void removePlaylit(String namePlaylist);
+    void removePlaylist(String namePlaylist);
     
     /**
      * Returns a List of favorites.
@@ -169,4 +169,10 @@ public interface ViewObserver {
      * @param pathNewLibrary
      */
     void newLibrary(final String pathNewLibrary);
+    
+    /**
+     * Set the selected playlist in reproduction
+     * @param playlistName
+     */
+    void playPlaylist(String playlistName);
 }
