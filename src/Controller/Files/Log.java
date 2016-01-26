@@ -15,7 +15,6 @@ public class Log {
 
     private static PrintWriter logWriter;
     private static boolean initialized;
-    //private static Log SINGLELOG = null;
     
     private Log(final String logfile) {
         
