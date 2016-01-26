@@ -41,9 +41,9 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
     /**
      * Audio Controller for mp3 songs.
      * @param Manager c
+     * @author bestrocker221
      */
     public AudioController(final Manager c){
-        
         this.lm = c;
         this.player = new BasicPlayer();
         this.control = this.player;
@@ -133,6 +133,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
     public void stopPlayer(){
         try {
             this.control.stop();
+            Log.PROGRAM("Player stopped.");
         } catch (BasicPlayerException e) {
             Log.ERROR("Cannot stop player, error stopPlayer()"  + e);
         }
@@ -144,11 +145,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
     @Override
     public void playPlayer(){
         try {
-            System.out.println("counter "+this.counter + "qsize " +this.lm.getQueueSize());
             String s = "empty";
-            //String s = this.playlist.get(this.counter);
-            //this.incrementSongCounter(this.lsong.get(this.counter));
-            //String s = this.lsong.get(this.counter).getPath();
             if(reproduceNow){
                 s = this.lm.getCurrentSong(0);
                 reproduceNow = false;
@@ -156,7 +153,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
                 s = this.lm.getCurrentSong(this.counter);
             }
             this.lm.setInReproduction(s);
-            Log.INFO(s + " set as Song in reproduction");
+            Log.INFO("Set as Song in reproduction: "+s);
             this.paused = false;
             this.control.open(new File(s));
             this.control.play();
