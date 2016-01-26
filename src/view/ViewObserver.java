@@ -168,11 +168,17 @@ public interface ViewObserver {
      * Create a full new Library in the specified path. If already existing, it will reload all its containing.
      * @param pathNewLibrary
      */
-    void newLibrary(final String pathNewLibrary);
+    void newLibrary(final String pathNewLibrary);    
     
     /**
      * Set the selected playlist in reproduction
      * @param playlistName
      */
     void playPlaylist(String playlistName);
+    
+    /**
+     * Remove this song from the current playlist
+     * @param songName
+     */
+    void removeFromPlaylist(String songName);
 }
