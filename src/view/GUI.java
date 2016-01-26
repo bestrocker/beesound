@@ -58,6 +58,7 @@ public class GUI implements ViewInterface{
     private String songName;
     private JSlider seekBar = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
     private Integer deltaColor = 0;
+    private JButton[] refreshArray;
 
     public GUI() {
 
@@ -259,7 +260,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(btAll, true, true, true, false, true);
+                            JPopupMenu menu = buildStandardPopup(btAll, true, true, true, false, true, false);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -340,7 +341,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false);
+                            JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false, true);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -374,7 +375,7 @@ public class GUI implements ViewInterface{
 
                                     if(list.getModel().getSize() > 0) {
 
-                                        JPopupMenu menu = buildStandardPopup(btReproduction, true, true, true, false, false);
+                                        JPopupMenu menu = buildStandardPopup(btReproduction, true, true, true, false, false, false);
                                         if(e.isPopupTrigger()) {
 
                                             menu.show(e.getComponent(), e.getX(), e.getY());
@@ -454,7 +455,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(btReproduction, false, true, false, false, false);
+                            JPopupMenu menu = buildStandardPopup(btReproduction, false, true, false, false, false, false);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -576,6 +577,9 @@ public class GUI implements ViewInterface{
                 , btPlaylist, btGenre, btFavorites, btPrev, btNext, btReproduction, lbInfoLibrary, pnInfoLibrary, lbInfoCurrent};
         setComponentFont(compArray);
         
+        //BUTTON ARRAY FOR REFRESH
+        this.refreshArray = new JButton[] {btAll,  btAlbum, btArtist, btPlaylist, btGenre, btFavorites, btReproduction};
+        
         mnFile.add(mniAddToLib);
         mnFile.add(mniCreatePlaylist);
         mnFile.add(mniExit);
@@ -592,6 +596,22 @@ public class GUI implements ViewInterface{
     }   
 
     ///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
+
+    @Override
+    public void setVisible(final boolean visible) {
+        this.frame.setVisible(visible);
+    }
+
+    /**
+     * Refresh all components
+     */
+    @Override
+    public void refreshView() {
+        
+        for (JButton cpm : refreshArray) {
+            cpm.doClick();
+        }
+    }
 
     /**
      * Sets font for a component
@@ -694,7 +714,7 @@ public class GUI implements ViewInterface{
      * @return JPopupMenu
      */
     private JPopupMenu buildStandardPopup(JButton button, boolean addQueue, boolean remQueue, boolean rem
-            , boolean remPlay, boolean addPlay) {
+            , boolean remPlay, boolean addPlay, boolean playPlay) {
 
         final JPopupMenu menu = new JPopupMenu();
         final JMenuItem itemAddToReproductionList = new JMenuItem("Add to reproduction Playlist");
@@ -706,7 +726,7 @@ public class GUI implements ViewInterface{
 
                 controller.addSongInReproductionPlaylist(list.getModel()
                         .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
-                button.doClick();
+                refreshView();
             }
         });
         
@@ -717,7 +737,7 @@ public class GUI implements ViewInterface{
             public void actionPerformed(ActionEvent e) {
                 controller.removeSongFromQueue(list.getModel()
                         .getElementAt(list.getMaxSelectionIndex()));              
-                button.doClick();
+                refreshView();
             }
 
         });
@@ -728,7 +748,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.removeSong(list.getModel().getElementAt(list.getMaxSelectionIndex()));
-                button.doClick();
+                refreshView();
             }
         });
 
@@ -737,8 +757,8 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.removePlaylit(list.getModel().getElementAt(list.getMaxSelectionIndex()));
-                button.doClick();
+                controller.removePlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                refreshView();
             }
         });
 
@@ -774,7 +794,7 @@ public class GUI implements ViewInterface{
                     public void actionPerformed(ActionEvent e) {
 
                         controller.addSongInPlaylist(songName, combo.getSelectedItem().toString());
-                        button.doClick();
+                        refreshView();
                         frameChoosePlaylist.dispose();
                     }
                 });
@@ -786,6 +806,16 @@ public class GUI implements ViewInterface{
                 frameChoosePlaylist.setSize(350, 65);
                 frameChoosePlaylist.setLocationRelativeTo(frame);
                 frameChoosePlaylist.setVisible(true);                
+            }                       
+        });
+        
+        final JMenuItem itemPlayPlaylist = new JMenuItem("Play Playlist");
+        itemPlayPlaylist.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //controller.playPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                refreshView();
             }
         });
         
@@ -806,6 +836,9 @@ public class GUI implements ViewInterface{
         }
         if(addPlay) {
             menu.add(itemAddToPlaylist);
+        }
+        if(playPlay) {
+            menu.add(itemPlayPlaylist);
         }
 
         return menu;
@@ -856,18 +889,6 @@ public class GUI implements ViewInterface{
                 }
             }
         }
-    }
-
-
-    @Override
-    public void refreshView() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setVisible(final boolean visible) {
-        this.frame.setVisible(visible);
     }
 
 }
