@@ -58,10 +58,9 @@ public class GUI implements ViewInterface{
     private String songName;
     private JSlider seekBar = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
     private Integer deltaColor = 0;
-    private JButton[] refreshArray;
 
     public GUI() {
-
+        
         frame = new JFrame("BeeSound Player");
         final JPanel pnLanding = new JPanel(new BorderLayout());
         frame.setFont(new Font("Trajan Pro", Font.PLAIN, 12));
@@ -223,7 +222,7 @@ public class GUI implements ViewInterface{
         pnPlayerButtons.add(btPlay);
         pnPlayerButtons.add(btNext);
 
-        /* LEFT PANEL & BUTTONS */
+        /////////////////// LEFT PANEL & BUTTONS ////////////////////////
 
         final JPanel pnLeftButtons = new JPanel(new GridLayout(0, 1, 0, 0));
         pnLeftButtons.setPreferredSize(new Dimension(85, 0));       
@@ -260,7 +259,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(btAll, true, true, true, false, true, false, false);
+                            JPopupMenu menu = buildStandardPopup(btAll, true, false, true, false, true, false, false);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -485,7 +484,7 @@ public class GUI implements ViewInterface{
         pnLeftButtons.add(btFavorites);
         pnLeftButtons.add(btReproduction);
 
-        /* TOP MENU */
+        ////////////////   TOP MENU ////////////////////
 
         final JMenuBar mnBar = new JMenuBar();
         final JMenu mnFile = new JMenu("File");
@@ -577,9 +576,6 @@ public class GUI implements ViewInterface{
                 , btPlaylist, btGenre, btFavorites, btPrev, btNext, btReproduction, lbInfoLibrary, pnInfoLibrary, lbInfoCurrent};
         setComponentFont(compArray);
         
-        //BUTTON ARRAY FOR REFRESH
-        this.refreshArray = new JButton[] {btAll,  btAlbum, btArtist, btPlaylist, btGenre, btFavorites, btReproduction};
-        
         mnFile.add(mniAddToLib);
         mnFile.add(mniCreatePlaylist);
         mnFile.add(mniExit);
@@ -592,7 +588,6 @@ public class GUI implements ViewInterface{
         pnLanding.add(pnRight, BorderLayout.EAST);
         frame.setJMenuBar(mnBar);  
         frame.getContentPane().add(pnLanding);
-
     }   
 
     ///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
@@ -608,9 +603,6 @@ public class GUI implements ViewInterface{
     @Override
     public void refreshView() {
         
-        for (JButton cpm : refreshArray) {
-            cpm.doClick();
-        }
     }
 
     /**
@@ -726,7 +718,7 @@ public class GUI implements ViewInterface{
 
                 controller.addSongInReproductionPlaylist(list.getModel()
                         .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
-                refreshView();
+                button.doClick();
             }
         });
         
@@ -737,7 +729,7 @@ public class GUI implements ViewInterface{
             public void actionPerformed(ActionEvent e) {
                 controller.removeSongFromQueue(list.getModel()
                         .getElementAt(list.getMaxSelectionIndex()));              
-                refreshView();
+                button.doClick();
             }
 
         });
@@ -748,7 +740,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.removeSong(list.getModel().getElementAt(list.getMaxSelectionIndex()));
-                refreshView();
+                button.doClick();
             }
         });
 
@@ -758,7 +750,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.removePlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
-                refreshView();
+                button.doClick();
             }
         });
 
@@ -794,7 +786,7 @@ public class GUI implements ViewInterface{
                     public void actionPerformed(ActionEvent e) {
 
                         controller.addSongInPlaylist(songName, combo.getSelectedItem().toString());
-                        refreshView();
+                        button.doClick();
                         frameChoosePlaylist.dispose();
                     }
                 });
@@ -815,7 +807,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //controller.playPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
-                refreshView();
+                button.doClick();
             }
         });
         
@@ -825,7 +817,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //controller.removeFromPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
-                refreshView();                
+                button.doClick();                
             }
         });
         
@@ -862,7 +854,7 @@ public class GUI implements ViewInterface{
      * Seekbar listens and works as a new thread until the song is playing.
      *
      */
-    private class Agent extends Thread {
+    /*private class Agent extends Thread {
 
         private JSlider seek;
         private Duration duration;
@@ -901,6 +893,6 @@ public class GUI implements ViewInterface{
                 }
             }
         }
-    }
+    }*/
 
 }
