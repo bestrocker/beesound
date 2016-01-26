@@ -78,7 +78,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
             }
         } catch (BasicPlayerException e){
             e.printStackTrace();
-            Log.ERROR("impossible toggle pause");
+            Log.ERROR("impossible toggle pause" + e);
         }
         this.lm.setSongPaused(this.paused);
     }
@@ -91,7 +91,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
         try {
             this.control.seek(nbytes);
         } catch (BasicPlayerException e) {
-            Log.ERROR("Error seeking song");
+            Log.ERROR("Error seeking song" + e);
         }
     }
     
@@ -104,7 +104,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
             control.stop();
             nextSongPlayer();
         } catch (BasicPlayerException e) {
-            Log.ERROR("cannot stop, next() failed");
+            Log.ERROR("cannot stop, next() failed" + e);
             e.printStackTrace();
         }
         
@@ -120,7 +120,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
             this.counter--;
             this.playPlayer();
         } catch (BasicPlayerException e) {
-            Log.ERROR("prevPlayer FAILED.");
+            Log.ERROR("prevPlayer FAILED." + e);
             e.printStackTrace();
         }
         
@@ -134,7 +134,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
         try {
             this.control.stop();
         } catch (BasicPlayerException e) {
-            Log.ERROR("Cannot stop player, error stopPlayer()");
+            Log.ERROR("Cannot stop player, error stopPlayer()"  + e);
         }
     }
     
@@ -163,7 +163,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
             this.control.setGain(0.85);
             this.control.setPan(0.0);
         } catch ( Exception e){
-            Log.ERROR("can't perform action: playPlayer()");
+            Log.ERROR("can't perform action: playPlayer()"  + e);
             e.printStackTrace();
         }
     }
@@ -209,7 +209,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
             this.control.setGain(volume);
             Log.PROGRAM("GAIN set to "+volume);
         } catch (BasicPlayerException e) {
-            Log.ERROR("impossible to change volume, error in setVolume");
+            Log.ERROR("impossible to change volume, error in setVolume " + e);
             e.printStackTrace();
         }
     }

@@ -111,7 +111,7 @@ public  class FileController implements SystemManager{
                return d;
            } catch (Exception e){
                e.printStackTrace();
-               Log.ERROR("Can't importToLibrary, error during copy");
+               Log.ERROR("Can't importToLibrary, error during copy " + e);
            }
        }
        return d;
@@ -125,7 +125,7 @@ public  class FileController implements SystemManager{
         try {
             new File(dstPath+name+".txt").createNewFile();
         } catch (IOException e) {
-            Log.ERROR("Can't createNewFile()");
+            Log.ERROR("Can't createNewFile()" + e);
             e.printStackTrace();
             return;
         }
@@ -138,6 +138,7 @@ public  class FileController implements SystemManager{
             this.writer.println(msg);
         } catch (IOException e) {
             e.printStackTrace();
+            Log.ERROR("error in appendToFile " + e);
         }
     }
 
@@ -151,7 +152,7 @@ public  class FileController implements SystemManager{
             Files.deleteIfExists(Paths.get(pathFile));
             Log.PROGRAM(pathFile + " Deleted.");
         } catch (IOException e) {
-            Log.ERROR("Can't remove " + pathFile);
+            Log.ERROR("Can't remove " + pathFile + e);
             e.printStackTrace();
         }
     }
