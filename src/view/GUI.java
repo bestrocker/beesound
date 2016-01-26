@@ -56,14 +56,13 @@ public class GUI implements ViewInterface{
     private boolean playing = false;
     private boolean stopped = true;
     private String songName;
-    private JSlider seek = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
-    private Integer colorVal = 0;
+    private JSlider seekBar = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
+    private Integer deltaColor = 0;
 
     public GUI() {
 
-        /* FRAME AND PANEL */
-
         frame = new JFrame("BeeSound Player");
+        final JPanel pnLanding = new JPanel(new BorderLayout());
         frame.setFont(new Font("Trajan Pro", Font.PLAIN, 12));
         final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         final int x = (int)(dimension.getWidth() * PERC_HALF - dimension.getWidth() * PERC_QUATER);
@@ -72,61 +71,52 @@ public class GUI implements ViewInterface{
         frame.setLocation(x, y);                
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);           
         frame.setMinimumSize(new Dimension(200, 100));
-
-        final JPanel landingPanel = new JPanel();
-        final BorderLayout landingLayout = new BorderLayout();
-        landingPanel.setLayout(landingLayout);
-
+        
         /* RIGHT PANEL FOR IMAGE AND INFO CURRENT SONG */
 
-        final JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.add(seek);
-
+        final JPanel pnRight = new JPanel();
+        pnRight.setLayout(new BoxLayout(pnRight, BoxLayout.Y_AXIS));
         final URL ImgURL = UIResource.class.getResource("/zutons.jpg");
-        final JLabel imageLabel = new JLabel();
-        imageLabel.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 250));
-        imageLabel.setIcon(new ImageIcon(ImgURL));
-        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        final JLabel infoTitle = new JLabel("Info Title");
-        infoTitle.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), (int)(frame.getHeight() * 0.1)));
-        infoTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        rightPanel.add(imageLabel);     
-        rightPanel.add(infoTitle);
+        final JLabel lbImage = new JLabel();
+        lbImage.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 250));
+        lbImage.setIcon(new ImageIcon(ImgURL));
+        lbImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+        final JLabel lbInfoCurrent = new JLabel("Info Current");
+        lbInfoCurrent.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), (int)(frame.getHeight() * 0.1)));
+        lbInfoCurrent.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        pnRight.add(seekBar);
+        pnRight.add(lbImage);     
+        pnRight.add(lbInfoCurrent);
 
         /* CENTER PANEL: LIST SELECTION & INFO LABEL */
 
-        final JPanel listSelectionPanel = new JPanel();
-        listSelectionPanel.setLayout(new BoxLayout(listSelectionPanel, BoxLayout.Y_AXIS));
+        final JPanel pnListView = new JPanel();
+        pnListView.setLayout(new BoxLayout(pnListView, BoxLayout.Y_AXIS));
+        final JPanel pnInfoLibrary = new JPanel();
+        pnInfoLibrary.setMaximumSize(new Dimension(32767, 30));
+        final JLabel lbInfoLibrary = new JLabel("Numero brani + minutaggio: ");
+        pnInfoLibrary.setBackground(new Color(100, 100, 255));
+        //setLibraryInfo(lbInfoLibrary, controller.showInfoLibrary());
 
-        final JPanel counterPanel = new JPanel();
-        counterPanel.setMaximumSize(new Dimension(32767, 30));
-        final JLabel counterLabel = new JLabel("Numero brani + minutaggio: ");
-        counterPanel.setBackground(new Color(100, 100, 255));
-        //setLibraryInfo(counterLabel, controller.showInfoLibrary());
-
-        listSelectionPanel.add(scrollPane);
-        listSelectionPanel.add(counterPanel);                               
-        counterPanel.add(counterLabel);
+        pnListView.add(scrollPane);
+        pnListView.add(pnInfoLibrary);                               
+        pnInfoLibrary.add(lbInfoLibrary);
 
         /* SOUTH PANEL: CONTROL PLAYER'S BUTTONS */
 
-        final FlowLayout playerButtonsLayout = new FlowLayout();
-        final JPanel playerButtonsPanel = new JPanel(playerButtonsLayout);
+        final JPanel pnPlayerButtons = new JPanel(new FlowLayout());        
+        final JButton btPlay = new JButton(" ▶ ");
+        final JButton btStop = new JButton(" ■ ");
+        final JButton btPrev = new JButton(" << ");
+        final JButton btNext = new JButton(" >> ");
+        final JButton btShuffle = new JButton("Shuffle");
+        final JButton btLinear = new JButton("Linear");       
+        final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
+        final JLabel lbVol = new JLabel(" volume ");
         
-        final JButton button_6 = new JButton(" ▶ ");
-        final JButton button_7 = new JButton(" ■ ");
-        final JButton button_8 = new JButton(" << ");
-        final JButton button_9 = new JButton(" >> ");
-        final JButton bShuffle = new JButton("Shuffle");
-        final JButton bLinear = new JButton("Linear");
-        
-        final JSlider volume = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
-        final JLabel volumeLabel = new JLabel(" volume ");
-
-        button_6.addActionListener(new ActionListener() {
+        // PLAY
+        btPlay.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -135,10 +125,10 @@ public class GUI implements ViewInterface{
 
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
-                    Agent agent = new Agent(seek);
+                    //Agent agent = new Agent(seekBar);
                     //agent.start();
                     playing = true;
-                    setInfoLabel(infoTitle, controller.getCurrentSongInfo());
+                    setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                 }
                 else {
 
@@ -146,11 +136,12 @@ public class GUI implements ViewInterface{
                     playing = !playing;
                 }
                 stopped = false;
-                updatePlayButton(button_6);
+                updatePlayButton(btPlay);
             }
         }); 
-
-        button_7.addActionListener(new ActionListener() {
+        
+        //STOP
+        btStop.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -158,11 +149,12 @@ public class GUI implements ViewInterface{
                 controller.stopButton();              
                 stopped = true;
                 playing = false;
-                updatePlayButton(button_6);
+                updatePlayButton(btPlay);
             }
         });
-
-        button_8.addActionListener(new ActionListener() {
+        
+        //PREVIOUS
+        btPrev.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -170,8 +162,9 @@ public class GUI implements ViewInterface{
                 controller.prevTrack();               
             }
         });
-
-        button_9.addActionListener(new ActionListener() {
+        
+        //NEXT
+        btNext.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -179,68 +172,71 @@ public class GUI implements ViewInterface{
                 controller.nextTrack();           
             }
         });
-
-        volume.setPreferredSize(new Dimension(150, 20));
-        volume.addChangeListener(new ChangeListener() {
+        
+        //VOLUME
+        slVol.setPreferredSize(new Dimension(150, 20));
+        slVol.addChangeListener(new ChangeListener() {
 
             @Override
             public void stateChanged(ChangeEvent e) {
 
-                controller.setVolumeButton((double)volume.getValue() / 100);                
+                controller.setVolumeButton((double)slVol.getValue() / 100);                
             }
         });
-
-        bShuffle.setEnabled(true);;
-        bShuffle.addActionListener(new ActionListener() {
+        
+        //SHUFFLE MODE
+        btShuffle.setEnabled(true);;
+        btShuffle.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 controller.setShuffleMode();
-                bShuffle.setEnabled(false);
-                bLinear.setEnabled(true);
+                btShuffle.setEnabled(false);
+                btLinear.setEnabled(true);
             }
         });
-
-        bLinear.setEnabled(false);
-        bLinear.addActionListener(new ActionListener() {
+        
+        //LINEAR MODE
+        btLinear.setEnabled(false);
+        btLinear.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 controller.linearMode();
-                bShuffle.setEnabled(true);
-                bLinear.setEnabled(false);
+                btShuffle.setEnabled(true);
+                btLinear.setEnabled(false);
             }
         });
 
-        playerButtonsPanel.add(bShuffle);
-        playerButtonsPanel.add(Box.createRigidArea(new Dimension()));
-        playerButtonsPanel.add(bLinear);
-        playerButtonsPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        playerButtonsPanel.add(volumeLabel);
-        playerButtonsPanel.add(volume);
-        playerButtonsPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        playerButtonsPanel.add(button_8);
-        playerButtonsPanel.add(button_7);
-        playerButtonsPanel.add(button_6);
-        playerButtonsPanel.add(button_9);
+        pnPlayerButtons.add(btShuffle);
+        pnPlayerButtons.add(Box.createRigidArea(new Dimension()));
+        pnPlayerButtons.add(btLinear);
+        pnPlayerButtons.add(Box.createRigidArea(new Dimension(10, 0)));
+        pnPlayerButtons.add(lbVol);
+        pnPlayerButtons.add(slVol);
+        pnPlayerButtons.add(Box.createRigidArea(new Dimension(10, 0)));
+        pnPlayerButtons.add(btPrev);
+        pnPlayerButtons.add(btStop);
+        pnPlayerButtons.add(btPlay);
+        pnPlayerButtons.add(btNext);
 
         /* LEFT PANEL & BUTTONS */
 
-        final JPanel leftButtonsPanel = new JPanel(new GridLayout(0, 1, 0, 0));
-        leftButtonsPanel.setPreferredSize(new Dimension(85, 0));
+        final JPanel pnLeftButtons = new JPanel(new GridLayout(0, 1, 0, 0));
+        pnLeftButtons.setPreferredSize(new Dimension(85, 0));       
+        final JButton btAll = new JButton("All Songs");
+        final JButton btAlbum = new JButton("Albums");
+        final JButton btArtist = new JButton("Artists");
+        final JButton btPlaylist = new JButton("Yuor Playlists");
+        final JButton btGenre = new JButton("Music Genre");
+        final JButton btFavorites = new JButton("Più ascoltati");
+        final JButton btReproduction = new JButton("In riproduzione");
         
-        final JButton button = new JButton("All Songs");
-        final JButton button_1 = new JButton("Albums");
-        final JButton button_2 = new JButton("Artists");
-        final JButton button_3 = new JButton("Yuor Playlists");
-        final JButton button_4 = new JButton("Music Genre");
-        final JButton button_5 = new JButton("Più ascoltati");
-        final JButton buttonQueue = new JButton("In riproduzione");
-
-        setLeftButtons(button);
-        button.addActionListener(new ActionListener() {
+        //ALL SONGS
+        setLeftButtons(btAll);
+        btAll.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -263,7 +259,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(button, true, true, true, false, true);
+                            JPopupMenu menu = buildStandardPopup(btAll, true, true, true, false, true);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -289,17 +285,18 @@ public class GUI implements ViewInterface{
                             //agent.start();
                             playing = true;
                             stopped = false;
-                            updatePlayButton(button_6);
-                            setInfoLabel(infoTitle, controller.getCurrentSongInfo());
+                            updatePlayButton(btPlay);
+                            setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                         }                        
                     }
                 });                
 
             }
         });
-
-        setLeftButtons(button_1);
-        button_1.addActionListener(new ActionListener() {
+        
+        //ALBUMS
+        setLeftButtons(btAlbum);
+        btAlbum.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -309,8 +306,8 @@ public class GUI implements ViewInterface{
             }
         });
 
-        setLeftButtons(button_2);
-        button_2.addActionListener(new ActionListener() {
+        setLeftButtons(btArtist);
+        btArtist.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -319,9 +316,10 @@ public class GUI implements ViewInterface{
                 createSelectableList();
             }
         });
-
-        setLeftButtons(button_3);
-        button_3.addActionListener(new ActionListener() {           
+        
+        //PLAYLIST
+        setLeftButtons(btPlaylist);
+        btPlaylist.addActionListener(new ActionListener() {           
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -342,7 +340,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(button_3, false, false, false, true, false);
+                            JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -376,7 +374,7 @@ public class GUI implements ViewInterface{
 
                                     if(list.getModel().getSize() > 0) {
 
-                                        JPopupMenu menu = buildStandardPopup(buttonQueue, true, true, true, false, false);
+                                        JPopupMenu menu = buildStandardPopup(btReproduction, true, true, true, false, false);
                                         if(e.isPopupTrigger()) {
 
                                             menu.show(e.getComponent(), e.getX(), e.getY());
@@ -401,8 +399,8 @@ public class GUI implements ViewInterface{
                                         //agent.start();
                                         playing = true;
                                         stopped = false;
-                                        updatePlayButton(button_6);
-                                        setInfoLabel(infoTitle, controller.getCurrentSongInfo());
+                                        updatePlayButton(btPlay);
+                                        setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                                     }                        
                                 }
                             }); 
@@ -413,9 +411,10 @@ public class GUI implements ViewInterface{
                 });
             }
         });
-
-        setLeftButtons(button_4);
-        button_4.addActionListener(new ActionListener() {
+        
+        //GENRE
+        setLeftButtons(btGenre);
+        btGenre.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -424,9 +423,10 @@ public class GUI implements ViewInterface{
                 createSelectableList();
             }
         });
-
-        setLeftButtons(button_5);
-        button_5.addActionListener(new ActionListener() {
+        
+        //FAVORITES
+        setLeftButtons(btFavorites);
+        btFavorites.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -435,9 +435,10 @@ public class GUI implements ViewInterface{
                 createSelectableList();
             }
         });
-
-        setLeftButtons(buttonQueue);
-        buttonQueue.addActionListener(new ActionListener() {
+        
+        //REPRODUCTION QUEUE
+        setLeftButtons(btReproduction);
+        btReproduction.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -453,7 +454,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(buttonQueue, true, true, false, false, false);
+                            JPopupMenu menu = buildStandardPopup(btReproduction, false, true, false, false, false);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -475,125 +476,119 @@ public class GUI implements ViewInterface{
             }
         });
 
-        leftButtonsPanel.add(button);
-        leftButtonsPanel.add(button_1);
-        leftButtonsPanel.add(button_2);
-        leftButtonsPanel.add(button_3);
-        leftButtonsPanel.add(button_4);
-        leftButtonsPanel.add(button_5);
-        leftButtonsPanel.add(buttonQueue);
+        pnLeftButtons.add(btAll);
+        pnLeftButtons.add(btAlbum);
+        pnLeftButtons.add(btArtist);
+        pnLeftButtons.add(btPlaylist);
+        pnLeftButtons.add(btGenre);
+        pnLeftButtons.add(btFavorites);
+        pnLeftButtons.add(btReproduction);
 
         /* TOP MENU */
 
-        final JMenuBar menuBar = new JMenuBar();
-        menuBar.setBorder(null);
-        frame.setJMenuBar(menuBar);  
-
-        /* jmenu buttons: file, help */
-
-        final JMenu menuFile = new JMenu("File");
-        menuBar.add(menuFile);
-        final JMenu menuInfo = new JMenu("Info");
-        menuBar.add(menuInfo);
-
-        /* choice menu(JMenuItem) */
-
-        final JMenuItem menuChoiceImport = new JMenuItem("Add file to Library");
-        menuChoiceImport.addActionListener(new ActionListener() {
+        final JMenuBar mnBar = new JMenuBar();
+        final JMenu mnFile = new JMenu("File");
+        final JMenu mnInfo = new JMenu("Info");
+        final JMenuItem mniAddToLib = new JMenuItem("Add file to Library");
+        final JMenuItem mniCreatePlaylist = new JMenuItem("Create new Playlist");
+        final JMenuItem mniExit = new JMenuItem("Exit Program");
+        final JMenuItem mniBeeInfo = new JMenuItem("Info Beesound");
+        mnBar.setBorder(null);
+        
+        //ADD MP3 LIBRARY
+        mniAddToLib.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int returnVal = chooser.showOpenDialog(menuFile);
+                int returnVal = chooser.showOpenDialog(mnFile);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                     controller.addSong(chooser.getSelectedFile().getAbsolutePath());
-                    button.doClick();
+                    btAll.doClick();
                 }
             }
         });
-        menuFile.add(menuChoiceImport);
- 
-        final JMenuItem menuCreatePlaylist = new JMenuItem("Create new Playlist");
-        menuCreatePlaylist.addActionListener(new ActionListener() {
+        
+        //CREATE PLAYLIST
+        mniCreatePlaylist.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                final JFrame frameChoosePlaylist = new JFrame("Your Playlist");
-                final JPanel panel = new JPanel();
-                final JLabel label = new JLabel("Insert playlist name  ");
-                final JTextArea area = new JTextArea(1, 10);
-                final JButton button = new JButton("ok");
-                button.setBackground(new Color(200, 200, 255));
-                button.addActionListener(new ActionListener() {
+                final JFrame frChoosePlaylist = new JFrame("Your Playlist");
+                final JPanel pnChoosePlaylist = new JPanel();
+                final JLabel lbChoosePlaylist = new JLabel("Insert playlist name  ");
+                final JTextArea taChoosePlaylist = new JTextArea(1, 10);
+                final JButton btChoosePlaylist = new JButton("ok");
+                btChoosePlaylist.setBackground(new Color(200, 200, 255));
+                btChoosePlaylist.addActionListener(new ActionListener() {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
 
-                        controller.newPlaylistFile(area.getText());
-                        frameChoosePlaylist.dispose();
+                        controller.newPlaylistFile(taChoosePlaylist.getText());
+                        frChoosePlaylist.dispose();
                     }
                 });
 
-                panel.add(label);
-                panel.add(area);
-                panel.add(Box.createRigidArea(new Dimension(5, 0)));
-                panel.add(button);
-                frameChoosePlaylist.add(panel);
-                frameChoosePlaylist.setSize(400, 40);
-                frameChoosePlaylist.setLocationRelativeTo(frame);
-                frameChoosePlaylist.setVisible(true);
+                pnChoosePlaylist.add(lbChoosePlaylist);
+                pnChoosePlaylist.add(taChoosePlaylist);
+                pnChoosePlaylist.add(Box.createRigidArea(new Dimension(5, 0)));
+                pnChoosePlaylist.add(btChoosePlaylist);
+                frChoosePlaylist.add(pnChoosePlaylist);
+                frChoosePlaylist.setSize(400, 40);
+                frChoosePlaylist.setLocationRelativeTo(frame);
+                frChoosePlaylist.setVisible(true);
             }
         });
-        menuFile.add(menuCreatePlaylist);
-
-        final JMenuItem menuChoiceExit = new JMenuItem("Exit Program");
-        menuChoiceExit.addActionListener(new ActionListener() {
+        
+        //EXIT PROGRAM
+        mniExit.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
-        menuFile.add(menuChoiceExit);
-
-        final JMenuItem menuChoiceInfo = new JMenuItem("Info Beesound");
-        menuInfo.add(menuChoiceInfo);
-        menuChoiceInfo.addActionListener(new ActionListener() {
+        
+        //INFO BEESOUND
+        mniBeeInfo.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                final JFrame infoFrame = new JFrame("Beesound members");
-                JTextArea textArea = new JTextArea("\nThis Program has been realized by: \n"
+                final JFrame frBeeInfo = new JFrame("Beesound members");
+                final JTextArea taBeeInfo = new JTextArea("\nThis Program has been realized by: \n"
                         + "\nTiziano De Cristofaro : model\n"
                         + "Carlo Alberto Scola: controller\n"
                         + "Gianluca Cincinelli: view\n");
-                textArea.setForeground(new Color(20, 40, 150));
-                textArea.setEditable(false);
-                textArea.setLineWrap(true);
-                infoFrame.add(textArea);
-                infoFrame.setSize(300, 120);
-                infoFrame.setLocationRelativeTo(frame);
-                infoFrame.setVisible(true);
+                taBeeInfo.setForeground(new Color(20, 40, 150));
+                taBeeInfo.setEditable(false);
+                taBeeInfo.setLineWrap(true);
+                frBeeInfo.add(taBeeInfo);
+                frBeeInfo.setSize(300, 120);
+                frBeeInfo.setLocationRelativeTo(frame);
+                frBeeInfo.setVisible(true);
             }
         });
 
-        /* array whit all components */
-
-        final Component[] compArray = new Component[]{menuChoiceExit, menuChoiceImport, menuCreatePlaylist
-                , menuChoiceInfo, menuFile, menuInfo, menuBar, bLinear, bShuffle, button, button_1, button_2
-                , button_3, button_4, button_5, button_8, button_9, buttonQueue, counterLabel, counterPanel, infoTitle};
+        //ARRAY WITH ALL COMPONENTS
+        final Component[] compArray = new Component[]{mniExit, mniAddToLib, mniCreatePlaylist
+                , mniBeeInfo, mnFile, mnInfo, mnBar, btLinear, btShuffle, btAll, btAlbum, btArtist
+                , btPlaylist, btGenre, btFavorites, btPrev, btNext, btReproduction, lbInfoLibrary, pnInfoLibrary, lbInfoCurrent};
         setComponentFont(compArray);
+        
+        mnFile.add(mniAddToLib);
+        mnFile.add(mniCreatePlaylist);
+        mnFile.add(mniExit);
+        mnInfo.add(mniBeeInfo);
+        mnBar.add(mnFile);
+        mnBar.add(mnInfo);
+        pnLanding.add(pnListView, BorderLayout.CENTER);                  
+        pnLanding.add(pnLeftButtons, BorderLayout.WEST);
+        pnLanding.add(pnPlayerButtons, BorderLayout.SOUTH);
+        pnLanding.add(pnRight, BorderLayout.EAST);
+        frame.setJMenuBar(mnBar);  
+        frame.getContentPane().add(pnLanding);
 
-        landingPanel.add(listSelectionPanel, BorderLayout.CENTER);                  
-        landingPanel.add(leftButtonsPanel, BorderLayout.WEST);
-        landingPanel.add(playerButtonsPanel, BorderLayout.SOUTH);
-        landingPanel.add(rightPanel, BorderLayout.EAST);
-
-        frame.getContentPane().add(landingPanel);
-        /*
-         * Decide il controller quando far vedere la view.
-         */
-        // frame.setVisible(true);
     }   
 
     ///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
@@ -641,13 +636,13 @@ public class GUI implements ViewInterface{
      */
     private void setLeftButtons(final JButton button) {
 
-        int a = 30, b = 255, c = b - (a * colorVal);
+        int a = 30, b = 255, c = b - (a * deltaColor);
         if(c > 0) {
             button.setBackground(new Color(255, 255, c));
         } else {
             button.setBackground(new Color(255 + c, 255, 255));
         }
-        colorVal++;
+        deltaColor++;
         button.setBorder(null);
     }
 
