@@ -43,7 +43,6 @@ import javax.swing.event.ChangeListener;
 
 import Controller.Audio.MpegInfo.Duration;
 import Controller.Controller.REPRODUCE;
-import Controller.ViewObserver;
 
 public class GUI implements ViewInterface{
 

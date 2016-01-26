@@ -1,10 +1,14 @@
-package Controller;
+package view;
 
 import java.util.List;
 import java.util.Map;
-
 import Controller.Controller.REPRODUCE;
 
+/**
+ * Observer Interface for Controller.
+ * @author bestrocker221
+ *
+ */
 public interface ViewObserver {
     
     /**

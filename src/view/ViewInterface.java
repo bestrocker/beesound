@@ -1,7 +1,5 @@
 package view;
 
-import Controller.ViewObserver;
-
 public interface ViewInterface {
 	
 	/**

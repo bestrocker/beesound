@@ -19,8 +19,8 @@
       <operations public="true" package="false" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <interface id="3" language="java" name="Controller.ViewObserver" project="oop15-beesound" 
-    file="/oop15-beesound/src/Controller/ViewObserver.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="3" language="java" name="view.ViewObserver" project="oop15-beesound" 
+    file="/oop15-beesound/src/view/ViewObserver.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="187" y="-138"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      

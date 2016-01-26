@@ -16,6 +16,7 @@ import model.LibraryManager;
 import model.Manager;
 import view.GUI;
 import view.ViewInterface;
+import view.ViewObserver;
 
 public class Controller implements ViewObserver {
 
