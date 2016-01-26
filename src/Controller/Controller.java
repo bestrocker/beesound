@@ -6,29 +6,38 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import Controller.Audio.AudioController;
+import Controller.Audio.AudioControllerInterface;
 import Controller.Audio.MpegInfo;
 import Controller.Files.FileController;
 import static Controller.Files.FileController.*;
 import Controller.Files.Log;
+import Controller.Files.SystemManager;
 import model.LibraryManager;
 import model.Manager;
 import view.GUI;
+import view.ViewInterface;
 
 public class Controller implements ViewObserver {
 
     private final Manager model;
-    private final GUI view;
-    private final AudioController audiocontrol;
-    private final FileController filecontrol;
+    private final ViewInterface view;
+    private final AudioControllerInterface audiocontrol;
+    private final SystemManager filecontrol;
     
-    public Controller() {
-        this.model = LibraryManager.getInstance();        
+    public Controller(final ViewInterface view, final Manager model) {
+        /*this.model = LibraryManager.getInstance();        
         this.filecontrol = new FileController();
         this.audiocontrol = new AudioController(model);
         loadInfoToLibrary();
         this.view = new GUI();
         this.view.setObserver(this);
-       
+       */
+        this.model=model;
+        this.view=view;
+        this.filecontrol = new FileController();
+        this.audiocontrol = new AudioController(model);
+        loadInfoToLibrary();
+        this.view.setObserver(this);
     }
     
     /**
@@ -89,7 +98,7 @@ public class Controller implements ViewObserver {
     }
     
     public static void main(String[] args) throws InterruptedException{
-        new Controller();
+        //new Controller();
         
        // List<String> l = c.filecontrol.listAllSongPath();
         

@@ -23,7 +23,7 @@ public interface SystemManager {
      * @param pathSource
      * @return final path of the copied file.
      */
-    String importToLibrary(final String mp3Source) throws IOException;
+    String importToLibrary(final String mp3Source);
     
     /**
      * Return a List of every song's absolute path contained in the given playlist 
@@ -51,4 +51,11 @@ public interface SystemManager {
      * @param pathFile
      */
     void delete(final String pathFile);
+    
+    /**
+     * Append a message to the file pointed.
+     * @param msg
+     * @param path
+     */
+    public void appendToFile(final String msg, final String path);
 }
