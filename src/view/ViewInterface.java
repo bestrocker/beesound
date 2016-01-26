@@ -2,17 +2,11 @@ package view;
 
 public interface ViewInterface {
 	
-	/**
-	 * Sets observer for the GUI
-	 * @param observer
-	 */
-    void setObserver(final ViewObserver observer);
-    
     /**
-     * Returns the index of the currently selected item
-     * @return
+     * Sets observer for the GUI
+     * @param observer
      */
-    int getSelectedIndex();
+    void setObserver(final ViewObserver observer);
     
     /**
      * Method called by Controller to notify the view to be refreshed.
@@ -21,6 +15,7 @@ public interface ViewInterface {
     
     /**
      * Set the visibility of the view.
+     * @param visible
      */
     void setVisible(final boolean visible);
 }
