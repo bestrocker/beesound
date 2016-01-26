@@ -2,9 +2,7 @@ package Main;
 
 import Controller.Controller;
 import model.LibraryManager;
-import model.Manager;
 import view.GUI;
-import view.ViewInterface;
 
 public class BeeSoundLauncher {
 
@@ -13,9 +11,7 @@ public class BeeSoundLauncher {
         /*
          * Initialize the player.
          */
-        final ViewInterface view = new GUI();
-        final Manager model = LibraryManager.getInstance();
-        new Controller(view,model);
+        new Controller(new GUI(),LibraryManager.getInstance());
         
     }
 
