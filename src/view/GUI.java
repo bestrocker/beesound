@@ -260,7 +260,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(btAll, true, true, true, false, true, false);
+                            JPopupMenu menu = buildStandardPopup(btAll, true, true, true, false, true, false, false);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -341,7 +341,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false, true);
+                            JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false, true, false);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -375,7 +375,7 @@ public class GUI implements ViewInterface{
 
                                     if(list.getModel().getSize() > 0) {
 
-                                        JPopupMenu menu = buildStandardPopup(btReproduction, true, true, true, false, false, false);
+                                        JPopupMenu menu = buildStandardPopup(btReproduction, true, false, true, false, false, false, true);
                                         if(e.isPopupTrigger()) {
 
                                             menu.show(e.getComponent(), e.getX(), e.getY());
@@ -455,7 +455,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(btReproduction, false, true, false, false, false, false);
+                            JPopupMenu menu = buildStandardPopup(btReproduction, false, true, false, false, false, false, false);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -714,7 +714,7 @@ public class GUI implements ViewInterface{
      * @return JPopupMenu
      */
     private JPopupMenu buildStandardPopup(JButton button, boolean addQueue, boolean remQueue, boolean rem
-            , boolean remPlay, boolean addPlay, boolean playPlay) {
+            , boolean remPlay, boolean addPlay, boolean playPlay, boolean remFromPlay) {
 
         final JPopupMenu menu = new JPopupMenu();
         final JMenuItem itemAddToReproductionList = new JMenuItem("Add to reproduction Playlist");
@@ -819,6 +819,16 @@ public class GUI implements ViewInterface{
             }
         });
         
+        final JMenuItem itemRemFromPlaylist = new JMenuItem("Remove from this playplist");
+        itemRemFromPlaylist.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //controller.removeFromPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                refreshView();                
+            }
+        });
+        
         if(controller.showAllPlaylist().isEmpty()) {
             itemAddToPlaylist.setEnabled(false);
         }       
@@ -840,10 +850,12 @@ public class GUI implements ViewInterface{
         if(playPlay) {
             menu.add(itemPlayPlaylist);
         }
+        if(remFromPlay) {
+            menu.add(itemRemFromPlaylist);
+        }
 
         return menu;
     }
-
 
     /**
      * This class create and start a new thread for running the seekbar media
