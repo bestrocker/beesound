@@ -80,6 +80,7 @@ public  class FileController implements SystemManager{
     
     /**
      * {@inheritDoc}
+     * @throws IOException 
      */
     @Override
     public List<String> getPlaylistSongs(final File playlist) throws IOException{

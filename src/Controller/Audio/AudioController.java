@@ -8,7 +8,7 @@ import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
 import model.Manager;
 
-public class AudioController implements BasicPlayerListener{
+public class AudioController implements BasicPlayerListener, AudioControllerInterface{
     
     final private Manager lm;
     private int counter = 0;
@@ -61,9 +61,9 @@ public class AudioController implements BasicPlayerListener{
     }
     
     /**
-     * Set pause if in reproduction.
-     * Set in reproduction if Paused.
+     * {@inheritDoc}
      */
+    @Override
     public void togglePause(){
         try{
             if(!this.paused){
@@ -84,9 +84,9 @@ public class AudioController implements BasicPlayerListener{
     }
     
     /**
-     * Skip the song to the given number of bytes.
-     * @param nbytes
+     * {@inheritDoc}
      */
+    @Override
     public void seekPlayer(final long nbytes){
         try {
             this.control.seek(nbytes);
@@ -96,8 +96,9 @@ public class AudioController implements BasicPlayerListener{
     }
     
     /**
-     * Play the next Track
+     * {@inheritDoc}
      */
+    @Override
     public void nextPlayer(){
         try {
             control.stop();
@@ -110,8 +111,9 @@ public class AudioController implements BasicPlayerListener{
     }
     
     /**
-     * Play the previous Track.
+     * {@inheritDoc}
      */
+    @Override
     public void prevPlayer(){
         try {
             control.stop();
@@ -125,8 +127,9 @@ public class AudioController implements BasicPlayerListener{
     }
     
     /**
-     * Stop the Player.
+     * {@inheritDoc}
      */
+    @Override
     public void stopPlayer(){
         try {
             this.control.stop();
@@ -136,8 +139,9 @@ public class AudioController implements BasicPlayerListener{
     }
     
     /**
-     * Play the current song in the player.
+     * {@inheritDoc}
      */
+    @Override
     public void playPlayer(){
         try {
             System.out.println("counter "+this.counter + "qsize " +this.lm.getQueueSize());
@@ -165,9 +169,9 @@ public class AudioController implements BasicPlayerListener{
     }
     
     /**
-     * Set the strategy for reproducing the next tracks.
-     * @param strategy
+     * {@inheritDoc}
      */
+    @Override
     public void setReproductionStrategy(final REPRODUCTION_STRATEGY strategy){
         this.strategy = strategy.getVal();
         if(strategy.getVal()){
@@ -196,6 +200,10 @@ public class AudioController implements BasicPlayerListener{
         this.playPlayer();
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setVolume(final double volume){
         try {
             this.control.setGain(volume);
@@ -210,6 +218,10 @@ public class AudioController implements BasicPlayerListener{
         if (out != null) out.println(msg);
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setReproduceNowBoolean(final boolean b){
         this.reproduceNow = b;
     }
