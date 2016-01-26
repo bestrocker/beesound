@@ -47,17 +47,28 @@ public class TryModel {
         System.out.println(library.getLibraryInfo().get("min"));
         System.out.println(library.getLibraryInfo().get("sec"));*/
         
-        /*library.newPlaylist("tiziano", "ciao");
+        library.newPlaylist("tiziano", "ciao");
         library.newPlaylist("salve", "ciao");
         
-        library.removePlaylist("tiziano");
+        //library.removePlaylist("tiziano");
         
-        library.getPlaylistList().forEach(x -> System.out.println(x.getName()));*/
+        //library.getPlaylistList().forEach(x -> System.out.println(x.getName()));
         
         //library.getAlbumList().forEach(x -> System.out.println(x.getTitle()));
         
-        library.fetchSongs("Money").forEach(x -> System.out.println(x));
+        //library.fetchSongs("trains").forEach(x -> System.out.println(x));
         
+        /*library.resetLibrary();
+        library = LibraryManager.getInstance();
+        library.getSongList().forEach(x -> System.out.println(x.getTitle()));*/
         
+        library.addSongInPlaylist("Money", "tiziano");
+        library.addSongInPlaylist("Trains", "tiziano");
+        /*library.removeSongFromPlaylist("Money", "tiziano");        
+        library.getPlaylistList().forEach(x -> x.getTrackList().forEach(y -> System.out.println(y.getTitle())));*/
+        
+        library.setReproductionPlaylist("tiziano");
+        System.out.println(library.getCurrentSongInfo().get("Title"));
+        //library.getInReproductionTitles().forEach(x -> System.out.println(x));       
     }
 }
