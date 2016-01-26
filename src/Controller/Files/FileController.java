@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 public  class FileController implements SystemManager{
     public static final String sep = System.getProperty("file.separator");
-    public static final String libraryPath = System.getProperty("user.home")+sep+"beesound"+sep;
-    public static final  String logPath = libraryPath+"LOG.txt";
+    private static String libraryPath = System.getProperty("user.home")+sep+"beesound"+sep;
+    public static final String logPath = libraryPath+"LOG.txt";
     public static final String propPath = libraryPath+"properties.txt";
     public static final String musicDirPath = libraryPath + "Music"+sep;
     public static final String playlistDirPath = libraryPath + "Playlist"+sep;
@@ -25,6 +25,15 @@ public  class FileController implements SystemManager{
      * Initialize FileController, Libraries folder, Logger, Properties.
      */
     public FileController() {
+        initialize();
+    }
+    
+    /**
+     * Contructor with specified LibraryPath.
+     * @param newLibraryPath
+     */
+    public FileController(final String newLibraryPath){
+        libraryPath = newLibraryPath+sep+"beesound"+sep;
         initialize();
     }
     

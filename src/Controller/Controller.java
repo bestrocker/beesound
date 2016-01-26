@@ -21,7 +21,7 @@ public class Controller implements ViewObserver {
     private final Manager model;
     private final ViewInterface view;
     private final AudioControllerInterface audiocontrol;
-    private final SystemManager filecontrol;
+    private SystemManager filecontrol;
     
     public Controller(final ViewInterface view, final Manager model) {
         this.model=model;
@@ -363,5 +363,16 @@ public class Controller implements ViewObserver {
     @Override
     public List<String> showFavorites() {
         return this.model.getMostListened();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void newLibrary(String pathNewLibrary) {
+        this.model.resetLibrary();
+        this.filecontrol = new FileController(pathNewLibrary);
+        loadInfoToLibrary();
+        this.view.refreshView(); 
     }
 }
