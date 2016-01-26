@@ -272,7 +272,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
     
     private Song getSong(String songTitle) throws NoSuchElementException {
         for (Song s : this.songList) {
-            if (s.getTitle().equals(songTitle)) {
+            if (s.getTitle().equals(clearText(songTitle))) {
                 return s;
             }            
         }
