@@ -12,9 +12,7 @@ import Controller.Files.FileController;
 import static Controller.Files.FileController.*;
 import Controller.Files.Log;
 import Controller.Files.SystemManager;
-import model.LibraryManager;
 import model.Manager;
-import view.GUI;
 import view.ViewInterface;
 import view.ViewObserver;
 
@@ -26,13 +24,6 @@ public class Controller implements ViewObserver {
     private final SystemManager filecontrol;
     
     public Controller(final ViewInterface view, final Manager model) {
-        /*this.model = LibraryManager.getInstance();        
-        this.filecontrol = new FileController();
-        this.audiocontrol = new AudioController(model);
-        loadInfoToLibrary();
-        this.view = new GUI();
-        this.view.setObserver(this);
-       */
         this.model=model;
         this.view=view;
         this.filecontrol = new FileController();
@@ -51,7 +42,6 @@ public class Controller implements ViewObserver {
             this.filecontrol.createNewFile(name,playlistDirPath);
             this.model.newPlaylist(name,temp);
         }
-        //AGGIUNGERE CODICE "ESISTE GIà"
     }
     
     /**
@@ -73,6 +63,9 @@ public class Controller implements ViewObserver {
         }
     }
     
+    /*
+     * Load all info into the library.
+     */
     private void loadInfoToLibrary() {
         final MpegInfo info = MpegInfo.getInstance();
         this.filecontrol.listAllSongPath()
@@ -89,7 +82,8 @@ public class Controller implements ViewObserver {
                             String plname = i.substring(i.lastIndexOf(sep)+1,i.length()-4);
                             this.model.newPlaylist(plname, i);
                             try {
-                                this.filecontrol.getPlaylistSongs(new File(i)).stream()
+                                this.filecontrol.getPlaylistSongs(new File(i))
+                                    .stream()
                                     .forEach(j->this.model.addSongInPlaylist(j.substring(j.lastIndexOf(sep)+1,j.length()-4), plname));
                             } catch (Exception e) {
                                 Log.ERROR("Can't load PLAYLIST to library.");
@@ -236,6 +230,12 @@ public class Controller implements ViewObserver {
         }
     }
     
+    /**
+     * Enum for setting the priority of a song to be reproduced.
+     * NOW-AFTER.
+     * @author bestrocker221
+     *
+     */
     public enum REPRODUCE{
         NOW(true),AFTER(false);
         
