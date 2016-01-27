@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.List;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ListSelectionModel;
@@ -61,6 +63,7 @@ public class GUI implements ViewInterface{
     final JLabel lbInfoLibrary = new JLabel("Numero brani + minutaggio: ");
     final JButton btAllSongs = new JButton("All Songs");
     final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
+    final List searchList = new List();
 
     public GUI() {
 
@@ -486,13 +489,16 @@ public class GUI implements ViewInterface{
         ////////////////   TOP MENU ////////////////////
 
         final JMenuBar mnBar = new JMenuBar();
+        mnBar.setBorder(null);
         final JMenu mnFile = new JMenu("File");
         final JMenu mnInfo = new JMenu("Info");
         final JMenuItem mniAddToLib = new JMenuItem("Add file to Library");
         final JMenuItem mniCreatePlaylist = new JMenuItem("Create new Playlist");
         final JMenuItem mniExit = new JMenuItem("Exit Program");
         final JMenuItem mniBeeInfo = new JMenuItem("Info Beesound");
-        mnBar.setBorder(null);
+        final JTextField tfSearchBar = new JTextField("search", 5);
+        tfSearchBar.setBackground(new Color(230, 255, 230));
+        tfSearchBar.select(0, tfSearchBar.getText().length());
         
         //ADD MP3 LIBRARY
         mniAddToLib.addActionListener(new ActionListener() {
@@ -512,7 +518,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                final JFrame frChoosePlaylist = new JFrame("Your Playlist");
+                final JFrame frChoosePlaylist = new JFrame("Create your Playlist");
                 final JPanel pnChoosePlaylist = new JPanel();
                 final JLabel lbChoosePlaylist = new JLabel("Insert playlist name  ");
                 final JTextArea taChoosePlaylist = new JTextArea(1, 10);
@@ -568,9 +574,24 @@ public class GUI implements ViewInterface{
                 frBeeInfo.setVisible(true);
             }
         });
+        
+        //SEARCH BAR
+        final JButton btSearch = new JButton(" Go ");
+        btSearch.setBackground(new Color(100, 220, 100));
+        btSearch.setBorder(null);
+        btSearch.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(controller.searchSong(tfSearchBar.getText()).toString());
+                //list = new JList<>(new Vector<>(controller.showAllPlaylist()));
+                list = new JList<>(new Vector<>(controller.searchSong(tfSearchBar.getText())));
+                createSelectableList();
+            }
+        });
 
         //ARRAY WITH ALL COMPONENTS
-        final Component[] compArray = new Component[]{mniExit, mniAddToLib, mniCreatePlaylist, lbVol
+        final Component[] compArray = new Component[]{mniExit, mniAddToLib, mniCreatePlaylist, lbVol, btSearch
                 , mniBeeInfo, mnFile, mnInfo, mnBar, btLinear, btShuffle, btAllSongs, btAlbum, btArtist
                 , btPlaylist, btGenre, btFavorites, btPrev, btNext, btReproduction, lbInfoLibrary, pnInfoLibrary, lbInfoCurrent};
         setComponentFont(compArray);
@@ -581,6 +602,11 @@ public class GUI implements ViewInterface{
         mnInfo.add(mniBeeInfo);
         mnBar.add(mnFile);
         mnBar.add(mnInfo);
+        mnBar.add(Box.createRigidArea(new Dimension((int)(frame.getWidth() * 0.5), 0)));
+        mnBar.add(tfSearchBar);
+        mnBar.add(Box.createRigidArea(new Dimension(10, 0)));
+        mnBar.add(btSearch);
+        mnBar.add(Box.createRigidArea(new Dimension(10, 0)));
         pnLanding.add(pnListView, BorderLayout.CENTER);                  
         pnLanding.add(pnLeftButtons, BorderLayout.WEST);
         pnLanding.add(pnPlayerButtons, BorderLayout.SOUTH);
@@ -595,11 +621,13 @@ public class GUI implements ViewInterface{
      * Sets volume for all song's reproduction
      */
     private void setVolume() {
+        
         controller.setVolumeButton((double)slVol.getValue() / 100);
     }
 
     @Override
     public void setVisible(final boolean visible) {
+        
         this.frame.setVisible(visible);
     }
 
