@@ -175,4 +175,10 @@ public interface ViewObserver {
      * @param songName
      */
     void removeSongFromPlaylist(String songName, String playlistName);
+    
+    /**
+     * Retrun a list containing informations amount of songs and minutes in library
+     * @return
+     */
+    List<Integer> showLibraryInfo();
 }
