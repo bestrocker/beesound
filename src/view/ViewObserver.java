@@ -181,4 +181,11 @@ public interface ViewObserver {
      * @return
      */
     List<Integer> showLibraryInfo();
+    
+    /**
+     * returns a list for all the matched strings
+     * @param text
+     * @return
+     */
+    List<String> searchSong(String text);
 }
