@@ -353,4 +353,13 @@ public class Controller implements ViewObserver {
         this.model.removeSongFromPlaylist(songName, playlistName);
         this.view.refreshView();
     }
+    
+    /**
+     * Returns info about amount of songs and total minutes in library
+     * @return
+     */
+    @Override
+    public List<Integer> showLibraryInfo() {
+        return this.model.getLibraryInfo();
+    }
 }
