@@ -60,6 +60,7 @@ public class GUI implements ViewInterface{
     private Integer[] infoLibraryArray = new Integer[3];
     final JLabel lbInfoLibrary = new JLabel("Numero brani + minutaggio: ");
     final JButton btAllSongs = new JButton("All Songs");
+    final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
 
     public GUI() {
 
@@ -112,7 +113,6 @@ public class GUI implements ViewInterface{
         final JButton btNext = new JButton(" >> ");
         final JButton btShuffle = new JButton("Shuffle");
         final JButton btLinear = new JButton("Linear");       
-        final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
         final JLabel lbVol = new JLabel(" volume ");
         
         // PLAY
@@ -126,6 +126,7 @@ public class GUI implements ViewInterface{
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                     playing = true;
+                    setVolume();
                     setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                 }
                 else {
@@ -178,7 +179,7 @@ public class GUI implements ViewInterface{
             @Override
             public void stateChanged(ChangeEvent e) {
 
-                controller.setVolumeButton((double)slVol.getValue() / 100);                
+                setVolume();                
             }
         });
         
@@ -278,6 +279,7 @@ public class GUI implements ViewInterface{
 
                             controller.addSongInReproductionPlaylist(list.getModel()
                                     .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
+                            setVolume();
                             playing = true;
                             stopped = false;
                             updatePlayButton(btPlay);
@@ -357,7 +359,7 @@ public class GUI implements ViewInterface{
 
                         if(e.getClickCount() == 2 && list.getModel().getSize() > 0) {
                             
-                            //selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                            selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
                             System.out.println(list.getModel().getElementAt(list.getMaxSelectionIndex()));
                             list = new JList<>(new Vector<>(controller.showPlaylistSong(list.getModel().getElementAt(list.getMaxSelectionIndex()))));
                             createSelectableList();
@@ -393,6 +395,7 @@ public class GUI implements ViewInterface{
 
                                         controller.addSongInReproductionPlaylist(list.getModel()
                                                 .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
+                                        setVolume();
                                         playing = true;
                                         stopped = false;
                                         updatePlayButton(btPlay);
@@ -587,6 +590,13 @@ public class GUI implements ViewInterface{
     }   
 
     ///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
+    
+    /**
+     * Sets volume for all song's reproduction
+     */
+    private void setVolume() {
+        controller.setVolumeButton((double)slVol.getValue() / 100);
+    }
 
     @Override
     public void setVisible(final boolean visible) {
@@ -614,19 +624,6 @@ public class GUI implements ViewInterface{
         for(Component var: comp) {
             var.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         }
-    }
-
-    /**
-     * Set information into a label about all songs in the library and their total time duration in minutes
-     * @param map
-     * @param label
-     */
-    private void setLibraryInfo(JLabel label, Map<String, Integer> map) {
-
-        label.setText("Songs in library: " + map.get("nSongs") + " - Minuti totali: " + map.get("min"));
-        label.setFont(new Font("Dialog", Font.PLAIN, 11));
-        label.setBackground(new Color(20, 20, 150));
-        label.setForeground(new Color(51, 204, 51));
     }
 
     /**
@@ -718,6 +715,7 @@ public class GUI implements ViewInterface{
 
                 controller.addSongInReproductionPlaylist(list.getModel()
                         .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
+                setVolume();
                 button.doClick();
             }
         });
@@ -807,6 +805,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.playPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                setVolume();
                 button.doClick();
             }
         });
