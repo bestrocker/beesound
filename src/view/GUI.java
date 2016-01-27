@@ -471,24 +471,24 @@ public class GUI implements ViewInterface{
                 final JFrame frChoosePlaylist = new JFrame("Create your Playlist");
                 final JPanel pnChoosePlaylist = new JPanel();
                 final JLabel lbChoosePlaylist = new JLabel("Insert playlist name  ");
-                final JTextArea taChoosePlaylist = new JTextArea(1, 10);
+                final JTextField tfChoosePlaylist = new JTextField(10);
                 final JButton btChoosePlaylist = new JButton("ok");
                 btChoosePlaylist.setBackground(new Color(200, 200, 255));
                 btChoosePlaylist.addActionListener(new ActionListener() {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controller.newPlaylistFile(taChoosePlaylist.getText());
+                        controller.newPlaylistFile(tfChoosePlaylist.getText());
                         frChoosePlaylist.dispose();
                     }
                 });
 
                 pnChoosePlaylist.add(lbChoosePlaylist);
-                pnChoosePlaylist.add(taChoosePlaylist);
+                pnChoosePlaylist.add(tfChoosePlaylist);
                 pnChoosePlaylist.add(Box.createRigidArea(new Dimension(5, 0)));
                 pnChoosePlaylist.add(btChoosePlaylist);
                 frChoosePlaylist.add(pnChoosePlaylist);
-                frChoosePlaylist.setSize(400, 40);
+                frChoosePlaylist.setSize(new Dimension(400, 60));
                 frChoosePlaylist.setLocationRelativeTo(frame);
                 frChoosePlaylist.setVisible(true);
             }
