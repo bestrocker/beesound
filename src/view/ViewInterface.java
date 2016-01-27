@@ -18,4 +18,10 @@ public interface ViewInterface {
      * @param visible
      */
     void setVisible(final boolean visible);
+    
+    /**
+     * Set the current song as highlighted in the reproduction list
+     * @param index
+     */
+    public void setHighlighted(int index);
 }
