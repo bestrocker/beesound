@@ -57,9 +57,12 @@ public class GUI implements ViewInterface{
     private String selectedPlaylistName;
     private JSlider seekBar = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
     private Integer deltaColor = 0;
+    private Integer[] infoLibraryArray = new Integer[3];
+    final JLabel lbInfoLibrary = new JLabel("Numero brani + minutaggio: ");
+    final JButton btAllSongs = new JButton("All Songs");
 
     public GUI() {
-        
+
         frame = new JFrame("BeeSound Player");
         final JPanel pnLanding = new JPanel(new BorderLayout());
         frame.setFont(new Font("Trajan Pro", Font.PLAIN, 12));
@@ -71,7 +74,7 @@ public class GUI implements ViewInterface{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);           
         frame.setMinimumSize(new Dimension(200, 100));
         
-        /* RIGHT PANEL FOR IMAGE AND INFO CURRENT SONG */
+        ////////////// RIGHT PANEL FOR IMAGE AND INFO CURRENT SONG ///////////////////
 
         final JPanel pnRight = new JPanel();
         pnRight.setLayout(new BoxLayout(pnRight, BoxLayout.Y_AXIS));
@@ -88,21 +91,19 @@ public class GUI implements ViewInterface{
         pnRight.add(lbImage);     
         pnRight.add(lbInfoCurrent);
 
-        /* CENTER PANEL: LIST SELECTION & INFO LABEL */
+        ////////////// CENTER PANEL: LIST SELECTION & INFO LABEL ////////////////////////
 
         final JPanel pnListView = new JPanel();
         pnListView.setLayout(new BoxLayout(pnListView, BoxLayout.Y_AXIS));
         final JPanel pnInfoLibrary = new JPanel();
         pnInfoLibrary.setMaximumSize(new Dimension(32767, 30));
-        final JLabel lbInfoLibrary = new JLabel("Numero brani + minutaggio: ");
         pnInfoLibrary.setBackground(new Color(100, 100, 255));
-        //setLibraryInfo(lbInfoLibrary, controller.showInfoLibrary());
 
         pnListView.add(scrollPane);
         pnListView.add(pnInfoLibrary);                               
-        pnInfoLibrary.add(lbInfoLibrary);
+        pnInfoLibrary.add(lbInfoLibrary, FlowLayout.LEFT);
 
-        /* SOUTH PANEL: CONTROL PLAYER'S BUTTONS */
+        ////////////// SOUTH PANEL: CONTROL PLAYER'S BUTTONS ////////////////////////
 
         final JPanel pnPlayerButtons = new JPanel(new FlowLayout());        
         final JButton btPlay = new JButton(" ▶ ");
@@ -124,8 +125,6 @@ public class GUI implements ViewInterface{
 
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
-                    //Agent agent = new Agent(seekBar);
-                    //agent.start();
                     playing = true;
                     setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                 }
@@ -208,7 +207,7 @@ public class GUI implements ViewInterface{
                 btLinear.setEnabled(false);
             }
         });
-
+        
         pnPlayerButtons.add(btShuffle);
         pnPlayerButtons.add(Box.createRigidArea(new Dimension()));
         pnPlayerButtons.add(btLinear);
@@ -225,7 +224,6 @@ public class GUI implements ViewInterface{
 
         final JPanel pnLeftButtons = new JPanel(new GridLayout(0, 1, 0, 0));
         pnLeftButtons.setPreferredSize(new Dimension(85, 0));       
-        final JButton btAll = new JButton("All Songs");
         final JButton btAlbum = new JButton("Albums");
         final JButton btArtist = new JButton("Artists");
         final JButton btPlaylist = new JButton("Yuor Playlists");
@@ -234,8 +232,8 @@ public class GUI implements ViewInterface{
         final JButton btReproduction = new JButton("In riproduzione");
         
         //ALL SONGS
-        setLeftButtons(btAll);
-        btAll.addActionListener(new ActionListener() {
+        setLeftButtons(btAllSongs);
+        btAllSongs.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -258,7 +256,7 @@ public class GUI implements ViewInterface{
 
                         if(list.getModel().getSize() > 0) {
 
-                            JPopupMenu menu = buildStandardPopup(btAll, true, false, true, false, true, false, false);
+                            JPopupMenu menu = buildStandardPopup(btAllSongs, true, false, true, false, true, false, false);
                             if(e.isPopupTrigger()) {
 
                                 menu.show(e.getComponent(), e.getX(), e.getY());
@@ -280,8 +278,6 @@ public class GUI implements ViewInterface{
 
                             controller.addSongInReproductionPlaylist(list.getModel()
                                     .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
-                            //Agent agent = new Agent(seek);
-                            //agent.start();
                             playing = true;
                             stopped = false;
                             updatePlayButton(btPlay);
@@ -304,7 +300,8 @@ public class GUI implements ViewInterface{
                 createSelectableList();
             }
         });
-
+        
+        //ARTISTS
         setLeftButtons(btArtist);
         btArtist.addActionListener(new ActionListener() {
 
@@ -338,7 +335,8 @@ public class GUI implements ViewInterface{
                     public void mousePressed(MouseEvent e) {
 
                         if(list.getModel().getSize() > 0) {
-
+                            
+                            //selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
                             JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false, true, false);
                             if(e.isPopupTrigger()) {
 
@@ -359,7 +357,7 @@ public class GUI implements ViewInterface{
 
                         if(e.getClickCount() == 2 && list.getModel().getSize() > 0) {
                             
-                            selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                            //selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
                             System.out.println(list.getModel().getElementAt(list.getMaxSelectionIndex()));
                             list = new JList<>(new Vector<>(controller.showPlaylistSong(list.getModel().getElementAt(list.getMaxSelectionIndex()))));
                             createSelectableList();
@@ -395,8 +393,6 @@ public class GUI implements ViewInterface{
 
                                         controller.addSongInReproductionPlaylist(list.getModel()
                                                 .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
-                                        //Agent agent = new Agent(seek);
-                                        //agent.start();
                                         playing = true;
                                         stopped = false;
                                         updatePlayButton(btPlay);
@@ -476,7 +472,7 @@ public class GUI implements ViewInterface{
             }
         });
 
-        pnLeftButtons.add(btAll);
+        pnLeftButtons.add(btAllSongs);
         pnLeftButtons.add(btAlbum);
         pnLeftButtons.add(btArtist);
         pnLeftButtons.add(btPlaylist);
@@ -502,7 +498,7 @@ public class GUI implements ViewInterface{
                 int returnVal = chooser.showOpenDialog(mnFile);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                     controller.addSong(chooser.getSelectedFile().getAbsolutePath());
-                    btAll.doClick();
+                    btAllSongs.doClick();
                 }
             }
         });
@@ -571,8 +567,8 @@ public class GUI implements ViewInterface{
         });
 
         //ARRAY WITH ALL COMPONENTS
-        final Component[] compArray = new Component[]{mniExit, mniAddToLib, mniCreatePlaylist
-                , mniBeeInfo, mnFile, mnInfo, mnBar, btLinear, btShuffle, btAll, btAlbum, btArtist
+        final Component[] compArray = new Component[]{mniExit, mniAddToLib, mniCreatePlaylist, lbVol
+                , mniBeeInfo, mnFile, mnInfo, mnBar, btLinear, btShuffle, btAllSongs, btAlbum, btArtist
                 , btPlaylist, btGenre, btFavorites, btPrev, btNext, btReproduction, lbInfoLibrary, pnInfoLibrary, lbInfoCurrent};
         setComponentFont(compArray);
         
@@ -603,6 +599,10 @@ public class GUI implements ViewInterface{
     @Override
     public void refreshView() {
         
+        btAllSongs.doClick();
+        controller.showLibraryInfo().toArray(infoLibraryArray);
+        lbInfoLibrary.setText("Total song: " + infoLibraryArray[0] + "          Total time: " + infoLibraryArray[1] + ":"
+                + infoLibraryArray[2] % 60);
     }
 
     /**
@@ -806,7 +806,7 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                //controller.playPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                controller.playPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
                 button.doClick();
             }
         });
@@ -823,7 +823,7 @@ public class GUI implements ViewInterface{
         
         if(controller.showAllPlaylist().isEmpty()) {
             itemAddToPlaylist.setEnabled(false);
-        }       
+        }
         if(addQueue) {
             menu.add(itemAddToReproductionList);
         }
@@ -848,51 +848,5 @@ public class GUI implements ViewInterface{
 
         return menu;
     }
-
-    /**
-     * This class create and start a new thread for running the seekbar media
-     * Seekbar listens and works as a new thread until the song is playing.
-     *
-     */
-    /*private class Agent extends Thread {
-
-        private JSlider seek;
-        private Duration duration;
-        private int totSec;
-
-        public Agent(JSlider seek) {
-
-            duration = (Duration) controller.getCurrentSongInfo().get("Duration"); 
-            this.totSec = (duration.getSec() + duration.getMin() * 60);
-            this.seek = seek;
-            this.seek.setValue(0);                      
-            seek.setMaximum(totSec);                     
-        }
-
-        @Override
-        public void run() {            
-
-            while(seek.getValue() < totSec) {
-
-                try {
-                    SwingUtilities.invokeAndWait(new Runnable() {
-
-                        @Override
-                        public void run() {
-
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            seek.setValue(seek.getValue() + 1);
-                        }
-                    });
-                } catch (InvocationTargetException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }*/
-
+    
 }
