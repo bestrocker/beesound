@@ -19,7 +19,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
     final private BasicController control;
     final private Random rnd = new Random();
     final private  PrintStream out ;
-    final private MpegInfo mp3Info;
+    final private TagInfo mp3Info;
     
     
     /**
@@ -56,7 +56,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
      * Obtain the MpegInfo instance
      * @return 
      */
-    public MpegInfo getMpegInfo(){
+    public TagInfo getMpegInfo(){
         return this.mp3Info;
     }
     

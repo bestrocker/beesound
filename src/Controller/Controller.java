@@ -61,7 +61,7 @@ public class Controller implements ViewObserver {
                 Log.INFO(songPath+ " Added to playlist "+playlist);
             }
         } catch (IOException e) {
-            Log.ERROR("Can't addSongInPlaylist");
+            Log.ERROR("Can't addSongInPlaylist"+e);
             e.printStackTrace();
         }
     }
@@ -89,7 +89,7 @@ public class Controller implements ViewObserver {
                                     .stream()
                                     .forEach(j->this.model.addSongInPlaylist(j.substring(j.lastIndexOf(sep)+1,j.length()-4), plname));
                             } catch (Exception e) {
-                                Log.ERROR("Can't load PLAYLIST to library.");
+                                Log.ERROR("Can't load PLAYLIST to library." +e);
                             }
                          });
         Log.INFO("Playlist succesfully loaded into the library.");
@@ -100,7 +100,7 @@ public class Controller implements ViewObserver {
         if(!this.model.getSongTitles().contains(alternativeTitle)){
             this.model.addSongToLibrary(
                      (info.getTitle().orElse(alternativeTitle)) ,(info.getAlbum().orElse("")) 
-                     ,(info.getArtist().orElse("")) ,(info.getGenre().orElse("")) ,(info.getDurationInMinutes())
+                    ,(info.getArtist().orElse("")) ,(info.getGenre().orElse("")) ,(info.getDurationInMinutes())
                     ,(info.getBitRate()) ,(info.getSize()) ,(songPath) ,(info.getCopyright()) ,(info.getChannels())
                     ,(info.getVersion()),(info.getSamplingRate()),(info.getChannelsMode())
                     );
