@@ -355,11 +355,18 @@ public class Controller implements ViewObserver {
     }
     
     /**
-     * Returns info about amount of songs and total minutes in library
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public List<Integer> showLibraryInfo() {
         return this.model.getLibraryInfo();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> searchSong(String text) {
+        return this.model.fetchSongs(text);
     }
 }
