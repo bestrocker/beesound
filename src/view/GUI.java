@@ -101,6 +101,7 @@ public class GUI implements ViewInterface{
                 JSlider source = (JSlider)e.getSource();
                 seekBar.setValueIsAdjusting(false);
                 seekBar.setValue(source.getValue());
+                controller.setPos(source.getValue());
                 seek((int)source.getValue());
                 System.out.println("MOUSE RILASCIATO");
                 updateProgressBar(PROGRESS_BAR.ACTIVE);
@@ -118,10 +119,6 @@ public class GUI implements ViewInterface{
             }
             @Override
             public void mouseClicked(MouseEvent e) {
-                /*JSlider source = (JSlider)e.getSource();
-                seekBar.setValueIsAdjusting(false);
-                seekBar.setValue((int)source.getValue());
-                seek((int)source.getValue());*/
             }
         });
         
@@ -159,23 +156,14 @@ public class GUI implements ViewInterface{
             public void actionPerformed(ActionEvent e) {
                 if (stopped) {
                     
-                   /* agent.interrupt();
-                    agent.start();*/
-                    
                     if(list.getModel().getSize()==0)return;
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                     playing = true;
-                    
-
-        //            updateProgressBar(PROGRESS_BAR.ACTIVE);
-                    
                     setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                 }
                 else {
                     controller.pauseButton();
-                   /* agent.interrupt();*/
-                 //   updateProgressBar(PROGRESS_BAR.PAUSE);
                     playing = !playing;
                 }
                 stopped = false;
@@ -317,10 +305,6 @@ public class GUI implements ViewInterface{
                             updatePlayButton(btPlay);
                             setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                             System.out.println("MAX: "+seekBar.getMaximum());
-                            /*
-                            agent.interrupt();
-                            agent.start();
-                            */
                             
                         }                        
                     }
@@ -911,13 +895,11 @@ public class GUI implements ViewInterface{
         if(val==PROGRESS_BAR.ACTIVE){
         if(agent!=null){
             agent.setStopped(true);
-          //  agent.interrupt();
         }
         agent = new Agent();
         agent.start();
         } else if (val==PROGRESS_BAR.PAUSE) {
             agent.setStopped(true);
-           // agent.interrupt();
         }
     }
     public enum PROGRESS_BAR{
