@@ -10,9 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,6 +40,7 @@ import java.awt.Font;
 import javax.swing.JMenuItem;
 import java.awt.Component;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -57,16 +60,20 @@ public class GUI implements ViewInterface{
     private boolean stopped = true;
     private String selectedSongName;
     private String selectedPlaylistName;
-    //private JSlider seekBar = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
+    private JSlider seekBar = new JSlider(SwingConstants.HORIZONTAL, 0,100,0);
     private Integer deltaColor = 0;
     private Integer[] infoLibraryArray = new Integer[3];
     final JLabel lbInfoLibrary = new JLabel("Numero brani + minutaggio: ");
     final JButton btAllSongs = new JButton("All Songs");
-    final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
+    final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 50);
     final List searchList = new List();
-
+    private Agent agent = new Agent();
     public GUI() {
-
+        agent.start();
+        
+        this.seekBar.setDoubleBuffered(true);
+        this.seekBar.setSnapToTicks(true);
+        
         frame = new JFrame("BeeSound Player");
         final JPanel pnLanding = new JPanel(new BorderLayout());
         frame.setFont(new Font("Trajan Pro", Font.PLAIN, 12));
@@ -90,6 +97,12 @@ public class GUI implements ViewInterface{
         final JLabel lbInfoCurrent = new JLabel("Info Current");
         lbInfoCurrent.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), (int)(frame.getHeight() * 0.1)));
         lbInfoCurrent.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pnRight.add(this.seekBar);
+        
+        //SeekBar
+        this.seekBar.addChangeListener(e->{
+            seek();
+        });
         
         //pnRight.add(seekBar);
         pnRight.add(lbImage);     
@@ -123,7 +136,11 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (stopped) {                   
+                if (stopped) {
+                    agent.setStopped(false);
+                    agent.awake();
+                    System.out.println("awake signal!!!!");
+                    if(list.getModel().getSize()==0)return;
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                     playing = true;
@@ -132,6 +149,7 @@ public class GUI implements ViewInterface{
                 }
                 else {
                     controller.pauseButton();
+                    agent.setStopped(true);
                     playing = !playing;
                 }
                 stopped = false;
@@ -146,6 +164,7 @@ public class GUI implements ViewInterface{
             public void actionPerformed(ActionEvent e) {
                 controller.stopButton();              
                 stopped = true;
+                
                 playing = false;
                 updatePlayButton(btPlay);
             }
@@ -184,7 +203,7 @@ public class GUI implements ViewInterface{
         });
         
         //SHUFFLE MODE
-        btShuffle.setEnabled(false);;
+        btShuffle.setEnabled(true);
         btShuffle.addActionListener(new ActionListener() {
 
             @Override
@@ -196,7 +215,7 @@ public class GUI implements ViewInterface{
         });
         
         //LINEAR MODE
-        btLinear.setEnabled(true);
+        btLinear.setEnabled(false);
         btLinear.addActionListener(new ActionListener() {
 
             @Override
@@ -269,6 +288,9 @@ public class GUI implements ViewInterface{
                             stopped = false;
                             updatePlayButton(btPlay);
                             setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
+                            agent.setStopped(false);
+                            agent.awake();
+                            
                         }                        
                     }
                 });                
@@ -575,6 +597,10 @@ public class GUI implements ViewInterface{
         controller.setVolumeButton((double)slVol.getValue() / 100);
     }
 
+    private void seek(){
+        controller.skipTo(this.seekBar.getValue());
+    }
+    
     @Override
     public void setVisible(final boolean visible) {        
         this.frame.setVisible(visible);
@@ -607,8 +633,10 @@ public class GUI implements ViewInterface{
      * @param Map
      */
     private void setInfoLabel(JLabel label, Map<String, Object> map) {
-        Duration duration = (Duration)(map.get("Duration"));
-        label.setText(map.get("Title") + " - " + duration.getMin() + ":" + duration.getSec());
+        Duration duration = (Duration)(map.get("duration"));
+        label.setText(map.get("title") + " - " + duration.getMin() + ":" + duration.getSec());
+        this.seekBar.setMaximum((Integer)(this.controller.getCurrentSongInfo().get("size")));
+        this.seekBar.setValue(0);
     }
 
     /**
@@ -814,4 +842,60 @@ public class GUI implements ViewInterface{
         
         return menu;
     }    
+    
+    class Agent extends Thread{
+        private volatile boolean stopped = true;
+        private int tickval;
+        private Object obj = new Object();
+        Semaphore sem = new Semaphore(1);
+        public synchronized void run(){
+           System.out.println("CIAO STRONZO");
+            while(true){
+                while(!stopped){
+                    tickval =(int)(GUI.this.controller.getCurrentSongInfo().get("size"))/100;
+                    System.out.println("POS: "+ controller.getPos());
+                    if(controller.getPos()%tickval==0){
+                        try {
+                            SwingUtilities.invokeAndWait(new Runnable() {
+                                
+                                @Override
+                                public void run() {
+                                    GUI.this.seekBar.setValue(
+                                            controller.getPos()
+                                                );
+                                        System.out.println("aggiornata seekbar");
+                                }
+                            });
+                        } catch (Exception e) {
+                           e.printStackTrace();
+                        }
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                
+               try {
+                   System.out.println("inizio attesa..");
+                   wait();
+                   System.out.println("attesa finita.");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    }
+            }
+        }
+        
+        public synchronized void awake(){
+            
+                notifyAll();
+            
+        }
+        
+        public void setStopped(final boolean value){
+            this.stopped = value;
+        }
+    }
 }

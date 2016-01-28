@@ -53,4 +53,6 @@ public interface AudioControllerInterface {
      * @param b
      */
     public void setReproduceNowBoolean(final boolean b);
+    
+    int getPos();
 }
