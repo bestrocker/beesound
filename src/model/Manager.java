@@ -147,7 +147,7 @@ public interface Manager {
      * Returns a list containing the most listened song titles.
      * @return a list containing the most listened song titles.
      */
-    List<String> getMostListened();
+    Map<String, Integer> getMostListened();
     
     /**
      * Removes the playlist with the specified name from the library.
