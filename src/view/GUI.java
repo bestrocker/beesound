@@ -29,6 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.DefaultListCellRenderer.UIResource;
 import java.awt.Color;
 import javax.swing.JMenuBar;
@@ -51,7 +52,9 @@ public class GUI implements ViewInterface{
     private final JFrame frame;
     private final JScrollPane scrollPane = new JScrollPane();
     private JFileChooser chooser = new JFileChooser(); 
-    private JList<String> list;
+    private JList<String> songList;
+    private JList<Integer> nFavorites;
+    private JList<Object> songInfo;
     private boolean playing = false;
     private boolean stopped = true;
     private String selectedSongName;
@@ -64,6 +67,7 @@ public class GUI implements ViewInterface{
     final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 50);
     final List searchList = new List();
     private Agent agent;
+    
     public GUI() {
         
         seekBar.setDoubleBuffered(true);
@@ -126,12 +130,12 @@ public class GUI implements ViewInterface{
         pnRight.add(lbInfoCurrent);
 
         ////////////// CENTER PANEL: LIST SELECTION & INFO LABEL ////////////////////////
-
+        
         final JPanel pnListView = new JPanel();
         pnListView.setLayout(new BoxLayout(pnListView, BoxLayout.Y_AXIS));
         final JPanel pnInfoLibrary = new JPanel();
         pnInfoLibrary.setMaximumSize(new Dimension(32767, 30));
-        pnInfoLibrary.setBackground(new Color(100, 100, 255));
+        pnInfoLibrary.setBackground(new Color(100, 100, 255));                
 
         pnListView.add(scrollPane);
         pnListView.add(pnInfoLibrary);                               
@@ -158,9 +162,9 @@ public class GUI implements ViewInterface{
                    /* agent.interrupt();
                     agent.start();*/
                     
-                    if(list.getModel().getSize()==0)return;
-                    controller.addSongInReproductionPlaylist(list.getModel()
-                            .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
+                    if(songList.getModel().getSize()==0)return;
+                    controller.addSongInReproductionPlaylist(songList.getModel()
+                            .getElementAt(songList.getMaxSelectionIndex()), REPRODUCE.NOW);
                     playing = true;
                     setVolume();
 
@@ -279,22 +283,22 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                list = new JList<>(new Vector<>(controller.showAllSong()));
-                if(list.getModel().getSize() > 0) {
-                    list.setSelectedIndex(0);
-                    selectedSongName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                songList = new JList<>(new Vector<>(controller.showAllSong()));
+                if(songList.getModel().getSize() > 0) {
+                    songList.setSelectedIndex(0);
+                    selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
                 }
                 createSelectableList();
-                list.addMouseListener(new MouseListener() {
+                songList.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseReleased(MouseEvent e) {}                    
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if(list.getModel().getSize() > 0) {
-                            JPopupMenu menu = buildStandardPopup(btAllSongs, true, false, true, false, true, false, false);
+                        if(songList.getModel().getSize() > 0) {
+                            JPopupMenu menu = buildStandardPopup(btAllSongs, true, false, true, false, true, false, false, true);
                             if(e.isPopupTrigger()) {
                                 menu.show(e.getComponent(), e.getX(), e.getY());
-                                selectedSongName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                                selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
                             }
                         }
                     }
@@ -304,9 +308,9 @@ public class GUI implements ViewInterface{
                     public void mouseEntered(MouseEvent e) {}
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if(e.getClickCount() == 2 && list.getModel().getSize() > 0) {
-                            controller.addSongInReproductionPlaylist(list.getModel()
-                                    .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
+                        if(e.getClickCount() == 2 && songList.getModel().getSize() > 0) {
+                            controller.addSongInReproductionPlaylist(songList.getModel()
+                                    .getElementAt(songList.getMaxSelectionIndex()), REPRODUCE.NOW);
                             setVolume();
                             playing = true;
                             stopped = false;
@@ -331,7 +335,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                list = new JList<>(new Vector<>(controller.showAllAlbum()));
+                songList = new JList<>(new Vector<>(controller.showAllAlbum()));
                 createSelectableList();
             }
         });
@@ -342,7 +346,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                list = new JList<>(new Vector<>(controller.showAllArtist()));
+                songList = new JList<>(new Vector<>(controller.showAllArtist()));
                 createSelectableList();
             }
         });
@@ -353,27 +357,25 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                list = new JList<>(new Vector<>(controller.showAllPlaylist()));
-                if(list.getModel().getSize() > 0) {
-                    list.setSelectedIndex(0);
+                songList = new JList<>(new Vector<>(controller.showAllPlaylist()));
+                if(songList.getModel().getSize() > 0) {
+                    songList.setSelectedIndex(0);
                 }
                 createSelectableList();
-                list.addMouseListener(new MouseListener() {
+                songList.addMouseListener(new MouseListener() {
 
                     @Override
                     public void mouseReleased(MouseEvent e) {}
                     @Override
                     public void mousePressed(MouseEvent e) {
 
-                        if(list.getModel().getSize() > 0) {
-                            
-                            //selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
-                            JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false, true, false);
-                            if(e.isPopupTrigger()) {
+                        if(songList.getModel().getSize() > 0) {
 
-                                menu.show(e.getComponent(), e.getX(), e.getY());
-                                selectedSongName = list.getModel().getElementAt(list.getMaxSelectionIndex());
-                            }
+                            //selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
+                            JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false, true, false, false);
+                            menu.show(e.getComponent(), e.getX(), e.getY());
+                            selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
+
                         }
                     }
                     @Override
@@ -382,20 +384,20 @@ public class GUI implements ViewInterface{
                     public void mouseEntered(MouseEvent e) {}
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if(e.getClickCount() == 2 && list.getModel().getSize() > 0) {                        
-                            selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
-                            System.out.println(list.getModel().getElementAt(list.getMaxSelectionIndex()));
-                            list = new JList<>(new Vector<>(controller.showPlaylistSong(list.getModel().getElementAt(list.getMaxSelectionIndex()))));
+                        if(e.getClickCount() == 2 && songList.getModel().getSize() > 0) {                        
+                            selectedPlaylistName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
+                            System.out.println(songList.getModel().getElementAt(songList.getMaxSelectionIndex()));
+                            songList = new JList<>(new Vector<>(controller.showPlaylistSong(songList.getModel().getElementAt(songList.getMaxSelectionIndex()))));
                             createSelectableList();
-                            list.addMouseListener(new MouseListener() {
+                            songList.addMouseListener(new MouseListener() {
 
                                 @Override
                                 public void mouseReleased(MouseEvent e) {}
                                 
                                 @Override
                                 public void mousePressed(MouseEvent e) {
-                                    if(list.getModel().getSize() > 0) {
-                                        JPopupMenu menu = buildStandardPopup(btPlaylist, true, false, true, false, false, false, true);
+                                    if(songList.getModel().getSize() > 0) {
+                                        JPopupMenu menu = buildStandardPopup(btPlaylist, true, false, true, false, false, false, true, true);
                                         if(e.isPopupTrigger()) {
                                             menu.show(e.getComponent(), e.getX(), e.getY());
                                         }
@@ -407,9 +409,9 @@ public class GUI implements ViewInterface{
                                 public void mouseEntered(MouseEvent e) {}
                                 @Override
                                 public void mouseClicked(MouseEvent e) {
-                                    if(e.getClickCount() == 2 && list.getModel().getSize() > 0) {
-                                        controller.addSongInReproductionPlaylist(list.getModel()
-                                                .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
+                                    if(e.getClickCount() == 2 && songList.getModel().getSize() > 0) {
+                                        controller.addSongInReproductionPlaylist(songList.getModel()
+                                                .getElementAt(songList.getMaxSelectionIndex()), REPRODUCE.NOW);
                                         setVolume();
                                         playing = true;
                                         stopped = false;
@@ -432,7 +434,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                list = new JList<>(new Vector<>(controller.showAllGenre()));
+                songList = new JList<>(new Vector<>(controller.showAllGenre()));
                 createSelectableList();
             }
         });
@@ -443,8 +445,9 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                list = new JList<>(new Vector<>(controller.showFavorites()));
-                createSelectableList();
+                songList = new JList<>(new Vector<>(controller.showFavorites().keySet()));
+                nFavorites = new JList<>(new Vector<>(controller.showFavorites().values()));
+                createFavoritesList();
             }
         });
         
@@ -453,15 +456,15 @@ public class GUI implements ViewInterface{
         btReproduction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                list = new JList<>(new Vector<>(controller.showReproductionPlaylist()));
-                list.addMouseListener(new MouseListener() {
+                songList = new JList<>(new Vector<>(controller.showReproductionPlaylist()));
+                songList.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseReleased(MouseEvent e) {}
                     
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if(list.getModel().getSize() > 0) {
-                            JPopupMenu menu = buildStandardPopup(btReproduction, false, true, false, false, false, false, false);
+                        if(songList.getModel().getSize() > 0) {
+                            JPopupMenu menu = buildStandardPopup(btReproduction, false, true, false, false, false, false, false, false);
                             if(e.isPopupTrigger()) {
                                 menu.show(e.getComponent(), e.getX(), e.getY());
                             }
@@ -585,7 +588,7 @@ public class GUI implements ViewInterface{
             public void actionPerformed(ActionEvent e) {
                 System.out.println(controller.searchSong(tfSearchBar.getText()).toString());
                 //list = new JList<>(new Vector<>(controller.showAllPlaylist()));
-                list = new JList<>(new Vector<>(controller.searchSong(tfSearchBar.getText())));
+                songList = new JList<>(new Vector<>(controller.searchSong(tfSearchBar.getText())));
                 createSelectableList();
             }
         });
@@ -687,14 +690,20 @@ public class GUI implements ViewInterface{
      * Create a selectable list to be shown into GUI
      */
     private void createSelectableList() {
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setFont(new Font("Droid Sans", Font.PLAIN, 11));
-        list.setSelectionInterval(0, 0);
-        scrollPane.setViewportView(list);
+        songList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        songList.setFont(new Font("Droid Sans", Font.PLAIN, 11));
+        songList.setSelectionInterval(0, 0);
+        scrollPane.setViewportView(songList);
+    }
+    
+    private void createFavoritesList() {
+        scrollPane.setViewportView(songList); 
+        scrollPane.setViewportView(nFavorites);
+
     }
     
     public void setHighlighted(int index) {
-        list.setSelectionInterval(index, index);
+        songList.setSelectionInterval(index, index);
     }
 
     /**
@@ -702,7 +711,7 @@ public class GUI implements ViewInterface{
      * @return
      */
     public int getSelectedIndex() {
-        return this.list.getMaxSelectionIndex();
+        return this.songList.getMaxSelectionIndex();
     }
 
     /**
@@ -732,7 +741,7 @@ public class GUI implements ViewInterface{
      * @return JPopupMenu
      */
     private JPopupMenu buildStandardPopup(JButton button, boolean addQueue, boolean remQueue, boolean rem
-            , boolean remPlay, boolean addPlay, boolean playPlay, boolean remFromPlay) {
+            , boolean remPlay, boolean addPlay, boolean playPlay, boolean remFromPlay, boolean songDet) {
 
         final JPopupMenu menu = new JPopupMenu();
         final JMenuItem itemAddToReproductionList = new JMenuItem("Add to reproduction Playlist");
@@ -741,8 +750,8 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                controller.addSongInReproductionPlaylist(list.getModel()
-                        .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.AFTER);
+                controller.addSongInReproductionPlaylist(songList.getModel()
+                        .getElementAt(songList.getMaxSelectionIndex()), REPRODUCE.AFTER);
                 setVolume();
                 button.doClick();
             }
@@ -753,8 +762,8 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.removeSongFromQueue(list.getModel()
-                        .getElementAt(list.getMaxSelectionIndex()));              
+                controller.removeSongFromQueue(songList.getModel()
+                        .getElementAt(songList.getMaxSelectionIndex()));              
                 button.doClick();
             }
 
@@ -765,7 +774,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.removeSong(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                controller.removeSong(songList.getModel().getElementAt(songList.getMaxSelectionIndex()));
                 button.doClick();
             }
         });
@@ -775,7 +784,7 @@ public class GUI implements ViewInterface{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.removePlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                controller.removePlaylist(songList.getModel().getElementAt(songList.getMaxSelectionIndex()));
                 button.doClick();
             }
         });
@@ -786,10 +795,10 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                list = new JList<>(new Vector<>(controller.showAllPlaylist()));
-                String[] array = new String[list.getModel().getSize()];
+                songList = new JList<>(new Vector<>(controller.showAllPlaylist()));
+                String[] array = new String[songList.getModel().getSize()];
                 for(int i = 0; i < array.length; i++ ) {
-                    array[i] = (String)(list.getModel().getElementAt(i));
+                    array[i] = (String)(songList.getModel().getElementAt(i));
                 }
 
                 final JFrame frameChoosePlaylist = new JFrame("Your Playlist");
@@ -826,7 +835,7 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.playPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()));
+                controller.playPlaylist(songList.getModel().getElementAt(songList.getMaxSelectionIndex()));
                 setVolume();
                 button.doClick();
             }
@@ -837,9 +846,28 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.removeSongFromPlaylist(list.getModel().getElementAt(list.getMaxSelectionIndex()), selectedPlaylistName);
+                controller.removeSongFromPlaylist(songList.getModel().getElementAt(songList.getMaxSelectionIndex()), selectedPlaylistName);
                 button.doClick();
             }
+        });
+        
+        final JMenuItem itemSongInfo = new JMenuItem("Show song info");
+        itemSongInfo.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                final JFrame frSongInfo = new JFrame("Song details ");
+                final JPanel pnSongInfo = new JPanel(new GridLayout(controller.showSongInfo(0).size(), 0, 0, 1));
+                System.out.println(controller.showSongInfo(0).size());
+                for (Map.Entry<String, Object> entry : controller.showSongInfo(songList.getSelectedIndex()).entrySet()) {
+                    pnSongInfo.add(new JTextField(entry.getKey() + ": " + entry.getValue()));
+                }
+                frSongInfo.add(pnSongInfo);
+                frSongInfo.setSize(500, 320);
+                frSongInfo.setResizable(false);
+                frSongInfo.setLocationRelativeTo(frame);
+                frSongInfo.setVisible(true);
+            } 
         });
         
         if(controller.showAllPlaylist().isEmpty()) {
@@ -865,6 +893,9 @@ public class GUI implements ViewInterface{
         }
         if(remFromPlay) {
             menu.add(itemRemFromPlaylist);
+        }
+        if(songDet) {
+            menu.add(itemSongInfo);
         }
         
         return menu;
