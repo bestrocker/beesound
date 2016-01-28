@@ -166,7 +166,6 @@ public class GUI implements ViewInterface{
                 }
                 else {
                     controller.pauseButton();
-                   /* agent.interrupt();*/
                     updateProgressBar(PROGRESS_BAR.PAUSE);
                     playing = !playing;
                 }
@@ -279,7 +278,7 @@ public class GUI implements ViewInterface{
                     selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
                 }
                 createSelectableList();
-                //toHighlight();
+                toHighlight();
                 songList.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseReleased(MouseEvent e) {}                    
@@ -462,7 +461,7 @@ public class GUI implements ViewInterface{
 
                 });                
                 createSelectableList();
-                //toHighlight();
+                toHighlight();
             }
         });
 
@@ -565,10 +564,10 @@ public class GUI implements ViewInterface{
             public void actionPerformed(ActionEvent e) {
 
                 final JFrame frBeeInfo = new JFrame("Beesound members");
-                final JTextArea taBeeInfo = new JTextArea("\nThis Program has been realized by: \n"
-                        + "\nTiziano De Cristofaro : model\n"
-                        + "Carlo Alberto Scola: controller\n"
-                        + "Gianluca Cincinelli: view\n");
+                final JTextArea taBeeInfo = new JTextArea("\n This Program has been realized by: \n"
+                        + "\n Tiziano De Cristofaro : model\n"
+                        + " Carlo Alberto Scola: controller\n"
+                        + " Gianluca Cincinelli: view\n");
                 taBeeInfo.setForeground(new Color(20, 40, 150));
                 taBeeInfo.setEditable(false);
                 taBeeInfo.setLineWrap(true);
@@ -727,7 +726,7 @@ public class GUI implements ViewInterface{
      * Create a selectable list to be shown into GUI
      */
     private void createSelectableList() {
-        songList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        songList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         songList.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         songList.setSelectionInterval(0, 0);
         scrollPane.setViewportView(songList);
@@ -736,16 +735,16 @@ public class GUI implements ViewInterface{
     /**
      * SHow favorite songs list
      */
-   /* private void createFavoritesList() {
+    private void createFavoritesList() {
         scrollPane.setViewportView(songList); 
         scrollPane.setViewportView(nFavorites);
 
-    }*/
+    }
     
     /**
      * Check for the current song to highlight
      */
-    /*private void toHighlight() {
+    private void toHighlight() {
         if (stopped) {
             return;
         }
@@ -757,7 +756,7 @@ public class GUI implements ViewInterface{
             }            
         }
     }
-    */
+    
     /**
      * Highlight current song
      */
