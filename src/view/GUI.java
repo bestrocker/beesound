@@ -53,7 +53,6 @@ public class GUI implements ViewInterface{
     private JFileChooser chooser = new JFileChooser(); 
     private JList<String> songList;
     private JList<Integer> nFavorites;
-    private JList<Object> songInfo;
     private boolean playing = false;
     private boolean stopped = true;
     private String selectedSongName;
@@ -157,18 +156,12 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (stopped) {
-                    
-                   /* agent.interrupt();
-                    agent.start();*/
-                    
                     if(songList.getModel().getSize()==0)return;
                     controller.addSongInReproductionPlaylist(songList.getModel()
                             .getElementAt(songList.getMaxSelectionIndex()), REPRODUCE.NOW);
                     playing = true;
                     setVolume();
-
-                    updateProgressBar(PROGRESS_BAR.ACTIVE);
-                    
+                    updateProgressBar(PROGRESS_BAR.ACTIVE);                  
                     setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                 }
                 else {
@@ -188,11 +181,9 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.stopButton();              
-                stopped = true;
-                
+                stopped = true;               
                 playing = false;
-                updatePlayButton(btPlay);
-                
+                updatePlayButton(btPlay);               
                 updateProgressBar(PROGRESS_BAR.PAUSE);
             }
         });
@@ -288,6 +279,7 @@ public class GUI implements ViewInterface{
                     selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
                 }
                 createSelectableList();
+                //toHighlight();
                 songList.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseReleased(MouseEvent e) {}                    
@@ -438,7 +430,7 @@ public class GUI implements ViewInterface{
             public void actionPerformed(ActionEvent e) {
                 songList = new JList<>(new Vector<>(controller.showFavorites().keySet()));
                 nFavorites = new JList<>(new Vector<>(controller.showFavorites().values()));
-                createFavoritesList();
+                //createFavoritesList();
             }
         });
         
@@ -470,6 +462,7 @@ public class GUI implements ViewInterface{
 
                 });                
                 createSelectableList();
+                //toHighlight();
             }
         });
 
@@ -684,7 +677,7 @@ public class GUI implements ViewInterface{
      * Refresh all components
      */
     @Override
-    public void refreshView() {      
+    public void refreshView() {
         btAllSongs.doClick();
         controller.showLibraryInfo().toArray(infoLibraryArray);
         lbInfoLibrary.setText("Total song: " + infoLibraryArray[0] + "          Total time: " + infoLibraryArray[1] + ":"
@@ -740,13 +733,35 @@ public class GUI implements ViewInterface{
         scrollPane.setViewportView(songList);
     }
     
-    private void createFavoritesList() {
+    /**
+     * SHow favorite songs list
+     */
+   /* private void createFavoritesList() {
         scrollPane.setViewportView(songList); 
         scrollPane.setViewportView(nFavorites);
 
-    }
+    }*/
     
-    public void setHighlighted(int index) {
+    /**
+     * Check for the current song to highlight
+     */
+    /*private void toHighlight() {
+        if (stopped) {
+            return;
+        }
+        final String songTitle = controller.getCurrentSongInfo().get("title").toString();
+        for (int i = 0; i < songList.getModel().getSize(); i++) {
+            if (songTitle.equals(songList.getModel().getElementAt(i))) {
+                setHighlighted(i);
+                //refreshView();
+            }            
+        }
+    }
+    */
+    /**
+     * Highlight current song
+     */
+    private void setHighlighted(int index) {
         songList.setSelectionInterval(index, index);
     }
 
