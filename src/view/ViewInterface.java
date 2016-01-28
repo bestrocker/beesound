@@ -1,5 +1,7 @@
 package view;
 
+import view.GUI.PROGRESS_BAR;
+
 public interface ViewInterface {
 	
     /**
@@ -24,4 +26,9 @@ public interface ViewInterface {
      * @param index
      */
     public void setHighlighted(int index);
+    
+    /**
+     * Tell the View to refresh and reinitialize the progress bar.
+     */
+    void updateProgressBar(PROGRESS_BAR val);
 }
