@@ -192,4 +192,5 @@ public interface ViewObserver {
     int getPos();
     
     Map<String, Object> showSongInfo(int index);
+
 }
