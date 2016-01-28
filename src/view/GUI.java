@@ -490,17 +490,36 @@ public class GUI implements ViewInterface{
         final JMenuItem mniAddToLib = new JMenuItem("Add file to Library");
         final JMenuItem mniCreatePlaylist = new JMenuItem("Create new Playlist");
         final JMenuItem mniExit = new JMenuItem("Exit Program");
+        final JMenuItem mniNewLib = new JMenuItem("New library");
         final JMenuItem mniBeeInfo = new JMenuItem("Info Beesound");
         final JTextField tfSearchBar = new JTextField("search", 5);
+
+        //CREATE NEW LIBRARY
+        mniNewLib.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
+                int returnVal = chooser.showSaveDialog(null);
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    controller.newLibrary(chooser.getCurrentDirectory().getAbsolutePath());
+                    //System.out.println(chooser.getSelectedFile().getAbsolutePath());
+                    refreshView();
+                }
+            }               
+        });
         
         //ADD MP3 LIBRARY
         mniAddToLib.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                final JFileChooser chooser = new JFileChooser();
                 int returnVal = chooser.showOpenDialog(mnFile);
+                chooser.setAcceptAllFileFilterUsed(false);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                     controller.addSong(chooser.getSelectedFile().getAbsolutePath());
-                    btAllSongs.doClick();
+                    refreshView();
                 }
             }
         });
@@ -618,13 +637,14 @@ public class GUI implements ViewInterface{
         });
 
         //ARRAY WITH ALL COMPONENTS
-        final Component[] compArray = new Component[]{mniExit, mniAddToLib, mniCreatePlaylist, lbVol, btSearch
+        final Component[] compArray = new Component[]{mniExit, mniAddToLib, mniCreatePlaylist, lbVol, btSearch, mniNewLib
                 , mniBeeInfo, mnFile, mnInfo, mnBar, btLinear, btShuffle, btAllSongs, btAlbum, btArtist
                 , btPlaylist, btGenre, btFavorites, btPrev, btNext, btReproduction, lbInfoLibrary, pnInfoLibrary, lbInfoCurrent};
         setComponentFont(compArray);
         
         mnFile.add(mniAddToLib);
         mnFile.add(mniCreatePlaylist);
+        mnFile.add(mniNewLib);
         mnFile.add(mniExit);
         mnInfo.add(mniBeeInfo);
         mnBar.add(mnFile);
