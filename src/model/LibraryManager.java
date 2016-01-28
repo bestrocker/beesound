@@ -394,13 +394,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
                 list.add(s);
             }
         }        
-        list.sort(new Comparator<Song>() {
-
-            @Override
-            public int compare(Song o1, Song o2) {
-                return o2.getReproductionsCounter() - o1.getReproductionsCounter();
-            }
-        });        
+        list.sort((j,k)->k.getReproductionsCounter()-j.getReproductionsCounter());        
         Map<String, Integer> map = new HashMap<>();
         list.forEach(x -> map.put(x.getTitle(), x.getReproductionsCounter()));       
         return  map;       
