@@ -379,7 +379,7 @@ public class Controller implements ViewObserver {
         return this.audiocontrol.getPos();
     }
     
-    public Map<String, Object> showSongInfo() {
-        return this.model.getSongInfo();
+    public Map<String, Object> showSongInfo(int index) {
+        return this.model.getSongInfo(index);
     }
 }
