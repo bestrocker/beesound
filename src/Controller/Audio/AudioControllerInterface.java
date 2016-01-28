@@ -54,5 +54,15 @@ public interface AudioControllerInterface {
      */
     public void setReproduceNowBoolean(final boolean b);
     
+    /**
+     * Return the current position of the song.
+     * @return
+     */
     int getPos();
+    
+    /**
+     * Return if the player is paused.
+     * @return
+     */
+    public boolean isPaused();
 }

@@ -94,8 +94,12 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
     @Override
     public void seekPlayer(final long nbytes){
         try {
+            togglePause();
+            Thread.sleep(10);
             this.control.seek(nbytes);
-        } catch (BasicPlayerException e) {
+            Thread.sleep(10);
+            togglePause();
+        } catch (Exception e) {
             Log.ERROR("Error seeking song" + e);
         }
     }
@@ -239,7 +243,8 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
             display("opened : "+properties.toString());             
     }
     
-    int position;
+    private int position;
+    Object obj = new Object();
     /*
      * @SuppressWarnig due to the native Library implementation(non-Javadoc)
      * @see javazoom.jlgui.basicplayer.BasicPlayerListener#progress(int, long, byte[], java.util.Map)
@@ -248,7 +253,9 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
     @SuppressWarnings("rawtypes")
     public void progress(final int bytesread,final long microseconds,
             final byte[] pcmdata,final Map properties) {
-       position = Long.valueOf((long)(properties.get("mp3.position.byte"))).intValue();
+       synchronized(obj){
+        position = Long.valueOf((long)(properties.get("mp3.position.byte"))).intValue();
+       }
        //display(""+position);
            //display("progress: "+ properties.get("mp3.position.byte"));
            // display("progress : "+properties.toString());
@@ -268,8 +275,19 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
         display("setController : "+controller);
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isPaused(){
+        return this.paused;
+    }
     
-    public int getPos(){
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized int getPos(){
         return this.position;
     }
 }
