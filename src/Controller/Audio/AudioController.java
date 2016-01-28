@@ -77,11 +77,13 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
                 this.paused = true;
                 
             } else {
+                this.control.seek(this.getPos());
+                Thread.sleep(5); // seek at same position and sleep(1) needed because of audio noise.
                 this.control.resume();
                 Log.INFO("Song resumed.");
                 this.paused = false;
             }
-        } catch (BasicPlayerException e){
+        } catch (BasicPlayerException | InterruptedException e){
             e.printStackTrace();
             Log.ERROR("impossible toggle pause" + e);
         }
@@ -94,11 +96,7 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
     @Override
     public void seekPlayer(final long nbytes){
         try {
-            togglePause();
-            Thread.sleep(10);
             this.control.seek(nbytes);
-            Thread.sleep(10);
-            togglePause();
         } catch (Exception e) {
             Log.ERROR("Error seeking song" + e);
         }
@@ -256,8 +254,6 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
        synchronized(obj){
         position = Long.valueOf((long)(properties.get("mp3.position.byte"))).intValue();
        }
-       //display(""+position);
-           //display("progress: "+ properties.get("mp3.position.byte"));
            // display("progress : "+properties.toString());
     }
     
@@ -290,4 +286,13 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
     public synchronized int getPos(){
         return this.position;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void setPos(final int pos){
+        this.position = pos;
+    }
+    
 }

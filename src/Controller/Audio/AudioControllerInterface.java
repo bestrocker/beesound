@@ -61,6 +61,13 @@ public interface AudioControllerInterface {
     int getPos();
     
     /**
+     * Set the current position.
+     * @param pos
+     * @return
+     */
+    void setPos(final int pos);
+    
+    /**
      * Return if the player is paused.
      * @return
      */

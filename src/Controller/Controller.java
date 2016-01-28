@@ -383,4 +383,8 @@ public class Controller implements ViewObserver {
     public int getPos(){
         return this.audiocontrol.getPos();
     }
+    
+    public void setPos(final int n){
+        this.audiocontrol.setPos(n);
+    }
 }
