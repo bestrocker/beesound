@@ -374,11 +374,11 @@ public class Controller implements ViewObserver {
     public List<String> searchSong(String text) {
         return this.model.fetchSongs(text);
     }
-   
+    @Override
     public int getPos(){
         return this.audiocontrol.getPos();
     }
-    
+    @Override
     public Map<String, Object> showSongInfo(int index) {
         return this.model.getSongInfo(index);
     }
