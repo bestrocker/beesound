@@ -29,7 +29,6 @@ import javax.swing.JTextField;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.DefaultListCellRenderer.UIResource;
 import java.awt.Color;
 import javax.swing.JMenuBar;
@@ -316,12 +315,7 @@ public class GUI implements ViewInterface{
                             stopped = false;
                             updatePlayButton(btPlay);
                             setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
-                            System.out.println("MAX: "+seekBar.getMaximum());
-                            /*
-                            agent.interrupt();
-                            agent.start();
-                            */
-                            
+                            System.out.println("MAX: "+seekBar.getMaximum());    
                         }                        
                     }
                 });                
@@ -370,12 +364,9 @@ public class GUI implements ViewInterface{
                     public void mousePressed(MouseEvent e) {
 
                         if(songList.getModel().getSize() > 0) {
-
-                            //selectedPlaylistName = list.getModel().getElementAt(list.getMaxSelectionIndex());
                             JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false, true, false, false);
                             menu.show(e.getComponent(), e.getX(), e.getY());
                             selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
-
                         }
                     }
                     @Override
@@ -397,7 +388,7 @@ public class GUI implements ViewInterface{
                                 @Override
                                 public void mousePressed(MouseEvent e) {
                                     if(songList.getModel().getSize() > 0) {
-                                        JPopupMenu menu = buildStandardPopup(btPlaylist, true, false, true, false, false, false, true, true);
+                                        JPopupMenu menu = buildStandardPopup(btPlaylist, true, false, false, false, false, false, true, true);
                                         if(e.isPopupTrigger()) {
                                             menu.show(e.getComponent(), e.getX(), e.getY());
                                         }
@@ -586,10 +577,43 @@ public class GUI implements ViewInterface{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(controller.searchSong(tfSearchBar.getText()).toString());
-                //list = new JList<>(new Vector<>(controller.showAllPlaylist()));
-                songList = new JList<>(new Vector<>(controller.searchSong(tfSearchBar.getText())));
+                songList = new JList<>(new Vector<>(controller.searchSong(tfSearchBar.getText())));                
+                if(songList.getModel().getSize() > 0) {
+                    songList.setSelectedIndex(0);
+                    selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
+                }
                 createSelectableList();
+                songList.addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseReleased(MouseEvent e) {}                    
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        if(songList.getModel().getSize() > 0) {
+                            JPopupMenu menu = buildStandardPopup(btAllSongs, true, false, true, false, true, false, false, true);
+                            if(e.isPopupTrigger()) {
+                                menu.show(e.getComponent(), e.getX(), e.getY());
+                                selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
+                            }
+                        }
+                    }
+                    @Override
+                    public void mouseExited(MouseEvent e) {}
+                    @Override
+                    public void mouseEntered(MouseEvent e) {}
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if(e.getClickCount() == 2 && songList.getModel().getSize() > 0) {
+                            controller.addSongInReproductionPlaylist(songList.getModel()
+                                    .getElementAt(songList.getMaxSelectionIndex()), REPRODUCE.NOW);
+                            setVolume();
+                            playing = true;
+                            stopped = false;
+                            updatePlayButton(btPlay);
+                            setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
+                        }                        
+                    }
+                });                
+
             }
         });
 
@@ -860,7 +884,7 @@ public class GUI implements ViewInterface{
                 final JPanel pnSongInfo = new JPanel(new GridLayout(controller.showSongInfo(0).size(), 0, 0, 1));
                 System.out.println(controller.showSongInfo(0).size());
                 for (Map.Entry<String, Object> entry : controller.showSongInfo(songList.getSelectedIndex()).entrySet()) {
-                    pnSongInfo.add(new JTextField(entry.getKey() + ": " + entry.getValue()));
+                    pnSongInfo.add(new JTextField(" " + entry.getKey() + ": " + entry.getValue()));
                 }
                 frSongInfo.add(pnSongInfo);
                 frSongInfo.setSize(500, 320);
