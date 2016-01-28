@@ -326,7 +326,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public List<String> showFavorites() {
+    public Map<String, Integer> showFavorites() {
         return this.model.getMostListened();
     }
 
@@ -377,5 +377,9 @@ public class Controller implements ViewObserver {
    
     public int getPos(){
         return this.audiocontrol.getPos();
+    }
+    
+    public Map<String, Object> showSongInfo() {
+        return this.model.getSongInfo();
     }
 }
