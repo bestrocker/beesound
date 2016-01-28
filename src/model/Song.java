@@ -1,5 +1,8 @@
 package model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import Controller.Audio.MpegInfo.Duration;
 
 /**
@@ -297,4 +300,24 @@ public class Song {
     public void incrementCounter() {
         this.reproductionsCounter++;
     }
+    
+    public Map<String, Object> getInfo() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", this.title);
+        map.put("album", this.album);
+        map.put("artist", this.artist);
+        map.put("genre", this.genre);
+        map.put("duration", this.duration.getMin() + ":" + this.duration.getSec());
+        map.put("bitrate", this.bitRate);
+        map.put("reproductions_counter", this.reproductionsCounter);
+        map.put("size", this.size);
+        map.put("path", this.path);
+        map.put("copyright", this.copyright);
+        map.put("channel", this.channel);
+        map.put("version", this.version);
+        map.put("rate", this.rate);
+        map.put("channels_mode", this.channelsMode);      
+        
+        return map;
+    }   
 }
