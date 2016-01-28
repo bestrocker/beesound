@@ -13,6 +13,7 @@ import static Controller.Files.FileController.*;
 import Controller.Files.Log;
 import Controller.Files.SystemManager;
 import model.Manager;
+import view.GUI.PROGRESS_BAR;
 import view.ViewInterface;
 import view.ViewObserver;
 
@@ -140,6 +141,7 @@ public class Controller implements ViewObserver {
     @Override
     public void playButton() {
         this.audiocontrol.playPlayer();
+      //  this.view.updateProgressBar(PROGRESS_BAR.ACTIVE);
     }
     
     /**
@@ -148,7 +150,7 @@ public class Controller implements ViewObserver {
     @Override
     public void pauseButton() {
         this.audiocontrol.togglePause();
-        
+        //this.view.updateProgressBar(PROGRESS_BAR.PAUSE);
     }
     
     /**
@@ -157,7 +159,7 @@ public class Controller implements ViewObserver {
     @Override
     public void stopButton() {
        this.audiocontrol.stopPlayer();
-        
+      // this.view.updateProgressBar(PROGRESS_BAR.PAUSE);
     }
     
     /**
@@ -186,6 +188,7 @@ public class Controller implements ViewObserver {
         if(when.getVal()){
             this.audiocontrol.setReproduceNowBoolean(true);
             this.audiocontrol.playPlayer();
+        //    this.view.updateProgressBar(PROGRESS_BAR.ACTIVE);
         }
     }
     
@@ -253,6 +256,7 @@ public class Controller implements ViewObserver {
     @Override
     public void nextTrack() {
         this.audiocontrol.nextPlayer();
+     //   this.view.updateProgressBar(PROGRESS_BAR.ACTIVE);
     }
 
     /**
@@ -261,6 +265,7 @@ public class Controller implements ViewObserver {
     @Override
     public void prevTrack() {
         this.audiocontrol.prevPlayer();
+    //    this.view.updateProgressBar(PROGRESS_BAR.ACTIVE);
     }
     
     /**
