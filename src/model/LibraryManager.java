@@ -426,4 +426,8 @@ public final class LibraryManager implements Manager{   // this class is impleme
     public void removeSongFromPlaylist(String songTitle, String playlistName) {
         getPlaylist(playlistName).removeSong(getSong(songTitle));        
     }
+    
+    public Map<String, Object> getSongInfo(int index) {
+        return this.songList.get(index).getInfo();       
+    }    
 }

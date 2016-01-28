@@ -173,4 +173,10 @@ public interface Manager {
      * @param playlistName - the name of the playlist from which the song is removed.
      */
     void removeSongFromPlaylist(String songTitle, String playlistName);
+    
+    /**
+     * Returns a map containing all the information
+     * @return
+     */
+    Map<String, Object> getSongInfo(int index);    
 }
