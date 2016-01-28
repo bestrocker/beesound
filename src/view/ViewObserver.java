@@ -190,4 +190,6 @@ public interface ViewObserver {
     List<String> searchSong(String text);
     
     int getPos();
+    
+    Map<String, Object> showSongInfo();
 }
