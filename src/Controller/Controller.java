@@ -378,4 +378,8 @@ public class Controller implements ViewObserver {
     public int getPos(){
         return this.audiocontrol.getPos();
     }
+    
+    public Map<String, Object> showSongInfo() {
+        return this.model.getSongInfo();
+    }
 }
