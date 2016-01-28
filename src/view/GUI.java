@@ -40,6 +40,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import Controller.Audio.MpegInfo.Duration;
 import Controller.Controller.REPRODUCE;
 
@@ -122,25 +124,21 @@ public class GUI implements ViewInterface{
             }
         });
         
-        //pnRight.add(seekBar);
+        pnRight.add(seekBar);
         pnRight.add(lbImage);     
         pnRight.add(lbInfoCurrent);
 
         ////////////// CENTER PANEL: LIST SELECTION & INFO LABEL ////////////////////////
 
         final JPanel pnListView = new JPanel();
-        pnListView.setLayout(new FlowLayout(FlowLayout.CENTER));
+        pnListView.setLayout(new BoxLayout(pnListView , BoxLayout.Y_AXIS));
         
         final JPanel pnInfoLibrary = new JPanel();
         pnInfoLibrary.setMaximumSize(new Dimension(32767, 30));
         pnInfoLibrary.setBackground(new Color(100, 100, 255));
 
         pnListView.add(scrollPane);
-        
-        
-       // pnListView.add(pnInfoLibrary,FlowLayout.);
-        
-        
+        pnListView.add(pnInfoLibrary);
         pnInfoLibrary.add(lbInfoLibrary, FlowLayout.LEFT);
 
         ////////////// SOUTH PANEL: CONTROL PLAYER'S BUTTONS ////////////////////////
@@ -496,6 +494,8 @@ public class GUI implements ViewInterface{
         mniAddToLib.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("FILTRO MP3 FILE", "mp3");
+                chooser.setFileFilter(filter);
                 int returnVal = chooser.showOpenDialog(mnFile);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                     controller.addSong(chooser.getSelectedFile().getAbsolutePath());
