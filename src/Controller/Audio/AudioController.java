@@ -8,13 +8,13 @@ import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
 import model.Manager;
 
-public class AudioController implements BasicPlayerListener, AudioControllerInterface{
+public class AudioController extends BasicPlayer implements BasicPlayerListener, AudioControllerInterface{
     
     final private Manager lm;
     private int counter = 0;
     private boolean reproduceNow;
     private boolean paused;
-    private boolean strategy; /* if true linear, else shuffle */
+    private boolean strategy = true; /* if true linear, else shuffle */
     final private BasicPlayer player;
     final private BasicController control;
     final private Random rnd = new Random();
@@ -50,6 +50,11 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
         this.player.addBasicPlayerListener(this);
         this.mp3Info = MpegInfo.getInstance();
         this.out = System.out;
+        try {
+            this.control.setGain(0.50);
+        } catch (BasicPlayerException e) {
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -117,6 +122,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
     public void prevPlayer(){
         try {
             control.stop();
+            if (this.counter == 0) return;
             this.counter--;
             this.playPlayer();
         } catch (BasicPlayerException e) {
@@ -157,7 +163,6 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
             this.paused = false;
             this.control.open(new File(s));
             this.control.play();
-            this.control.setGain(0.85);
             this.control.setPan(0.0);
         } catch ( Exception e){
             Log.ERROR("can't perform action: playPlayer()"  + e);
@@ -183,6 +188,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
      */
     private void nextSongPlayer(){
         if(strategy) {
+            System.out.println("Queue size: " +this.lm.getQueueSize());
             if(this.counter + 1 > this.lm.getQueueSize() -1 ){
                 this.stopPlayer();
                 Log.INFO("playlist finished");
@@ -204,7 +210,6 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
     public void setVolume(final double volume){
         try {
             this.control.setGain(volume);
-            Log.PROGRAM("GAIN set to "+volume);
         } catch (BasicPlayerException e) {
             Log.ERROR("impossible to change volume, error in setVolume " + e);
             e.printStackTrace();
@@ -234,6 +239,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
             display("opened : "+properties.toString());             
     }
     
+    int position;
     /*
      * @SuppressWarnig due to the native Library implementation(non-Javadoc)
      * @see javazoom.jlgui.basicplayer.BasicPlayerListener#progress(int, long, byte[], java.util.Map)
@@ -242,8 +248,10 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
     @SuppressWarnings("rawtypes")
     public void progress(final int bytesread,final long microseconds,
             final byte[] pcmdata,final Map properties) {
-            
-     //       display("progress : "+properties.toString());
+       position = Long.valueOf((long)(properties.get("mp3.position.byte"))).intValue();
+       //display(""+position);
+           //display("progress: "+ properties.get("mp3.position.byte"));
+           // display("progress : "+properties.toString());
     }
     
     @Override
@@ -258,5 +266,10 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
     @Override
     public void setController(final BasicController controller) {
         display("setController : "+controller);
+    }
+    
+    
+    public int getPos(){
+        return this.position;
     }
 }

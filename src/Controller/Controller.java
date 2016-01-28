@@ -369,4 +369,8 @@ public class Controller implements ViewObserver {
     public List<String> searchSong(String text) {
         return this.model.fetchSongs(text);
     }
+   
+    public int getPos(){
+        return this.audiocontrol.getPos();
+    }
 }

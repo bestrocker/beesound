@@ -177,15 +177,17 @@ public interface ViewObserver {
     void removeSongFromPlaylist(String songName, String playlistName);
     
     /**
-     * Retrun a list containing informations amount of songs and minutes in library
+     * Return a list containing informations amount of songs and minutes in library
      * @return
      */
     List<Integer> showLibraryInfo();
     
     /**
-     * returns a list for all the matched strings
+     * Returns a list for all the matched songs.
      * @param text
      * @return
      */
     List<String> searchSong(String text);
+    
+    int getPos();
 }

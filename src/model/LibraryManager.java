@@ -360,9 +360,9 @@ public final class LibraryManager implements Manager{   // this class is impleme
     @Override
     public Map<String, Object> getCurrentSongInfo() {
         Map<String, Object> map = new HashMap<>();
-        map.put("Title", this.playlistInReproduction.getSongInReproduction().getTitle());
-        map.put("Size", this.playlistInReproduction.getSongInReproduction().getSize());
-        map.put("Duration", this.playlistInReproduction.getSongInReproduction().getDuration());
+        map.put("title", this.playlistInReproduction.getSongInReproduction().getTitle());
+        map.put("size",(int)(this.playlistInReproduction.getSongInReproduction().getSize()));
+        map.put("duration", this.playlistInReproduction.getSongInReproduction().getDuration());
         return map;       
     }    
     
@@ -421,13 +421,13 @@ public final class LibraryManager implements Manager{   // this class is impleme
     }  
     
     public void resetLibrary() {
-        this.INSTANCE = new LibraryManager();       
+        INSTANCE = new LibraryManager();       
     }
     
     public List<String> fetchSongs(String songTitle) {
         List<String> list = new ArrayList<>();
         for (Song s : this.songList) {
-            if (clearText(s.getTitle()).toLowerCase().matches(songTitle.toLowerCase())) {
+            if (clearText(s.getTitle()).toLowerCase().contains(songTitle.toLowerCase())) {
                 list.add(s.getTitle());
             }
         }
