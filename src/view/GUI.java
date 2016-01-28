@@ -495,7 +495,7 @@ public class GUI implements ViewInterface{
         final JTextField tfSearchBar = new JTextField("search", 5);
 
         //CREATE NEW LIBRARY
-        mniNewLib.addActionListener(new ActionListener() {
+        mniNewLib.addActionListener(new ActionListener() {      //controllare dalla parte del controller
 
             @Override
             public void actionPerformed(ActionEvent e) {
