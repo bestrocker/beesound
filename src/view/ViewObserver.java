@@ -156,7 +156,7 @@ public interface ViewObserver {
      * Returns a List of favorites.
      * @return List<String>
      */
-    List<String>showFavorites();
+    Map<String, Integer>showFavorites();
     
     /**
      * Create a full new Library in the specified path. If already existing, it will reload all its containing.
