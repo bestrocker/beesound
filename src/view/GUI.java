@@ -63,11 +63,11 @@ public class GUI implements ViewInterface{
     final JButton btAllSongs = new JButton("All Songs");
     final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 50);
     final List searchList = new List();
-    private Agent agent;
+    private Agent agent = new Agent();
     public GUI() {
         
         seekBar.setDoubleBuffered(true);
-        seekBar.setValueIsAdjusting(true);
+        
         
         frame = new JFrame("BeeSound Player");
         final JPanel pnLanding = new JPanel(new BorderLayout());
@@ -100,10 +100,14 @@ public class GUI implements ViewInterface{
             public void mouseReleased(MouseEvent e) {
                 JSlider source = (JSlider)e.getSource();
                 seekBar.setValueIsAdjusting(false);
+                seekBar.setValue(source.getValue());
                 seek((int)source.getValue());
+                System.out.println("MOUSE RILASCIATO");
+                updateProgressBar(PROGRESS_BAR.ACTIVE);
             }
             @Override
             public void mousePressed(MouseEvent e) {
+                System.out.println("MOUSE PREMUTO");
                 seekBar.setValueIsAdjusting(true);
             }
             @Override
@@ -114,10 +118,10 @@ public class GUI implements ViewInterface{
             }
             @Override
             public void mouseClicked(MouseEvent e) {
-                JSlider source = (JSlider)e.getSource();
+                /*JSlider source = (JSlider)e.getSource();
                 seekBar.setValueIsAdjusting(false);
                 seekBar.setValue((int)source.getValue());
-                seek((int)source.getValue());
+                seek((int)source.getValue());*/
             }
         });
         
@@ -162,16 +166,16 @@ public class GUI implements ViewInterface{
                     controller.addSongInReproductionPlaylist(list.getModel()
                             .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
                     playing = true;
-                    setVolume();
+                    
 
-                    updateProgressBar(PROGRESS_BAR.ACTIVE);
+        //            updateProgressBar(PROGRESS_BAR.ACTIVE);
                     
                     setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                 }
                 else {
                     controller.pauseButton();
                    /* agent.interrupt();*/
-                    updateProgressBar(PROGRESS_BAR.PAUSE);
+                 //   updateProgressBar(PROGRESS_BAR.PAUSE);
                     playing = !playing;
                 }
                 stopped = false;
@@ -190,7 +194,7 @@ public class GUI implements ViewInterface{
                 playing = false;
                 updatePlayButton(btPlay);
                 
-                updateProgressBar(PROGRESS_BAR.PAUSE);
+       //         updateProgressBar(PROGRESS_BAR.PAUSE);
             }
         });
         
@@ -200,7 +204,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.prevTrack();
-                setVolume();
+                
                 setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
             }
         });
@@ -211,7 +215,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.nextTrack();
-                setVolume();
+                
                 setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
             }
         });
@@ -307,7 +311,7 @@ public class GUI implements ViewInterface{
                         if(e.getClickCount() == 2 && list.getModel().getSize() > 0) {
                             controller.addSongInReproductionPlaylist(list.getModel()
                                     .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
-                            setVolume();
+                            
                             playing = true;
                             stopped = false;
                             updatePlayButton(btPlay);
@@ -410,7 +414,7 @@ public class GUI implements ViewInterface{
                                     if(e.getClickCount() == 2 && list.getModel().getSize() > 0) {
                                         controller.addSongInReproductionPlaylist(list.getModel()
                                                 .getElementAt(list.getMaxSelectionIndex()), REPRODUCE.NOW);
-                                        setVolume();
+                                        
                                         playing = true;
                                         stopped = false;
                                         updatePlayButton(btPlay);
@@ -876,7 +880,7 @@ public class GUI implements ViewInterface{
         public void run(){
            this.stopped=false;
            System.out.println("CIAO STRONZO sono entrato!!");
-                while(!stopped){
+                while(!stopped && seekBar.getValueIsAdjusting()==false){
                     try {
                             SwingUtilities.invokeAndWait(new Runnable() {
                                 @Override
@@ -884,7 +888,7 @@ public class GUI implements ViewInterface{
                                     seekBar.setValue(controller.getPos());  
                                     frame.repaint();
                                     try {
-                                        Thread.sleep(1000);
+                                        Thread.sleep(70);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -907,13 +911,13 @@ public class GUI implements ViewInterface{
         if(val==PROGRESS_BAR.ACTIVE){
         if(agent!=null){
             agent.setStopped(true);
-            agent.interrupt();
+          //  agent.interrupt();
         }
         agent = new Agent();
         agent.start();
         } else if (val==PROGRESS_BAR.PAUSE) {
             agent.setStopped(true);
-            agent.interrupt();
+           // agent.interrupt();
         }
     }
     public enum PROGRESS_BAR{
