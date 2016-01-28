@@ -129,13 +129,18 @@ public class GUI implements ViewInterface{
         ////////////// CENTER PANEL: LIST SELECTION & INFO LABEL ////////////////////////
 
         final JPanel pnListView = new JPanel();
-        pnListView.setLayout(new BoxLayout(pnListView, BoxLayout.Y_AXIS));
+        pnListView.setLayout(new FlowLayout(FlowLayout.CENTER));
+        
         final JPanel pnInfoLibrary = new JPanel();
         pnInfoLibrary.setMaximumSize(new Dimension(32767, 30));
         pnInfoLibrary.setBackground(new Color(100, 100, 255));
 
         pnListView.add(scrollPane);
-        pnListView.add(pnInfoLibrary);                               
+        
+        
+       // pnListView.add(pnInfoLibrary,FlowLayout.);
+        
+        
         pnInfoLibrary.add(lbInfoLibrary, FlowLayout.LEFT);
 
         ////////////// SOUTH PANEL: CONTROL PLAYER'S BUTTONS ////////////////////////
@@ -858,31 +863,34 @@ public class GUI implements ViewInterface{
         return menu;
     }    
     
+    /**
+     * Agent Class thread to serve the seekBar utility.
+     * @author bestrocker221
+     *
+     */
     class Agent extends Thread{
         private volatile boolean stopped = false;
 
         public void run(){
-           this.stopped=false;
-           System.out.println("CIAO STRONZO sono entrato!!");
+            this.stopped=false;
                 while(!stopped && seekBar.getValueIsAdjusting()==false){
                     try {
-                            SwingUtilities.invokeAndWait(new Runnable() {
-                                @Override
-                                public void run() {
-                                    seekBar.setValue(controller.getPos());  
-                                    frame.repaint();
-                                    try {
-                                        Thread.sleep(70);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
+                        SwingUtilities.invokeAndWait(new Runnable() {
+                            @Override
+                            public void run() {
+                                seekBar.setValue(controller.getPos());  
+                                frame.repaint();
+                                try {
+                                    Thread.sleep(70);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
-                            });
-                        } catch (Exception e) {
-                           e.printStackTrace();
-                        }
-                }
-                System.out.println("ESCO DAL THREAD");
+                             }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }                
         }
         
         public void setStopped(final boolean value){
@@ -902,6 +910,7 @@ public class GUI implements ViewInterface{
             agent.setStopped(true);
         }
     }
+    
     public enum PROGRESS_BAR{
         PAUSE,ACTIVE;
     }
