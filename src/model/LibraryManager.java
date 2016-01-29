@@ -387,7 +387,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
         return list;
     }
     
-    public Map<String, Integer> getMostListened() {
+    public List<String> getMostListened() {
         List<Song> list = new LinkedList<>();
         for (Song s : this.songList) {
             if (s.getReproductionsCounter() > 0) {
@@ -395,9 +395,9 @@ public final class LibraryManager implements Manager{   // this class is impleme
             }
         }        
         list.sort((j,k)->k.getReproductionsCounter()-j.getReproductionsCounter());        
-        Map<String, Integer> map = new HashMap<>();
-        list.forEach(x -> map.put(x.getTitle(), x.getReproductionsCounter()));       
-        return  map;       
+        List<String> titles = new ArrayList<>();
+        list.forEach(x -> titles.add(x.getTitle() + "  -  " + x.getReproductionsCounter()));
+        return  titles;       
     }
     
     @Override
