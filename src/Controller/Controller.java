@@ -326,7 +326,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Integer> showFavorites() {
+    public List<String> showFavorites() {
         return this.model.getMostListened();
     }
 
