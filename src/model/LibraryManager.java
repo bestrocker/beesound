@@ -396,7 +396,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
         }        
         list.sort((j,k)->k.getReproductionsCounter()-j.getReproductionsCounter());        
         List<String> titles = new ArrayList<>();
-        list.forEach(x -> titles.add(x.getTitle() + "  -  " + x.getReproductionsCounter()));
+        list.forEach(x -> titles.add("(" + x.getReproductionsCounter() + ")" + "    " + x.getTitle()));
         return  titles;       
     }
     
