@@ -4,9 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -53,7 +50,6 @@ public class GUI implements ViewInterface {
     private final JFrame frame;
     private final JScrollPane scrollPane = new JScrollPane();
     private JList<String> songList;
-    private JList<Integer> nFavorites;
     private boolean playing = false;
     private boolean stopped = true;
     private String selectedSongName;
