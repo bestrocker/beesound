@@ -426,7 +426,8 @@ public class GUI implements ViewInterface {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                songList = new JList<>(new Vector<>(controller.showFavorites().keySet()));
+                songList = new JList<>(new Vector<>(controller.showFavorites()));
+                createSelectableList();
                 //final JList<Integer> nFavorites = new JList<>(new Vector<>(controller.showFavorites().values()));
             }
         });
