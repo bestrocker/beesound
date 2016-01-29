@@ -355,8 +355,10 @@ public class GUI implements ViewInterface {
 
                         if(songList.getModel().getSize() > 0) {
                             JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false, true, false, false);
-                            menu.show(e.getComponent(), e.getX(), e.getY());
-                            selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
+                            if(e.isPopupTrigger()) {
+                                menu.show(e.getComponent(), e.getX(), e.getY());
+                                selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
+                            }
                         }
                     }
                     @Override
@@ -428,7 +430,6 @@ public class GUI implements ViewInterface {
             public void actionPerformed(ActionEvent e) {
                 songList = new JList<>(new Vector<>(controller.showFavorites()));
                 createSelectableList();
-                //final JList<Integer> nFavorites = new JList<>(new Vector<>(controller.showFavorites().values()));
             }
         });
         
