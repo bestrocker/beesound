@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,14 +45,13 @@ import javax.swing.event.ChangeListener;
 import Controller.Audio.MpegInfo.Duration;
 import Controller.Controller.REPRODUCE;
 
-public class GUI implements ViewInterface{
+public class GUI implements ViewInterface {
 
     private static final double PERC_HALF = 0.5;
     private static final double PERC_QUATER = 0.25;
     private ViewObserver controller;   
     private final JFrame frame;
     private final JScrollPane scrollPane = new JScrollPane();
-    private JFileChooser chooser = new JFileChooser(); 
     private JList<String> songList;
     private JList<Integer> nFavorites;
     private boolean playing = false;
@@ -63,7 +64,6 @@ public class GUI implements ViewInterface{
     final JLabel lbInfoLibrary = new JLabel("Numero brani + minutaggio: ");
     final JButton btAllSongs = new JButton("All Songs");
     final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 50);
-    final List searchList = new List();
     private Agent agent;
     
     public GUI() {
@@ -77,7 +77,7 @@ public class GUI implements ViewInterface{
         final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         final int x = (int)(dimension.getWidth() * PERC_HALF - dimension.getWidth() * PERC_QUATER);
         final int y = (int)(dimension.getHeight() * PERC_HALF - dimension.getHeight() * PERC_QUATER);
-        frame.setSize((int) (dimension.getWidth() * 0.5), (int) (dimension.getHeight() * 0.5));
+        frame.setSize((int) (dimension.getWidth() * 0.55), (int) (dimension.getHeight() * 0.55));
         frame.setLocation(x, y);                
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);           
         frame.setMinimumSize(new Dimension(200, 100));
@@ -96,7 +96,7 @@ public class GUI implements ViewInterface{
         lbInfoCurrent.setAlignmentX(Component.CENTER_ALIGNMENT);
         pnRight.add(this.seekBar);
         
-        //SeekBar
+        //////////////  SEEKBAR  /////////////////      
         this.seekBar.addMouseListener(new MouseListener() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -123,7 +123,6 @@ public class GUI implements ViewInterface{
             }
         });
         
-        //pnRight.add(seekBar);
         pnRight.add(lbImage);     
         pnRight.add(lbInfoCurrent);
 
@@ -428,8 +427,7 @@ public class GUI implements ViewInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 songList = new JList<>(new Vector<>(controller.showFavorites().keySet()));
-                nFavorites = new JList<>(new Vector<>(controller.showFavorites().values()));
-                //createFavoritesList();
+                //final JList<Integer> nFavorites = new JList<>(new Vector<>(controller.showFavorites().values()));
             }
         });
         
@@ -730,15 +728,6 @@ public class GUI implements ViewInterface{
         songList.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         songList.setSelectionInterval(0, 0);
         scrollPane.setViewportView(songList);
-    }
-    
-    /**
-     * SHow favorite songs list
-     */
-    private void createFavoritesList() {
-        scrollPane.setViewportView(songList); 
-        scrollPane.setViewportView(nFavorites);
-
     }
     
     /**

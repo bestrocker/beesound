@@ -189,8 +189,23 @@ public interface ViewObserver {
      */
     List<String> searchSong(String text);
     
+    /**
+     * Returns the current byte of the seekbar
+     * @return
+     */
     int getPos();
     
+    /**
+     * Returns info for the current song
+     * @param index
+     * @return
+     */
     Map<String, Object> showSongInfo(int index);
 
 }
+
+
+
+
+
+
