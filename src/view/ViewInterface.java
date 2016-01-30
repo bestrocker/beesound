@@ -2,6 +2,11 @@ package view;
 
 import view.GUI.PROGRESS_BAR;
 
+/**
+ * Interface for Controller-View Communication.
+ * @author bestrocker221
+ *
+ */
 public interface ViewInterface {
 	
     /**
