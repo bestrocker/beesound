@@ -46,6 +46,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 
 public class GUI implements ViewInterface {
@@ -66,12 +68,12 @@ public class GUI implements ViewInterface {
     final JLabel lbInfoLibrary = new JLabel("Numero brani + minutaggio: ");
     final JButton btAllSongs = new JButton("All Songs");
     final JSlider slVol = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 50);
-    private Agent agent;
+    private Agent agent = new Agent();
     
     public GUI() {
         
         seekBar.setDoubleBuffered(true);
-        seekBar.setValueIsAdjusting(true);
+        
         
         frame = new JFrame("BeeSound Player");
         final JPanel pnLanding = new JPanel(new BorderLayout());
@@ -111,10 +113,15 @@ public class GUI implements ViewInterface {
             public void mouseReleased(MouseEvent e) {
                 JSlider source = (JSlider)e.getSource();
                 seekBar.setValueIsAdjusting(false);
+                seekBar.setValue(source.getValue());
+                controller.setPos(source.getValue());
                 seek((int)source.getValue());
+                System.out.println("MOUSE RILASCIATO");
+                updateProgressBar(PROGRESS_BAR.ACTIVE);
             }
             @Override
             public void mousePressed(MouseEvent e) {
+                System.out.println("MOUSE PREMUTO");
                 seekBar.setValueIsAdjusting(true);
             }
             @Override
@@ -125,27 +132,25 @@ public class GUI implements ViewInterface {
             }
             @Override
             public void mouseClicked(MouseEvent e) {
-                JSlider source = (JSlider)e.getSource();
-                seekBar.setValueIsAdjusting(false);
-                seekBar.setValue((int)source.getValue());
-                seek((int)source.getValue());
             }
         });
+        
+        pnRight.add(lbImage);     
         pnRight.add(this.seekBar);
-        pnRight.add(lbImage);
         pnRight.add(Box.createRigidArea(new Dimension(20, 20)));
         pnRight.add(lbInfoCurrent);
 
         ////////////// CENTER PANEL: LIST SELECTION & INFO LABEL ////////////////////////
         
         final JPanel pnListView = new JPanel();
-        pnListView.setLayout(new BoxLayout(pnListView, BoxLayout.Y_AXIS));
+        pnListView.setLayout(new BoxLayout(pnListView , BoxLayout.Y_AXIS));
+        
         final JPanel pnInfoLibrary = new JPanel();
         pnInfoLibrary.setMaximumSize(new Dimension(32767, 30));
         pnInfoLibrary.setBackground(new Color(100, 100, 255));                
 
         pnListView.add(scrollPane);
-        pnListView.add(pnInfoLibrary);                               
+        pnListView.add(pnInfoLibrary);
         pnInfoLibrary.add(lbInfoLibrary, FlowLayout.LEFT);
 
         ////////////// SOUTH PANEL: CONTROL PLAYER'S BUTTONS ////////////////////////
@@ -169,13 +174,10 @@ public class GUI implements ViewInterface {
                     controller.addSongInReproductionPlaylist(songList.getModel()
                             .getElementAt(songList.getMaxSelectionIndex()), REPRODUCE.NOW);
                     playing = true;
-                    setVolume();
-                    updateProgressBar(PROGRESS_BAR.ACTIVE);                  
                     setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
                 }
                 else {
                     controller.pauseButton();
-                    updateProgressBar(PROGRESS_BAR.PAUSE);
                     playing = !playing;
                 }
                 stopped = false;
@@ -192,7 +194,7 @@ public class GUI implements ViewInterface {
                 stopped = true;               
                 playing = false;
                 updatePlayButton(btPlay);               
-                updateProgressBar(PROGRESS_BAR.PAUSE);
+       //         updateProgressBar(PROGRESS_BAR.PAUSE);
             }
         });
         
@@ -202,7 +204,7 @@ public class GUI implements ViewInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.prevTrack();
-                setVolume();
+                
                 setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
             }
         });
@@ -213,7 +215,7 @@ public class GUI implements ViewInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.nextTrack();
-                setVolume();
+                
                 setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
             }
         });
@@ -310,12 +312,13 @@ public class GUI implements ViewInterface {
                         if(e.getClickCount() == 2 && songList.getModel().getSize() > 0) {
                             controller.addSongInReproductionPlaylist(songList.getModel()
                                     .getElementAt(songList.getMaxSelectionIndex()), REPRODUCE.NOW);
-                            setVolume();
+                            
                             playing = true;
                             stopped = false;
                             updatePlayButton(btPlay);
                             setInfoLabel(lbInfoCurrent, controller.getCurrentSongInfo());
-                            System.out.println("MAX: "+seekBar.getMaximum());    
+                            System.out.println("MAX: "+seekBar.getMaximum());
+                            
                         }                        
                     }
                 });                
@@ -405,7 +408,7 @@ public class GUI implements ViewInterface {
                                     if(e.getClickCount() == 2 && songList.getModel().getSize() > 0) {
                                         controller.addSongInReproductionPlaylist(songList.getModel()
                                                 .getElementAt(songList.getMaxSelectionIndex()), REPRODUCE.NOW);
-                                        setVolume();
+                                        
                                         playing = true;
                                         stopped = false;
                                         updatePlayButton(btPlay);
@@ -517,6 +520,8 @@ public class GUI implements ViewInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final JFileChooser chooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("FILTRO MP3 FILE", "mp3");
+                chooser.setFileFilter(filter);
                 int returnVal = chooser.showOpenDialog(mnFile);
                 chooser.setAcceptAllFileFilterUsed(false);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
@@ -956,31 +961,34 @@ public class GUI implements ViewInterface {
         return menu;
     }    
     
+    /**
+     * Agent Class thread to serve the seekBar utility.
+     * @author bestrocker221
+     *
+     */
     class Agent extends Thread{
         private volatile boolean stopped = false;
 
         public void run(){
-           this.stopped=false;
-           System.out.println("CIAO STRONZO sono entrato!!");
-                while(!stopped){
+            this.stopped=false;
+                while(!stopped && seekBar.getValueIsAdjusting()==false){
                     try {
-                            SwingUtilities.invokeAndWait(new Runnable() {
-                                @Override
-                                public void run() {
-                                    seekBar.setValue(controller.getPos());  
-                                    frame.repaint();
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
+                        SwingUtilities.invokeAndWait(new Runnable() {
+                            @Override
+                            public void run() {
+                                seekBar.setValue(controller.getPos());  
+                                frame.repaint();
+                                try {
+                                    Thread.sleep(70);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
-                            });
-                        } catch (Exception e) {
-                           e.printStackTrace();
-                        }
-                }
-                System.out.println("ESCO DAL THREAD");
+                             }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }                
         }
         
         public void setStopped(final boolean value){
@@ -993,15 +1001,14 @@ public class GUI implements ViewInterface {
         if(val==PROGRESS_BAR.ACTIVE){
         if(agent!=null){
             agent.setStopped(true);
-            agent.interrupt();
         }
         agent = new Agent();
         agent.start();
         } else if (val==PROGRESS_BAR.PAUSE) {
             agent.setStopped(true);
-            agent.interrupt();
         }
     }
+    
     public enum PROGRESS_BAR{
         PAUSE,ACTIVE;
     }

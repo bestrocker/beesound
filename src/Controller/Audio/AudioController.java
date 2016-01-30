@@ -77,11 +77,13 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
                 this.paused = true;
                 
             } else {
+                this.control.seek(this.getPos());
+                Thread.sleep(5); // seek at same position and sleep(1) needed because of audio noise.
                 this.control.resume();
                 Log.INFO("Song resumed.");
                 this.paused = false;
             }
-        } catch (BasicPlayerException e){
+        } catch (BasicPlayerException | InterruptedException e){
             e.printStackTrace();
             Log.ERROR("impossible toggle pause" + e);
         }
@@ -95,7 +97,7 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
     public void seekPlayer(final long nbytes){
         try {
             this.control.seek(nbytes);
-        } catch (BasicPlayerException e) {
+        } catch (Exception e) {
             Log.ERROR("Error seeking song" + e);
         }
     }
@@ -239,7 +241,8 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
             display("opened : "+properties.toString());             
     }
     
-    int position;
+    private int position;
+    Object obj = new Object();
     /*
      * @SuppressWarnig due to the native Library implementation(non-Javadoc)
      * @see javazoom.jlgui.basicplayer.BasicPlayerListener#progress(int, long, byte[], java.util.Map)
@@ -248,9 +251,9 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
     @SuppressWarnings("rawtypes")
     public void progress(final int bytesread,final long microseconds,
             final byte[] pcmdata,final Map properties) {
-       position = Long.valueOf((long)(properties.get("mp3.position.byte"))).intValue();
-       //display(""+position);
-           //display("progress: "+ properties.get("mp3.position.byte"));
+       synchronized(obj){
+        position = Long.valueOf((long)(properties.get("mp3.position.byte"))).intValue();
+       }
            // display("progress : "+properties.toString());
     }
     
@@ -268,8 +271,28 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
         display("setController : "+controller);
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isPaused(){
+        return this.paused;
+    }
     
-    public int getPos(){
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized int getPos(){
         return this.position;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void setPos(final int pos){
+        this.position = pos;
+    }
+    
 }
