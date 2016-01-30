@@ -1,17 +1,30 @@
 package view;
 
+import Controller.Audio.MpegInfo.Duration;
+import Controller.Controller.REPRODUCE;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer.UIResource;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,28 +32,21 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ListSelectionModel;
-import javax.swing.DefaultListCellRenderer.UIResource;
-import java.awt.Color;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import java.awt.Font;
-import javax.swing.JMenuItem;
-import java.awt.Component;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import Controller.Audio.MpegInfo.Duration;
-import Controller.Controller.REPRODUCE;
+
 
 public class GUI implements ViewInterface {
 
@@ -54,8 +60,8 @@ public class GUI implements ViewInterface {
     private boolean stopped = true;
     private String selectedSongName;
     private String selectedPlaylistName;
+    private int deltaColor = 0;
     private JSlider seekBar = new JSlider(SwingConstants.HORIZONTAL, 0,100,0);
-    private Integer deltaColor = 0;
     private Integer[] infoLibraryArray = new Integer[3];
     final JLabel lbInfoLibrary = new JLabel("Numero brani + minutaggio: ");
     final JButton btAllSongs = new JButton("All Songs");
@@ -82,17 +88,24 @@ public class GUI implements ViewInterface {
 
         final JPanel pnRight = new JPanel();
         pnRight.setLayout(new BoxLayout(pnRight, BoxLayout.Y_AXIS));
-        final URL ImgURL = UIResource.class.getResource("/zutons.jpg");
-        final JLabel lbImage = new JLabel();
-        lbImage.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), 250));
-        lbImage.setIcon(new ImageIcon(ImgURL));
+        pnRight.setBackground(new Color(140,220,170));
+        final URL ImgURL = UIResource.class.getResource("/beesound.jpg");
+        final JLabel lbImage = new JLabel();    
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(ImgURL); 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        final Image resizedImg = img.getScaledInstance((int)(frame.getWidth() * 0.42), (int)(frame.getHeight() * 0.72), Image.SCALE_SMOOTH);
+        final ImageIcon newImg = new ImageIcon(resizedImg);
+        lbImage.setIcon(newImg);
         lbImage.setAlignmentX(Component.CENTER_ALIGNMENT);
         final JLabel lbInfoCurrent = new JLabel("Info Current");
-        lbInfoCurrent.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.46), (int)(frame.getHeight() * 0.1)));
+        lbInfoCurrent.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.45), (int)(frame.getHeight() * 0.1)));
         lbInfoCurrent.setAlignmentX(Component.CENTER_ALIGNMENT);
-        pnRight.add(this.seekBar);
         
-        //////////////  SEEKBAR  /////////////////      
+        //SEEKBAR      
         this.seekBar.addMouseListener(new MouseListener() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -118,8 +131,9 @@ public class GUI implements ViewInterface {
                 seek((int)source.getValue());
             }
         });
-        
-        pnRight.add(lbImage);     
+        pnRight.add(this.seekBar);
+        pnRight.add(lbImage);
+        pnRight.add(Box.createRigidArea(new Dimension(20, 20)));
         pnRight.add(lbInfoCurrent);
 
         ////////////// CENTER PANEL: LIST SELECTION & INFO LABEL ////////////////////////
@@ -470,7 +484,7 @@ public class GUI implements ViewInterface {
         pnLeftButtons.add(btReproduction);
 
         /////////////////////  TOP MENU ////////////////////
-
+ 
         final JMenuBar mnBar = new JMenuBar();
         mnBar.setBorder(null);
         final JMenu mnFile = new JMenu("File");
@@ -702,18 +716,14 @@ public class GUI implements ViewInterface {
     }
 
     /**
-     * Set left button Layout. Set a value from 0 to 86 to show a different range of colors
+     * Set left button Layout. Set a value of 'a' from 0 to 86 to show a different range of colors
      * Set 0 < a < 41 for monocromatic look
      * Set 42 < a < 86 for a bicromatic look
      * @param button
      */
     private void setLeftButtons(final JButton button) {
-        int a = 30, b = 255, c = b - (a * deltaColor);
-        if(c > 0) {
-            button.setBackground(new Color(255, 255, c));
-        } else {
-            button.setBackground(new Color(255 + c, 255, 255));
-        }
+        int a = 40, b = 255, c = b - (a * deltaColor);
+        button.setBackground(new Color(255, 255, c));
         deltaColor++;
         button.setBorder(null);
     }
@@ -721,6 +731,7 @@ public class GUI implements ViewInterface {
     /**
      * Create a selectable list to be shown into GUI
      */
+    //per la relazione preso da stackoverflow
     private void createSelectableList() {
         songList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         songList.setFont(new Font("Droid Sans", Font.PLAIN, 11));
@@ -739,7 +750,6 @@ public class GUI implements ViewInterface {
         for (int i = 0; i < songList.getModel().getSize(); i++) {
             if (songTitle.equals(songList.getModel().getElementAt(i))) {
                 setHighlighted(i);
-                //refreshView();
             }            
         }
     }
