@@ -39,14 +39,15 @@ public class Controller implements ViewObserver {
     
     
     private void addDemoSong(){
-        this.filecontrol.importToLibrary(Controller.class.getResource("/Adele - Hello.mp3").getPath().toString().replace("%20", " "));
-        this.filecontrol.importToLibrary(Controller.class.getResource("/AC-DC - Back In Black.mp3").getPath().toString().replace("%20", " "));
-        this.filecontrol.importToLibrary(Controller.class.getResource("/Mark Ronson - Uptown Funk ft. Bruno Mars.mp3").getPath().toString().replace("%20", " "));
-        this.filecontrol.importToLibrary(Controller.class.getResource("/OMI - Cheerleader.mp3").getPath().toString().replace("%20", " "));
-        this.filecontrol.importToLibrary(Controller.class.getResource("/Red Hot Chili Peppers - Can't Stop.mp3").getPath().toString().replace("%20", " "));
-        this.filecontrol.importToLibrary(Controller.class.getResource("/Red Hot Chili Peppers - Otherside.mp3").getPath().toString().replace("%20", " "));
-        this.filecontrol.importToLibrary(Controller.class.getResource("/Robin Schulz - Sugar (feat. Francesco Yates) .mp3").getPath().toString().replace("%20", " "));
-        this.filecontrol.importToLibrary(Controller.class.getResource("/Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Adele - Hello.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/AC-DC - Back In Black.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Mark Ronson - Uptown Funk ft. Bruno Mars.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/OMI - Cheerleader.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Red Hot Chili Peppers - Can't Stop.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Red Hot Chili Peppers - Otherside.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Robin Schulz - Sugar (feat. Francesco Yates) .mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack.mp3").getPath().toString().replace("%20", " "));
+        
         
         this.newPlaylistFile("2015 hit");
         this.newPlaylistFile("Old but Gold");
@@ -68,8 +69,9 @@ public class Controller implements ViewObserver {
         final String temp = playlistDirPath+name+".txt";
         if(this.filecontrol.notExist(temp)){
             this.filecontrol.createNewFile(name,playlistDirPath);
-            this.model.newPlaylist(name,temp);
+            //this.model.newPlaylist(name,temp);
         }
+        this.model.newPlaylist(name,temp);
         this.view.refreshView();
     }
     
