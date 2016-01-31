@@ -292,7 +292,17 @@ public class GUI implements ViewInterface {
                 toHighlight();
                 songList.addMouseListener(new MouseListener() {
                     @Override
-                    public void mouseReleased(MouseEvent e) {}                    
+                    public void mouseReleased(MouseEvent e) {
+                        if (SwingUtilities.isRightMouseButton(e)) {                            
+                            if(songList.getModel().getSize() > 0) {
+                                JPopupMenu menu = buildStandardPopup(btAllSongs, true, false, true, false, true, false, false, true);
+                                if(e.isPopupTrigger()) {
+                                    menu.show(e.getComponent(), e.getX(), e.getY());
+                                    selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
+                                }
+                            }
+                        }
+                    }                    
                     @Override
                     public void mousePressed(MouseEvent e) {
                         if(songList.getModel().getSize() > 0) {
@@ -302,6 +312,7 @@ public class GUI implements ViewInterface {
                                 selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
                             }
                         }
+
                     }
                     @Override
                     public void mouseExited(MouseEvent e) {}
@@ -362,7 +373,17 @@ public class GUI implements ViewInterface {
                 songList.addMouseListener(new MouseListener() {
 
                     @Override
-                    public void mouseReleased(MouseEvent e) {}
+                    public void mouseReleased(MouseEvent e) {
+                        if (SwingUtilities.isRightMouseButton(e)) {                            
+                            if(songList.getModel().getSize() > 0) {
+                                JPopupMenu menu = buildStandardPopup(btPlaylist, false, false, false, true, false, true, false, false);
+                                if(e.isPopupTrigger()) {
+                                    menu.show(e.getComponent(), e.getX(), e.getY());
+                                    selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
+                                }
+                            }
+                        }
+                    }
                     @Override
                     public void mousePressed(MouseEvent e) {
 
@@ -388,7 +409,16 @@ public class GUI implements ViewInterface {
                             songList.addMouseListener(new MouseListener() {
 
                                 @Override
-                                public void mouseReleased(MouseEvent e) {}
+                                public void mouseReleased(MouseEvent e) {
+                                    if(SwingUtilities.isRightMouseButton(e)) {
+                                        if(songList.getModel().getSize() > 0) {
+                                            JPopupMenu menu = buildStandardPopup(btPlaylist, true, false, false, false, false, false, true, true);
+                                            if(e.isPopupTrigger()) {
+                                                menu.show(e.getComponent(), e.getX(), e.getY());
+                                            }
+                                        }
+                                    }
+                                }
                                 
                                 @Override
                                 public void mousePressed(MouseEvent e) {
@@ -454,7 +484,16 @@ public class GUI implements ViewInterface {
                 songList = new JList<>(new Vector<>(controller.showReproductionPlaylist()));
                 songList.addMouseListener(new MouseListener() {
                     @Override
-                    public void mouseReleased(MouseEvent e) {}
+                    public void mouseReleased(MouseEvent e) {
+                        if (SwingUtilities.isRightMouseButton(e)) {
+                            if(songList.getModel().getSize() > 0) {
+                                JPopupMenu menu = buildStandardPopup(btReproduction, false, true, false, false, false, false, false, false);
+                                if(e.isPopupTrigger()) {
+                                    menu.show(e.getComponent(), e.getX(), e.getY());
+                                }
+                            }
+                        }
+                    }
                     
                     @Override
                     public void mousePressed(MouseEvent e) {
@@ -610,7 +649,17 @@ public class GUI implements ViewInterface {
                 createSelectableList();
                 songList.addMouseListener(new MouseListener() {
                     @Override
-                    public void mouseReleased(MouseEvent e) {}                    
+                    public void mouseReleased(MouseEvent e) {
+                        if(SwingUtilities.isRightMouseButton(e)) {
+                            if(songList.getModel().getSize() > 0) {
+                                JPopupMenu menu = buildStandardPopup(btAllSongs, true, false, true, false, true, false, false, true);
+                                if(e.isPopupTrigger()) {
+                                    menu.show(e.getComponent(), e.getX(), e.getY());
+                                    selectedSongName = songList.getModel().getElementAt(songList.getMaxSelectionIndex());
+                                }
+                            }
+                        }
+                    }                    
                     @Override
                     public void mousePressed(MouseEvent e) {
                         if(songList.getModel().getSize() > 0) {
