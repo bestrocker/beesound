@@ -110,10 +110,6 @@
             <ruleset>Basic</ruleset>
         </rule>
         <rule>
-            <name>AssignmentInOperand</name>
-            <ruleset>Controversial</ruleset>
-        </rule>
-        <rule>
             <name>AvoidTrailingComma</name>
             <ruleset>Basic Ecmascript</ruleset>
         </rule>
@@ -190,14 +186,6 @@
             <ruleset>Basic JSP</ruleset>
         </rule>
         <rule>
-            <name>AvoidReassigningParameters</name>
-            <ruleset>Design</ruleset>
-        </rule>
-        <rule>
-            <name>CollapsibleIfStatements</name>
-            <ruleset>Basic</ruleset>
-        </rule>
-        <rule>
             <name>EmptyForeachStmt</name>
             <ruleset>Basic Velocity</ruleset>
         </rule>
@@ -230,27 +218,11 @@
             <ruleset>Braces</ruleset>
         </rule>
         <rule>
-            <name>ForLoopsMustUseBraces</name>
-            <ruleset>Braces</ruleset>
-        </rule>
-        <rule>
-            <name>IfElseStmtsMustUseBraces</name>
-            <ruleset>Braces</ruleset>
-        </rule>
-        <rule>
             <name>IfElseStmtsMustUseBraces</name>
             <ruleset>Braces</ruleset>
         </rule>
         <rule>
             <name>IfStmtsMustUseBraces</name>
-            <ruleset>Braces</ruleset>
-        </rule>
-        <rule>
-            <name>IfStmtsMustUseBraces</name>
-            <ruleset>Braces</ruleset>
-        </rule>
-        <rule>
-            <name>WhileLoopsMustUseBraces</name>
             <ruleset>Braces</ruleset>
         </rule>
         <rule>
@@ -267,14 +239,6 @@
         </rule>
         <rule>
             <name>CyclomaticComplexity</name>
-            <ruleset>Code Size</ruleset>
-        </rule>
-        <rule>
-            <name>CyclomaticComplexity</name>
-            <ruleset>Code Size</ruleset>
-        </rule>
-        <rule>
-            <name>ExcessiveMethodLength</name>
             <ruleset>Code Size</ruleset>
         </rule>
         <rule>
@@ -298,19 +262,11 @@
             <ruleset>Code Size</ruleset>
         </rule>
         <rule>
-            <name>ExcessiveParameterList</name>
-            <ruleset>Code Size</ruleset>
-        </rule>
-        <rule>
             <name>ExcessivePublicCount</name>
             <ruleset>Code Size</ruleset>
         </rule>
         <rule>
             <name>ExcessiveTypeLength</name>
-            <ruleset>Code Size</ruleset>
-        </rule>
-        <rule>
-            <name>NcssMethodCount</name>
             <ruleset>Code Size</ruleset>
         </rule>
         <rule>
@@ -326,19 +282,7 @@
             <ruleset>Code Size</ruleset>
         </rule>
         <rule>
-            <name>NPathComplexity</name>
-            <ruleset>Code Size</ruleset>
-        </rule>
-        <rule>
             <name>TooManyFields</name>
-            <ruleset>Code Size</ruleset>
-        </rule>
-        <rule>
-            <name>TooManyFields</name>
-            <ruleset>Code Size</ruleset>
-        </rule>
-        <rule>
-            <name>TooManyMethods</name>
             <ruleset>Code Size</ruleset>
         </rule>
         <rule>
@@ -395,7 +339,7 @@
         </rule>
         <rule>
             <name>UnnecessaryParentheses</name>
-            <ruleset>Unnecessary</ruleset>
+            <ruleset>Controversial</ruleset>
         </rule>
         <rule>
             <name>UseObjectForClearerAPI</name>
@@ -620,10 +564,6 @@
         <rule>
             <name>EmptyFinallyBlock</name>
             <ruleset>Empty Code</ruleset>
-        </rule>
-        <rule>
-            <name>EmptyIfStmt</name>
-            <ruleset>Basic Velocity</ruleset>
         </rule>
         <rule>
             <name>EmptyInitializer</name>
@@ -1095,10 +1035,6 @@
         </rule>
         <rule>
             <name>UnnecessaryFinalModifier</name>
-            <ruleset>Unnecessary</ruleset>
-        </rule>
-        <rule>
-            <name>UnnecessaryParentheses</name>
             <ruleset>Unnecessary</ruleset>
         </rule>
         <rule>
