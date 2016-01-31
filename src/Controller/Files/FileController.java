@@ -46,8 +46,10 @@ public  class FileController implements SystemManager{
     }
     
     private void initialize() {
+        
         if (notExist(libraryPath)){
             new File(libraryPath).mkdirs();
+            Log.initializeLogger();
             Log.PROGRAM(libraryPath +" created.");
         }
         Log.initializeLogger();
