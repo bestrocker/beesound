@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Playlist implements Serializable{
-    
+/**
+ * This class model a playlist in the music library. 
+ */
+public class Playlist implements Serializable {
+
     /**
      * serial UID
      */
@@ -13,7 +16,7 @@ public class Playlist implements Serializable{
     private final String name;
     private List<Song> trackList;
     private final String path;
-    
+
     /**
      * Constructor with two parameters: the name of the playlist to create and its path in the file system.
      * @param name 
@@ -24,33 +27,43 @@ public class Playlist implements Serializable{
         this.trackList = new LinkedList<>();
         this.path = path;
     }
-    
+
+    /**
+     * The reproduction list for this library. 
+     */
     public static class Playing extends Playlist {
-        
+
         /**
          * 
          */
         private static final long serialVersionUID = 1L;
         private Song songInReproduction;
-        
-        Playing() {
-            super("IN_REPRODUCTION","empty");
-        }
-        
-        /**
-         * Returns the number of elements inside the reproduction queue.
-         * @return the number of elements inside the reproduction queue.
-         */
 
-        public void setSongInReproduction(final Song song){
-            this.songInReproduction=song;
+        Playing() {
+            super("IN_REPRODUCTION", "empty"); 
         }
-            
+
+        /**
+         * Sets the specified song as song in reproduction. 
+         * @param song - the song to set as song in reproduction
+         */
+        public void setSongInReproduction(final Song song) {
+            this.songInReproduction = song;
+        }
+
+        /**
+         * Returns the song in reproduction.
+         * @return the song in reproduction
+         */
         public Song getSongInReproduction() {
             return this.songInReproduction;
         }
-        
-        public void setTracklist(List<Song> tracklist) {
+
+        /**
+         * Sets the specified tracklist as tracklist in the playlist in reproduction. 
+         * @param tracklist - the tracklist to set
+         */
+        public void setTracklist(final List<Song> tracklist) {
             super.trackList = tracklist;
         }
     }
@@ -62,7 +75,7 @@ public class Playlist implements Serializable{
     public String getPath() {
         return this.path;
     }
-    
+
     /**
      * Returns the name of this playlist.
      * @return the name of this playlist.
@@ -70,7 +83,7 @@ public class Playlist implements Serializable{
     public String getName() {
         return this.name;
     }
-    
+
     /**
      * Returns the list of the songs in this playlist.
      * @return the list of the songs in this playlist.
@@ -78,7 +91,7 @@ public class Playlist implements Serializable{
     public List<Song> getTrackList() {
         return this.trackList;
     }
-    
+
     /**
      * Adds a song to this playlist.
      * @param song - the song to add to the playlist.
@@ -86,12 +99,12 @@ public class Playlist implements Serializable{
     public void addSong(final Song song) {
         this.trackList.add(song);
     }
-    
+
     /**
      * Removes a song from this playlist.
      * @param song - the song to remove from this playlist.
      */
     public void removeSong(final Song song) {
         this.trackList.remove(song);
-    }    
+    }
 }
