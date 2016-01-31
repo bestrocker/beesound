@@ -28,12 +28,36 @@ public class Controller implements ViewObserver {
     public Controller(final ViewInterface view, final Manager model) {
         this.model=model;
         this.view=view;
-        this.filecontrol = new FileController();
-        this.audiocontrol = new AudioController(model);
         this.view.setObserver(this);
+        this.filecontrol = new FileController();
+        addDemoSong();
+        this.audiocontrol = new AudioController(model);
         loadInfoToLibrary();
         this.view.refreshView();        
         this.view.setVisible(true);
+    }
+    
+    
+    private void addDemoSong(){
+        this.filecontrol.importToLibrary(Controller.class.getResource("/Adele - Hello.mp3").getPath().toString().replace("%20", " "));
+        this.filecontrol.importToLibrary(Controller.class.getResource("/AC-DC - Back In Black.mp3").getPath().toString().replace("%20", " "));
+        this.filecontrol.importToLibrary(Controller.class.getResource("/Mark Ronson - Uptown Funk ft. Bruno Mars.mp3").getPath().toString().replace("%20", " "));
+        this.filecontrol.importToLibrary(Controller.class.getResource("/OMI - Cheerleader.mp3").getPath().toString().replace("%20", " "));
+        this.filecontrol.importToLibrary(Controller.class.getResource("/Red Hot Chili Peppers - Can't Stop.mp3").getPath().toString().replace("%20", " "));
+        this.filecontrol.importToLibrary(Controller.class.getResource("/Red Hot Chili Peppers - Otherside.mp3").getPath().toString().replace("%20", " "));
+        this.filecontrol.importToLibrary(Controller.class.getResource("/Robin Schulz - Sugar (feat. Francesco Yates) .mp3").getPath().toString().replace("%20", " "));
+        this.filecontrol.importToLibrary(Controller.class.getResource("/Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack.mp3").getPath().toString().replace("%20", " "));
+        
+        this.newPlaylistFile("2015 hit");
+        this.newPlaylistFile("Old but Gold");
+        
+        this.addSongInPlaylist("Adele - Hello", "2015 hit");
+        this.addSongInPlaylist("Mark Ronson - Uptown Funk ft. Bruno Mars", "2015 hit");
+        this.addSongInPlaylist("Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack", "2015 hit");
+        this.addSongInPlaylist("Robin Schulz - Sugar (feat. Francesco Yates) ", "2015 hit");
+        this.addSongInPlaylist("Red Hot Chili Peppers - Can't Stop", "Old but Gold");
+        this.addSongInPlaylist("AC-DC - Back In Black", "Old but Gold");
+        this.addSongInPlaylist("Red Hot Chili Peppers - Otherside", "Old but Gold");
     }
     
     /**
