@@ -16,7 +16,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -49,8 +48,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-
-
 public class GUI implements ViewInterface {
 
     private static final double PERC_HALF = 0.5;
@@ -73,9 +70,7 @@ public class GUI implements ViewInterface {
     
     public GUI() {
         
-        seekBar.setDoubleBuffered(true);
-        
-        
+        seekBar.setDoubleBuffered(true);      
         frame = new JFrame("BeeSound Player");
         final JPanel pnLanding = new JPanel(new BorderLayout());
         frame.setFont(new Font("Trajan Pro", Font.PLAIN, 12));
@@ -105,7 +100,7 @@ public class GUI implements ViewInterface {
         lbImage.setIcon(newImg);
         lbImage.setAlignmentX(Component.CENTER_ALIGNMENT);
         final JLabel lbInfoCurrent = new JLabel("Info Current");
-        lbInfoCurrent.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.45), (int)(frame.getHeight() * 0.1)));
+        lbInfoCurrent.setPreferredSize(new Dimension((int)(frame.getWidth() * 0.45), (int)(frame.getHeight() * 0.2)));
         lbInfoCurrent.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         //SEEKBAR      
@@ -138,7 +133,7 @@ public class GUI implements ViewInterface {
         
         pnRight.add(lbImage);     
         pnRight.add(this.seekBar);
-        pnRight.add(Box.createRigidArea(new Dimension(10, (int)(frame.getHeight() * 0.02))));
+        pnRight.add(Box.createRigidArea(new Dimension(10, (int)(frame.getHeight() * 0.01))));
         pnRight.add(lbInfoCurrent);       
 
         ////////////// CENTER PANEL: LIST SELECTION & INFO LABEL ////////////////////////
@@ -517,7 +512,7 @@ public class GUI implements ViewInterface {
                 toHighlight();
             }
         });
-        
+
         pnLeftButtons.add(btAllSongs);
         pnLeftButtons.add(btAlbum);
         pnLeftButtons.add(btArtist);
@@ -548,7 +543,7 @@ public class GUI implements ViewInterface {
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
                 int returnVal = chooser.showSaveDialog(null);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
-                    controller.newLibrary(chooser.getSelectedFile().getAbsolutePath());
+                    controller.newLibrary(chooser.getCurrentDirectory().getAbsolutePath());
                     refreshView();
                 }
             }               
@@ -719,10 +714,7 @@ public class GUI implements ViewInterface {
     }   
 
     ///////////////////////////  PRIVATE METHODS  ///////////////////////////////////
-    
-    /**
-     * Sets volume for all song's reproduction
-     */
+
     private void setVolume() {       
         controller.setVolumeButton((double)slVol.getValue() / 100);
     }
@@ -736,9 +728,6 @@ public class GUI implements ViewInterface {
         this.frame.setVisible(visible);
     }
 
-    /**
-     * Refresh all components
-     */
     @Override
     public void refreshView() {
         btAllSongs.doClick();
@@ -747,21 +736,12 @@ public class GUI implements ViewInterface {
                 + infoLibraryArray[2] % 60);
     }
 
-    /**
-     * Sets font for a component
-     * @param comp[]
-     */
     private void setComponentFont(Component[] comp){
         for(Component var: comp) {
             var.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         }
     }
 
-    /**
-     * Set lable's text to show title and song duration
-     * @param label
-     * @param Map
-     */
     private void setInfoLabel(JLabel label, Map<String, Object> map) {
         Duration duration = (Duration)(map.get("duration"));
         label.setText(map.get("title") + " - " + duration.getMin() + ":" + duration.getSec());
@@ -769,12 +749,6 @@ public class GUI implements ViewInterface {
         this.seekBar.setValue(0);
     }
 
-    /**
-     * Set left button Layout. Set a value of 'a' from 0 to 86 to show a different range of colors
-     * Set 0 < a < 41 for monocromatic look
-     * Set 42 < a < 86 for a bicromatic look
-     * @param button
-     */
     private void setLeftButtons(final JButton button) {
         int a = 40, b = 255, c = b - (a * deltaColor);
         button.setBackground(new Color(255, 255, c));
@@ -782,20 +756,13 @@ public class GUI implements ViewInterface {
         button.setBorder(null);
     }
 
-    /**
-     * Create a selectable list to be shown into GUI
-     */
-    //per la relazione preso da stackoverflow
     private void createSelectableList() {
         songList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         songList.setFont(new Font("Droid Sans", Font.PLAIN, 11));
         songList.setSelectionInterval(0, 0);
         scrollPane.setViewportView(songList);
     }
-    
-    /**
-     * Check for the current song to highlight
-     */
+
     private void toHighlight() {
         if (stopped) {
             return;
@@ -807,35 +774,20 @@ public class GUI implements ViewInterface {
             }            
         }
     }
-    
-    /**
-     * Highlight current song
-     */
+
     private void setHighlighted(int index) {
         songList.setSelectionInterval(index, index);
     }
 
-    /**
-     * Return the actual list selection index
-     * @return
-     */
     public int getSelectedIndex() {
         return this.songList.getMaxSelectionIndex();
     }
 
-    /**
-     * Set the controller as the observer
-     * @param observer
-     */
     @Override
     public void setObserver(ViewObserver observer) {
         this.controller = observer;
     }
 
-    /**
-     * Switch between play/pause button
-     * @param button
-     */
     private void updatePlayButton(JButton button) {
         if (playing) {
             button.setText(" || ");
