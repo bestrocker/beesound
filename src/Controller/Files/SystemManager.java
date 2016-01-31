@@ -13,22 +13,22 @@ public interface SystemManager {
     List<String> listAllPlaylist();
     
     /**
-     * Return a list of string representing the absolute path of every mp3 song in the default Music directory
+     * Return a list of string representing the absolute path of every mp3 song in the default Music directory.
      * @return a List<String>
      */
     List<String> listAllSongPath();
     
     /**
      * Import the given mp3 into the library.
-     * @param pathSource
+     * @param pathSource String
      * @return final path of the copied file.
      */
     String importToLibrary(final String mp3Source);
     
     /**
-     * Return a List of every song's absolute path contained in the given playlist 
-     * @param playlist
-     * @return
+     * Return a List of every song's absolute path contained in the given playlist.
+     * @param playlist File
+     * @return List<String>
      * @throws IOException
      */
     List<String> getPlaylistSongs(final File playlist) throws IOException;
@@ -40,7 +40,7 @@ public interface SystemManager {
     boolean notExist(final String srcPath);
     
     /**
-     * Create a new text file with the given name in the dstPath
+     * Create a new text file with the given name in the dstPath.
      * Note: dstPath must have final "/"
      * @param dstPath, name
      */
@@ -48,14 +48,14 @@ public interface SystemManager {
     
     /**
      * Delete the selected file.
-     * @param pathFile
+     * @param pathFile String
      */
     void delete(final String pathFile);
     
     /**
      * Append a message to the file pointed.
-     * @param msg
-     * @param path
+     * @param msg String
+     * @param path String
      */
-    public void appendToFile(final String msg, final String path);
+    void appendToFile(final String msg, final String path);
 }

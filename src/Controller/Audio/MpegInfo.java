@@ -25,6 +25,9 @@ package Controller.Audio;
 import org.tritonus.share.sampled.file.TAudioFileFormat;
 
 import Controller.Files.Log;
+
+import javax.print.DocFlavor.INPUT_STREAM;
+import javax.print.attribute.standard.RequestingUserName;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -39,7 +42,7 @@ import java.util.Optional;
 /**
  * This class gives information (audio format and comments) about MPEG file or URL.
  */
-public class MpegInfo implements TagInfo {
+public final class MpegInfo implements TagInfo {
     
     private static final MpegInfo SINGLEINSTANCE = new MpegInfo();
     
@@ -65,7 +68,11 @@ public class MpegInfo implements TagInfo {
     private String album = null;
     private Duration durationInMinutes;
     
-    public static MpegInfo getInstance(){
+    /**
+     * Return an instance of the class.
+     * @return {@link MpegInfo}
+     */
+    public static MpegInfo getInstance() {
         return MpegInfo.SINGLEINSTANCE;
     }
     
@@ -79,16 +86,17 @@ public class MpegInfo implements TagInfo {
     /**
      * Load and parse MPEG info from File.
      *
-     * @param input
+     * @param input File
      * @throws IOException
+     * @return boolean b
      */
-    public boolean load(final File input){
+    public boolean load(final File input) {
         this.size = input.length();
         this.location = input.getPath();
-        try{
+        try {
             loadInfo(input);
         } catch (IOException | UnsupportedAudioFileException e) {
-            Log.ERROR("Can't load MPEG TAG of "+input.getPath());
+            Log.ERROR("Can't load MPEG TAG of " + input.getPath());
             e.printStackTrace();
             return false;
         }
@@ -98,7 +106,7 @@ public class MpegInfo implements TagInfo {
     /**
      * Load and parse MPEG info from URL.
      *
-     * @param input
+     * @param input URL
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
@@ -110,7 +118,7 @@ public class MpegInfo implements TagInfo {
     /**
      * Load and parse MPEG info from InputStream.
      *
-     * @param input
+     * @param input {@link INPUT_STREAM}
      * @throws IOException
      * @throws UnsupportedAudioFileException
      */
@@ -150,11 +158,11 @@ public class MpegInfo implements TagInfo {
     @SuppressWarnings("unchecked")
     private void loadInfo(final AudioFileFormat aff) throws UnsupportedAudioFileException {
         final String type = aff.getType().toString();
-        if (!type.equalsIgnoreCase("mp3")){
+        if (!type.equalsIgnoreCase("mp3")) {
             throw new UnsupportedAudioFileException("Not MP3 audio format");
         }
         if (aff instanceof TAudioFileFormat) {
-            final Map<String,Object> props = ((TAudioFileFormat) aff).properties();
+            final Map<String, Object> props = ((TAudioFileFormat) aff).properties();
             if (props.containsKey("mp3.channels")){
                 channels = ((Integer) props.get("mp3.channels")).intValue();
             }

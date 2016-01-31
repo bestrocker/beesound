@@ -9,55 +9,55 @@ public interface AudioControllerInterface {
      * Set pause if in reproduction.
      * Set in reproduction if Paused.
      */
-    public void togglePause();
+    void togglePause();
     
     /**
      * Skip the song to the given number of bytes.
-     * @param nbytes
+     * @param nbytes long
      */
-    public void seekPlayer(final long nbytes);
+    void seekPlayer(final long nbytes);
     
     /**
-     * Play the next Track
+     * Play the next Track.
      */
-    public void nextPlayer();
+    void nextPlayer();
     
     /**
      * Play the previous Track.
      */
-    public void prevPlayer();
+    void prevPlayer();
     
     /**
      * Stop the Player.
      */
-    public void stopPlayer();
+    void stopPlayer();
     
     /**
      * Play the current song in the player.
      */
-    public void playPlayer();
+    void playPlayer();
     
     /**
      * Set the strategy for reproducing the next tracks.
-     * @param strategy
+     * @param strategy {@link REPRODUCTION_STRATEGY}
      */
-    public void setReproductionStrategy(final REPRODUCTION_STRATEGY strategy);
+    void setReproductionStrategy(final REPRODUCTION_STRATEGY strategy);
     
     /**
-     * Set the volume to the given 0.1-1 value
-     * @param volume
+     * Set the volume to the given 0.1-1 value.
+     * @param volume double
      */
-    public void setVolume(final double volume);
+    void setVolume(final double volume);
     
     /**
      * Set the reproduction to play the first song.
-     * @param b
+     * @param b boolean
      */
-    public void setReproduceNowBoolean(final boolean b);
+    void setReproduceNowBoolean(final boolean b);
     
     /**
      * Return the current position of the song.
-     * @return
+     * @return int 
      */
     int getPos();
     
@@ -72,7 +72,7 @@ public interface AudioControllerInterface {
      * Return if the player is paused.
      * @return
      */
-    public boolean isPaused();
+    boolean isPaused();
     
     /**
      * Set the model.
