@@ -30,35 +30,11 @@ public class Controller implements ViewObserver {
         this.view=view;
         this.view.setObserver(this);
         this.filecontrol = new FileController();
+        loadInfoToLibrary();
         addDemoSong();
         this.audiocontrol = new AudioController(model);
-        loadInfoToLibrary();
         this.view.refreshView();        
         this.view.setVisible(true);
-    }
-    
-    
-    private void addDemoSong(){
-        this.addSong(Controller.class.getResource("/Adele - Hello.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/AC-DC - Back In Black.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Mark Ronson - Uptown Funk ft. Bruno Mars.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/OMI - Cheerleader.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Red Hot Chili Peppers - Can't Stop.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Red Hot Chili Peppers - Otherside.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Robin Schulz - Sugar (feat. Francesco Yates) .mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack.mp3").getPath().toString().replace("%20", " "));
-        
-        
-        this.newPlaylistFile("2015 hit");
-        this.newPlaylistFile("Old but Gold");
-        
-        this.addSongInPlaylist("Adele - Hello", "2015 hit");
-        this.addSongInPlaylist("Mark Ronson - Uptown Funk ft. Bruno Mars", "2015 hit");
-        this.addSongInPlaylist("Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack", "2015 hit");
-        this.addSongInPlaylist("Robin Schulz - Sugar (feat. Francesco Yates) ", "2015 hit");
-        this.addSongInPlaylist("Red Hot Chili Peppers - Can't Stop", "Old but Gold");
-        this.addSongInPlaylist("AC-DC - Back In Black", "Old but Gold");
-        this.addSongInPlaylist("Red Hot Chili Peppers - Otherside", "Old but Gold");
     }
     
     /**
@@ -69,9 +45,8 @@ public class Controller implements ViewObserver {
         final String temp = playlistDirPath+name+".txt";
         if(this.filecontrol.notExist(temp)){
             this.filecontrol.createNewFile(name,playlistDirPath);
-            //this.model.newPlaylist(name,temp);
+            this.model.newPlaylist(name,temp);
         }
-        this.model.newPlaylist(name,temp);
         this.view.refreshView();
     }
     
@@ -87,8 +62,8 @@ public class Controller implements ViewObserver {
         this.filecontrol = new FileController(pathNewLibrary);
         loadInfoToLibrary();
         this.audiocontrol.setModel(this.model);
-        this.view.setVisible(true);
         this.view.refreshView();
+        this.view.setVisible(true);
     }
     
     /**
@@ -435,4 +410,33 @@ public class Controller implements ViewObserver {
     public Map<String, Object> showSongInfo(int index) {
         return this.model.getSongInfo(index);
     }
+
+    private void addDemoSong(){
+        this.addSong(Controller.class.getResource("/Adele - Hello.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/AC-DC - Back In Black.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Mark Ronson - Uptown Funk ft. Bruno Mars.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/OMI - Cheerleader.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Red Hot Chili Peppers - Can't Stop.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Red Hot Chili Peppers - Otherside.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Robin Schulz - Sugar (feat. Francesco Yates) .mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResource("/Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack.mp3").getPath().toString().replace("%20", " "));
+        
+        this.newPlaylistFile("2015 hit");
+        this.newPlaylistFile("Old but Gold");
+        try {
+            if(filecontrol.getPlaylistSongs(new File(playlistDirPath+"2015 hit.txt")).size()==0){
+                System.out.println(playlistDirPath+"2015 hit esiste"+ playlistDirPath+"Old but Gold ESISTE");
+                this.addSongInPlaylist("Adele - Hello", "2015 hit");
+                this.addSongInPlaylist("Mark Ronson - Uptown Funk ft. Bruno Mars", "2015 hit");
+                this.addSongInPlaylist("Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack", "2015 hit");
+                this.addSongInPlaylist("Robin Schulz - Sugar (feat. Francesco Yates) ", "2015 hit");
+                this.addSongInPlaylist("Red Hot Chili Peppers - Can't Stop", "Old but Gold");
+                this.addSongInPlaylist("AC-DC - Back In Black", "Old but Gold");
+                this.addSongInPlaylist("Red Hot Chili Peppers - Otherside", "Old but Gold");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
 }

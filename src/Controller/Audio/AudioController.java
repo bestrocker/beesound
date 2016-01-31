@@ -170,6 +170,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
             Log.INFO("Set as Song in reproduction: "+s);
             this.paused = false;
             this.control.open(new File(s));
+            Thread.sleep(100);
             this.control.play();
             this.control.setPan(0.0);
         } catch ( Exception e){
