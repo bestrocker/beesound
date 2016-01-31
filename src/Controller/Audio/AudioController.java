@@ -196,7 +196,6 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
      */
     private void nextSongPlayer(){
         if(strategy) {
-            System.out.println("Queue size: " +this.lm.getQueueSize());
             if(this.counter + 1 > this.lm.getQueueSize() -1 ){
                 this.stopPlayer();
                 Log.INFO("playlist finished");
