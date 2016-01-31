@@ -6,35 +6,33 @@ import Controller.Controller.REPRODUCE;
 
 /**
  * Observer Interface for Controller.
- * @author bestrocker221
- *
  */
 public interface ViewObserver {
-    
+
     /**
-     * Create a new empty Playlist file into the library playlist folder and load it into the library.
-     * @param name
+     * Create a new empty Playlist file into the library playlist folder and load it into the library. 
+     * @param name - the specified name for the new playlist.
      */
     void newPlaylistFile(final String name);
     
     /**
-     * Add a song to library
-     * @param songPath
+     * Add a song to library. 
+     * @param songPath - 
      */
     void addSong(final String songPath);
-    
+
     /**
      * Return a list of all song in library
      * @return song list
      */
     List<String> showAllSong();
-    
+
     /**
      * Return a list of all playlist.
      * @return playlist list
      */
     List<String> showAllPlaylist();
-    
+
     /**
      * List of all album.
      * @return List<String>

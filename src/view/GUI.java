@@ -77,7 +77,7 @@ public class GUI implements ViewInterface {
         final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         final int x = (int)(dimension.getWidth() * PERC_HALF - dimension.getWidth() * PERC_QUATER);
         final int y = (int)(dimension.getHeight() * PERC_HALF - dimension.getHeight() * PERC_QUATER);
-        frame.setSize((int) (dimension.getWidth() * 0.5), (int) (dimension.getHeight() * 0.5));
+        frame.setSize((int) (dimension.getWidth() * 0.55), (int) (dimension.getHeight() * 0.55));
         frame.setLocation(x, y);                
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);           
         frame.setMinimumSize(new Dimension(200, 100));
