@@ -506,8 +506,8 @@ public class GUI implements ViewInterface {
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
                 int returnVal = chooser.showSaveDialog(null);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
-                    controller.newLibrary(chooser.getCurrentDirectory().getAbsolutePath());
-                    //System.out.println(chooser.getSelectedFile().getAbsolutePath());
+                    controller.newLibrary(chooser.getCurrentDirectory().getAbsolutePath()+"");
+                    System.out.println(chooser.getSelectedFile().getAbsolutePath());
                     refreshView();
                 }
             }               
