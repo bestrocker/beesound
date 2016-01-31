@@ -133,7 +133,7 @@ public class GUI implements ViewInterface {
         
         pnRight.add(lbImage);     
         pnRight.add(this.seekBar);
-        pnRight.add(Box.createRigidArea(new Dimension(10, (int)(frame.getHeight() * 0.01))));
+        //pnRight.add(Box.createRigidArea(new Dimension(10, (int)(frame.getHeight() * 0.01))));
         pnRight.add(lbInfoCurrent);       
 
         ////////////// CENTER PANEL: LIST SELECTION & INFO LABEL ////////////////////////
@@ -190,7 +190,6 @@ public class GUI implements ViewInterface {
                 stopped = true;               
                 playing = false;
                 updatePlayButton(btPlay);               
-       //         updateProgressBar(PROGRESS_BAR.PAUSE);
             }
         });
         
