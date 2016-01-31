@@ -72,7 +72,7 @@ public interface AudioControllerInterface {
      * Return if the player is paused.
      * @return
      */
-    public boolean isPaused();
+    boolean isPaused();
     
     /**
      * Set the model.
