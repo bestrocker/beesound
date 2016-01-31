@@ -8,7 +8,7 @@ import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
 import model.Manager;
 
-public class AudioController extends BasicPlayer implements BasicPlayerListener, AudioControllerInterface{
+public class AudioController implements BasicPlayerListener, AudioControllerInterface{
     
     private Manager lm;
     private int counter = 0;
