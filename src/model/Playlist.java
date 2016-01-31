@@ -1,12 +1,15 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Playlist implements Serializable{
     
+    /**
+     * serial UID
+     */
+    private static final long serialVersionUID = 3936662649329388172L;
     private final String name;
     private List<Song> trackList;
     private final String path;
@@ -28,7 +31,6 @@ public class Playlist implements Serializable{
          * 
          */
         private static final long serialVersionUID = 1L;
-        //private final String QUEUE_NAME = "Reproduction_Queue";
         private Song songInReproduction;
         
         Playing() {

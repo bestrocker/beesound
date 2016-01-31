@@ -1,31 +1,27 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.stream.Stream;
-
 import Controller.Audio.MpegInfo.Duration;
 
 /**
  * Representation of the music library. 
  * @author tiziano
  */
-public final class LibraryManager implements Manager{   // this class is implemented using the singleton pattern
+public final class LibraryManager implements Manager{
     
     private static LibraryManager INSTANCE = new LibraryManager();
-    private static final int MAX_FAVOURITE = 10;
     private static final String CLEAR = "[^a-zA-Z0-9 -]";
             
     private final List<Song> songList;
     private final List<Album> albumList;
     private final List<Artist> artistList;
     private final List<Genre> genreList;
-    private final List<Playlist> playlistList;        // try to find a better name for this field
+    private final List<Playlist> playlistList;
     private Playlist.Playing playlistInReproduction;
     
     private LibraryManager() {
@@ -88,7 +84,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
     @Override
     public void addSongToLibrary(String title, String album, String artist, String genre,
             Duration duration, int bitRate, long size, String path, boolean copyright, int channel,
-            String version, int rate, String channelsMode) {   // raw version, try to improve
+            String version, int rate, String channelsMode) {
         if (isSongPresent(clearText(title))) {            
             return;
         }
@@ -138,7 +134,7 @@ public final class LibraryManager implements Manager{   // this class is impleme
                 .build();
     }
     
-    public List<String> getAlbumTitles() {     // try to generalize these methods with interfaces and abstract classes
+    public List<String> getAlbumTitles() {
         final List<String> list = new ArrayList<>();
         this.albumList.forEach(x -> list.add(x.getTitle()));
         return list;       
@@ -156,7 +152,6 @@ public final class LibraryManager implements Manager{   // this class is impleme
         return list;
     }
     
-    // try to reduce the private methods below
     private Album getAlbumFromList(final String title) throws NoSuchElementException {
         for (final Album a : this.albumList) {
             if (a.getTitle().equals(title)) {
@@ -187,19 +182,16 @@ public final class LibraryManager implements Manager{   // this class is impleme
     private void newAlbum(final String title) {
         final Album album = new Album(title);
         this.albumList.add(album);
-        //add serialization
     }
     
     private void newArtist(final String name) {
         final Artist artist = new Artist(name);
         this.artistList.add(artist);
-        //add serialization
     }
     
     private void newGenre(final String name) {
         final Genre genre = new Genre(name);
         this.genreList.add(genre);
-        //add serialization
     }
     
     /**
@@ -210,7 +202,6 @@ public final class LibraryManager implements Manager{   // this class is impleme
     public void newPlaylist(final String name, final String path) {
         final Playlist playlist = new Playlist(name, path);
         this.playlistList.add(playlist);
-        //add serialization
     }
    
     /**
