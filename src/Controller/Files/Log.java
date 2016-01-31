@@ -14,8 +14,7 @@ import java.util.List;
 public class Log {
 
     private static PrintWriter logWriter;
-    //private static boolean initialized;
-    
+        
     private Log(final String logfile) {
         
         try {
@@ -36,10 +35,7 @@ public class Log {
      * Initialize the Logger static class if not initialized yet.
      */
     public static void initializeLogger(){
-        //if(!Log.initialized){
             new Log(FileController.logPath);
-          //  Log.initialized = true;
-        //}
     }
     
     /**
