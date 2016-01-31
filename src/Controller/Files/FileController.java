@@ -25,24 +25,24 @@ public  class FileController implements SystemManager{
      * Initialize FileController, Libraries folder, Logger, Properties.
      */
     public FileController() {
-        libraryPath = System.getProperty("user.home")+sep+"beesound"+sep;
+        libraryPath = System.getProperty("user.home") + sep + "beesound" + sep;
         initializePaths(libraryPath);
         initialize();
     }
     
-    private void initializePaths(final String root){
-        logPath = root+"LOG.txt";
-        propPath = root+"properties.txt";
-        musicDirPath = root + "Music"+sep;
-        playlistDirPath = root + "Playlist"+sep;
+    private void initializePaths(final String root) {
+        logPath = root + "LOG.txt";
+        propPath = root + "properties.txt";
+        musicDirPath = root + "Music" + sep;
+        playlistDirPath = root + "Playlist" + sep;
     }
     
     /**
      * Contructor with specified LibraryPath.
-     * @param newLibraryPath
+     * @param newLibraryPath {@link String}
      */
-    public FileController(final String newLibraryPath){
-        libraryPath = newLibraryPath+sep+"beesound"+sep;
+    public FileController(final String newLibraryPath) {
+        libraryPath = newLibraryPath + sep + "beesound" + sep;
         initializePaths(libraryPath);
         initialize();
     }
@@ -51,29 +51,29 @@ public  class FileController implements SystemManager{
      * {@inheritDoc}
      */
     @Override
-    public boolean notExist(final String srcPath){
+    public boolean notExist(final String srcPath) {
         return (Files.notExists(Paths.get(srcPath), LinkOption.NOFOLLOW_LINKS));
     }
     
     private void initialize() {
         
-        if (notExist(libraryPath)){
+        if (notExist(libraryPath)) {
             new File(libraryPath).mkdirs();
             Log.initializeLogger();
-            Log.PROGRAM(libraryPath +" created.");
+            Log.PROGRAM(libraryPath + " created.");
         }
         Log.initializeLogger();
         Log.PROGRAM("Root Library folder loaded. STARTING PROGRAM");
-        if (notExist(musicDirPath)){
+        if (notExist(musicDirPath)) {
             new File(musicDirPath).mkdirs();
             Log.PROGRAM("Music Directory created");
         }
-        if (notExist(playlistDirPath)){
+        if (notExist(playlistDirPath)) {
             new File(playlistDirPath).mkdirs();
             Log.PROGRAM("Playlist Directory created");
         }
-        if (notExist(propPath)){
-            createNewFile("" ,propPath);
+        if (notExist(propPath)) {
+            createNewFile("", propPath);
         }
     }
 
@@ -88,16 +88,16 @@ public  class FileController implements SystemManager{
      * {@inheritDoc}
      */
     @Override
-    public List<String> listAllPlaylist(){
-        return listAllSongPath(new File(playlistDirPath),".txt");
+    public List<String> listAllPlaylist() {
+        return listAllSongPath(new File(playlistDirPath), ".txt");
     }
     
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<String> listAllSongPath(){
-        return listAllSongPath(new File(musicDirPath),".mp3");
+    public List<String> listAllSongPath() {
+        return listAllSongPath(new File(musicDirPath), ".mp3");
     }
     
     /**
@@ -105,7 +105,7 @@ public  class FileController implements SystemManager{
      * @throws IOException 
      */
     @Override
-    public List<String> getPlaylistSongs(final File playlist) throws IOException{
+    public List<String> getPlaylistSongs(final File playlist) throws IOException {
         return Files.readAllLines(playlist.toPath());
     }
     
@@ -115,14 +115,14 @@ public  class FileController implements SystemManager{
     @Override
     public  String importToLibrary(final String pathSource) {
        final String d = musicDirPath + pathSource.substring(pathSource.lastIndexOf(sep));
-       if(Files.notExists(Paths.get(d), LinkOption.NOFOLLOW_LINKS)){
-           try{
+       if (Files.notExists(Paths.get(d), LinkOption.NOFOLLOW_LINKS)) {
+           try {
                Files.copy(Paths.get(pathSource),
                    Paths.get(d),
                    StandardCopyOption.COPY_ATTRIBUTES);
-               Log.INFO("Added to library "+pathSource);
+               Log.INFO("Added to library " + pathSource);
                return d;
-           } catch (Exception e){
+           } catch (Exception e) {
                e.printStackTrace();
                Log.ERROR("Can't importToLibrary, error during copy " + e);
            }
@@ -134,20 +134,24 @@ public  class FileController implements SystemManager{
      * {@inheritDoc}
      * @throws IOException 
      */
-    public void createNewFile(final String name,final String dstPath) {
+    public void createNewFile(final String name, final String dstPath) {
         try {
-            new File(dstPath+name+".txt").createNewFile();
+            new File(dstPath + name + ".txt").createNewFile();
         } catch (IOException e) {
             Log.ERROR("Can't createNewFile()" + e);
             e.printStackTrace();
             return;
         }
-        Log.PROGRAM("New file "+name+" created : "+dstPath+name+".txt");
+        Log.PROGRAM("New file " + name + " created : " + dstPath + name + ".txt");
     }
     
-    public void appendToFile(final String msg, final String path){
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void appendToFile(final String msg, final String path) {
         try {
-            this.writer = new PrintWriter(new FileWriter(new File(path),true),true);
+            this.writer = new PrintWriter(new FileWriter(new File(path), true), true);
             this.writer.println(msg);
         } catch (IOException e) {
             e.printStackTrace();
@@ -160,7 +164,7 @@ public  class FileController implements SystemManager{
      * @param pathFile
      */
     @Override
-    public void delete(String pathFile) {
+    public void delete(final String pathFile) {
         try {
             Files.deleteIfExists(Paths.get(pathFile));
             Log.PROGRAM(pathFile + " Deleted.");
