@@ -34,27 +34,27 @@ import Controller.Audio.MpegInfo.Duration;
  * This interface define needed features for song information.
  * Adapted from Scott Pennell interface.
  */
-public interface TagInfo
-{
-    public void load(InputStream input) throws IOException, UnsupportedAudioFileException;
+public interface TagInfo {
+    
+    void load(InputStream input) throws IOException, UnsupportedAudioFileException;
 
-    public void load(URL input) throws IOException, UnsupportedAudioFileException;
+    void load(URL input) throws IOException, UnsupportedAudioFileException;
 
-    public boolean load(File input) throws IOException, UnsupportedAudioFileException;
+    boolean load(File input) throws IOException, UnsupportedAudioFileException;
 
     /**
-     * Get Sampling Rate
+     * Get Sampling Rate.
      *
      * @return sampling rate
      */
-    public int getSamplingRate();
+    int getSamplingRate();
 
     /**
      * Get Nominal Bitrate
      *
      * @return bitrate in bps
      */
-    public int getBitRate();
+    int getBitRate();
 
 
     /**
@@ -62,47 +62,47 @@ public interface TagInfo
      *
      * @return play time in seconds
      */
-    public long getPlayTime();
+    long getPlayTime();
 
     /**
      * Get the title of the song.
      *
      * @return the title of the song
      */
-    public Optional<String> getTitle();
+    Optional<String> getTitle();
 
     /**
-     * Get the artist that performed the song
+     * Get the artist that performed the song.
      *
      * @return the artist that performed the song
      */
-    public Optional<String> getArtist();
+    Optional<String> getArtist();
 
     /**
-     * Get the name of the album upon which the song resides
+     * Get the name of the album upon which the song resides.
      *
      * @return the album name
      */
-    public Optional<String> getAlbum();
+     Optional<String> getAlbum();
 
     /**
-     * Get the genre string of the music
+     * Get the genre string of the music.
      *
      * @return the genre string
      */
-    public Optional<String> getGenre();
+    Optional<String> getGenre();
 
     /**
-     * Get the year the track was released
+     * Get the year the track was released.
      *
      * @return the year the track was released
      */
-    public Optional<String> getYear();
+    Optional<String> getYear();
     
     /**
      * Get the song's duration.
      * 
      * @return a Dimension including minutes and seconds. Width = minutes, Height = seconds;
      */
-    public Duration getDurationInMinutes();
+     Duration getDurationInMinutes();
 }

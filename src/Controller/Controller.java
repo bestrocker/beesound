@@ -18,6 +18,11 @@ import view.GUI.PROGRESS_BAR;
 import view.ViewInterface;
 import view.ViewObserver;
 
+/**
+ * Controller class.
+ * @author bestrocker221
+ *
+ */
 public class Controller implements ViewObserver {
 
     private Manager model;
@@ -25,9 +30,14 @@ public class Controller implements ViewObserver {
     private final AudioControllerInterface audiocontrol;
     private SystemManager filecontrol;
     
+    /**
+     * Controller constructor.
+     * @param view GUI
+     * @param model MODEL
+     */
     public Controller(final ViewInterface view, final Manager model) {
-        this.model=model;
-        this.view=view;
+        this.model = model;
+        this.view = view;
         this.view.setObserver(this);
         this.filecontrol = new FileController();
         loadInfoToLibrary();
@@ -41,11 +51,11 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void newPlaylistFile(final String name){
-        final String temp = playlistDirPath+name+".txt";
-        if(this.filecontrol.notExist(temp)){
-            this.filecontrol.createNewFile(name,playlistDirPath);
-            this.model.newPlaylist(name,temp);
+    public void newPlaylistFile(final String name) {
+        final String temp = playlistDirPath + name + ".txt";
+        if (this.filecontrol.notExist(temp)) {
+            this.filecontrol.createNewFile(name, playlistDirPath);
+            this.model.newPlaylist(name, temp);
         }
         this.view.refreshView();
     }
@@ -54,7 +64,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void newLibrary(String pathNewLibrary) {
+    public void newLibrary(final String pathNewLibrary) {
         this.view.setVisible(false);
         this.audiocontrol.stopPlayer();
         this.model.resetLibrary();
@@ -70,17 +80,17 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void addSongInPlaylist(final String song, final String playlist){
-       this.model.addSongInPlaylist(song,playlist);
-       final String songPath= this.model.getSongPath(song);
+    public void addSongInPlaylist(final String song, final String playlist) {
+       this.model.addSongInPlaylist(song, playlist);
+       final String songPath = this.model.getSongPath(song);
        final String playlistPath = this.model.getPlaylistPath(playlist);
         try {
-            if(!this.filecontrol.getPlaylistSongs(new File(playlistPath)).contains(songPath)){
-                this.filecontrol.appendToFile(songPath,playlistPath);
-                Log.INFO(songPath+ " Added to playlist "+playlist);
+            if (!this.filecontrol.getPlaylistSongs(new File(playlistPath)).contains(songPath)) {
+                this.filecontrol.appendToFile(songPath, playlistPath);
+                Log.INFO(songPath + " Added to playlist " + playlist);
             }
         } catch (IOException e) {
-            Log.ERROR("Can't addSongInPlaylist"+e);
+            Log.ERROR("Can't addSongInPlaylist" + e);
             e.printStackTrace();
         }
     }
@@ -92,36 +102,36 @@ public class Controller implements ViewObserver {
         final MpegInfo info = MpegInfo.getInstance();
         this.filecontrol.listAllSongPath()
                         .stream()
-                        .forEach(i->{
-                             if(info.load(new File(i))){
+                        .forEach(i-> {
+                             if (info.load(new File(i))) {
                                  this.addSong(i, info);
                              }
                          });
         Log.INFO("Mpeg tag succesfully loaded into the library.");
         this.filecontrol.listAllPlaylist()
                         .stream()
-                        .forEach(i->{
-                            String plname = i.substring(i.lastIndexOf(sep)+1,i.length()-4);
+                        .forEach(i-> {
+                            String plname = i.substring(i.lastIndexOf(sep) + 1, i.length() - 4);
                             this.model.newPlaylist(plname, i);
                             try {
                                 this.filecontrol.getPlaylistSongs(new File(i))
                                     .stream()
-                                    .forEach(j->this.model.addSongInPlaylist(j.substring(j.lastIndexOf(sep)+1,j.length()-4), plname));
+                                    .forEach(j->this.model.addSongInPlaylist(j.substring(j.lastIndexOf(sep) + 1, j.length() - 4), plname));
                             } catch (Exception e) {
-                                Log.ERROR("Can't load PLAYLIST to library." +e);
+                                Log.ERROR("Can't load PLAYLIST to library." + e);
                             }
                          });
         Log.INFO("Playlist succesfully loaded into the library.");
     }
     
-    private void addSong(final String songPath, final MpegInfo info){
-        final String alternativeTitle = songPath.substring(songPath.lastIndexOf(sep)+1,songPath.length()-4);
-        if(!this.model.getSongTitles().contains(alternativeTitle)){
+    private void addSong(final String songPath, final MpegInfo info) {
+        final String alternativeTitle = songPath.substring(songPath.lastIndexOf(sep) + 1, songPath.length() - 4);
+        if (!this.model.getSongTitles().contains(alternativeTitle)) {
             this.model.addSongToLibrary(
-                     (info.getTitle().orElse(alternativeTitle)) ,(info.getAlbum().orElse("")) 
-                    ,(info.getArtist().orElse("")) ,(info.getGenre().orElse("")) ,(info.getDurationInMinutes())
-                    ,(info.getBitRate()) ,(info.getSize()) ,(songPath) ,(info.getCopyright()) ,(info.getChannels())
-                    ,(info.getVersion()),(info.getSamplingRate()),(info.getChannelsMode())
+                     info.getTitle().orElse(alternativeTitle), info.getAlbum().orElse("") 
+                    , info.getArtist().orElse(""), info.getGenre().orElse(""), info.getDurationInMinutes()
+                    , info.getBitRate(), info.getSize(), songPath, info.getCopyright(), info.getChannels()
+                    , info.getVersion(), info.getSamplingRate(), info.getChannelsMode()
                     );
         }
     }
@@ -168,7 +178,7 @@ public class Controller implements ViewObserver {
     @Override
     public void pauseButton() {
         this.audiocontrol.togglePause();
-        if(this.audiocontrol.isPaused()){
+        if (this.audiocontrol.isPaused()) {
             this.view.updateProgressBar(PROGRESS_BAR.PAUSE);
         } else {
             this.view.updateProgressBar(PROGRESS_BAR.ACTIVE);
@@ -205,10 +215,10 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void addSongInReproductionPlaylist(final String song,final REPRODUCE when) {
+    public void addSongInReproductionPlaylist(final String song, final REPRODUCE when) {
         this.model.addSongInPlaylist(song, when.getVal());
         Log.INFO(song + " added in reproduction playlist.");
-        if(when.getVal()){
+        if (when.getVal()) {
             this.audiocontrol.setReproduceNowBoolean(true);
             this.audiocontrol.playPlayer();
             this.view.updateProgressBar(PROGRESS_BAR.ACTIVE);
@@ -221,14 +231,25 @@ public class Controller implements ViewObserver {
      * @author bestrocker221
      *
      */
-    public enum REPRODUCE{
-        NOW(true),AFTER(false);
+    public enum REPRODUCE {
+        /**
+         * Reproduce now.
+         */
+        NOW (true),
+        /**
+         * Reproduce after.
+         */
+        AFTER (false);
         
-        final private boolean val;
-        private REPRODUCE(final boolean b) {
+        private final boolean val;
+        REPRODUCE(final boolean b) {
            this.val = b;
         }
-        public boolean getVal(){
+        /**
+         * Return the value of the selected strategy.
+         * @return boolean
+         */
+        public boolean getVal() {
             return this.val;
         }
     }
@@ -305,7 +326,7 @@ public class Controller implements ViewObserver {
     @Override
     public void removeSong(final String songTitle) {
         this.model.removeSong(songTitle);
-        this.filecontrol.delete(musicDirPath+songTitle+".mp3");
+        this.filecontrol.delete(musicDirPath + songTitle + ".mp3");
         this.view.refreshView();
     }
 
@@ -323,7 +344,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public List<String> showPlaylistSong(String playlistName) {
+    public List<String> showPlaylistSong(final String playlistName) {
         return this.model.showPlaylistSong(playlistName);
     }
 
@@ -339,9 +360,9 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void removePlaylist(String namePlaylist) {
+    public void removePlaylist(final String namePlaylist) {
         this.model.removePlaylist(namePlaylist);
-        this.filecontrol.delete(playlistDirPath+namePlaylist+".txt");
+        this.filecontrol.delete(playlistDirPath + namePlaylist + ".txt");
         this.view.refreshView();
     }
 
@@ -357,7 +378,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void playPlaylist(String playlistName) {
+    public void playPlaylist(final String playlistName) {
         this.model.setReproductionPlaylist(playlistName);
         this.audiocontrol.playPlayer();
     }
@@ -366,7 +387,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void removeSongFromPlaylist(String songName, String playlistName) {
+    public void removeSongFromPlaylist(final String songName, final String playlistName) {
         this.model.removeSongFromPlaylist(songName, playlistName);
         this.view.refreshView();
     }
@@ -383,7 +404,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public List<String> searchSong(String text) {
+    public List<String> searchSong(final String text) {
         return this.model.fetchSongs(text);
     }
    
@@ -391,7 +412,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public int getPos(){
+    public int getPos() {
         return this.audiocontrol.getPos();
     }
     
@@ -399,7 +420,7 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public void setPos(final int n){
+    public void setPos(final int n) {
         this.audiocontrol.setPos(n);
     }
     
@@ -407,11 +428,11 @@ public class Controller implements ViewObserver {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Object> showSongInfo(int index) {
+    public Map<String, Object> showSongInfo(final int index) {
         return this.model.getSongInfo(index);
     }
 
-    private void addDemoSong(){
+    private void addDemoSong() {
         this.addSong(Controller.class.getResource("/Adele - Hello.mp3").getPath().toString().replace("%20", " "));
         this.addSong(Controller.class.getResource("/AC-DC - Back In Black.mp3").getPath().toString().replace("%20", " "));
         this.addSong(Controller.class.getResource("/Mark Ronson - Uptown Funk ft. Bruno Mars.mp3").getPath().toString().replace("%20", " "));
@@ -424,8 +445,8 @@ public class Controller implements ViewObserver {
         this.newPlaylistFile("2015 hit");
         this.newPlaylistFile("Old but Gold");
         try {
-            if(filecontrol.getPlaylistSongs(new File(playlistDirPath+"2015 hit.txt")).size()==0){
-                System.out.println(playlistDirPath+"2015 hit esiste"+ playlistDirPath+"Old but Gold ESISTE");
+            if (filecontrol.getPlaylistSongs(new File(playlistDirPath + "2015 hit.txt")).size() == 0) {
+                System.out.println(playlistDirPath + "2015 hit esiste" + playlistDirPath + "Old but Gold ESISTE");
                 this.addSongInPlaylist("Adele - Hello", "2015 hit");
                 this.addSongInPlaylist("Mark Ronson - Uptown Funk ft. Bruno Mars", "2015 hit");
                 this.addSongInPlaylist("Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack", "2015 hit");
