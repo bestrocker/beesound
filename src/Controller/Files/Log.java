@@ -24,7 +24,6 @@ public final class Log {
         
         try {
             Log.logWriter = new PrintWriter(new FileWriter(logfile, true), true);
-            System.out.println(logfile);
             if (Files.notExists(Paths.get(logfile), LinkOption.NOFOLLOW_LINKS)) {
                 new File(logfile).createNewFile();
                 Log.PROGRAM("log file creato");
