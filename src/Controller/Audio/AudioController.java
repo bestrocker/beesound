@@ -10,7 +10,7 @@ import model.Manager;
 
 public class AudioController extends BasicPlayer implements BasicPlayerListener, AudioControllerInterface{
     
-    final private Manager lm;
+    private Manager lm;
     private int counter = 0;
     private boolean reproduceNow;
     private boolean paused;
@@ -65,6 +65,12 @@ public class AudioController extends BasicPlayer implements BasicPlayerListener,
         return this.mp3Info;
     }
     
+    /**
+     *
+     */
+    public void setModel(final Manager model){
+        this.lm = model;
+    }
     /**
      * {@inheritDoc}
      */

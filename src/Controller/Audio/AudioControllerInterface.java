@@ -1,6 +1,7 @@
 package Controller.Audio;
 
 import Controller.Audio.AudioController.REPRODUCTION_STRATEGY;
+import model.Manager;
 
 public interface AudioControllerInterface {
 
@@ -72,4 +73,9 @@ public interface AudioControllerInterface {
      * @return
      */
     public boolean isPaused();
+    
+    /**
+     * Set the model.
+     */
+    void setModel(final Manager model);
 }

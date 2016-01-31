@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -477,7 +478,7 @@ public class GUI implements ViewInterface {
                 toHighlight();
             }
         });
-
+        
         pnLeftButtons.add(btAllSongs);
         pnLeftButtons.add(btAlbum);
         pnLeftButtons.add(btArtist);
@@ -508,7 +509,7 @@ public class GUI implements ViewInterface {
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
                 int returnVal = chooser.showSaveDialog(null);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
-                    controller.newLibrary(chooser.getCurrentDirectory().getAbsolutePath());
+                    controller.newLibrary(chooser.getSelectedFile().getAbsolutePath());
                     refreshView();
                 }
             }               

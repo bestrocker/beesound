@@ -12,6 +12,7 @@ import Controller.Files.FileController;
 import static Controller.Files.FileController.*;
 import Controller.Files.Log;
 import Controller.Files.SystemManager;
+import model.LibraryManager;
 import model.Manager;
 import view.GUI.PROGRESS_BAR;
 import view.ViewInterface;
@@ -19,8 +20,8 @@ import view.ViewObserver;
 
 public class Controller implements ViewObserver {
 
-    private final Manager model;
-    private final ViewInterface view;
+    private Manager model;
+    private ViewInterface view;
     private final AudioControllerInterface audiocontrol;
     private SystemManager filecontrol;
     
@@ -45,6 +46,22 @@ public class Controller implements ViewObserver {
             this.filecontrol.createNewFile(name,playlistDirPath);
             this.model.newPlaylist(name,temp);
         }
+        this.view.refreshView();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void newLibrary(String pathNewLibrary) {
+        this.view.setVisible(false);
+        this.audiocontrol.stopPlayer();
+        this.model.resetLibrary();
+        this.model = LibraryManager.getInstance();
+        this.filecontrol = new FileController(pathNewLibrary);
+        loadInfoToLibrary();
+        this.audiocontrol.setModel(this.model);
+        this.view.setVisible(true);
         this.view.refreshView();
     }
     
@@ -334,17 +351,6 @@ public class Controller implements ViewObserver {
     public List<String> showFavorites() {
         return this.model.getMostListened();
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void newLibrary(String pathNewLibrary) {
-        this.model.resetLibrary();
-        this.filecontrol = new FileController(pathNewLibrary);
-        loadInfoToLibrary();
-        this.view.refreshView(); 
-    }
     
     /**
      * {@inheritDoc}
@@ -380,13 +386,25 @@ public class Controller implements ViewObserver {
         return this.model.fetchSongs(text);
     }
    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getPos(){
         return this.audiocontrol.getPos();
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setPos(final int n){
         this.audiocontrol.setPos(n);
     }
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, Object> showSongInfo(int index) {
         return this.model.getSongInfo(index);
