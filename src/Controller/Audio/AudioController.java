@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.Map;
 import java.util.Random;
+import Controller.Audio.AudioControllerInterface;
+import Controller.Audio.MpegInfo;
+import Controller.Audio.TagInfo;
 import Controller.Files.Log;
 import javazoom.jlgui.basicplayer.*;
 import model.Manager;
@@ -32,7 +35,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
      * @author bestrocker221
      *
      */
-    public enum REPRODUCTION_STRATEGY{
+    public static enum REPRODUCTION_STRATEGY{
         /**
          * Reproduce songs one after the other.
          */
@@ -202,7 +205,7 @@ public class AudioController implements BasicPlayerListener, AudioControllerInte
      * {@inheritDoc}
      */
     @Override
-    public void setReproductionStrategy(final REPRODUCTION_STRATEGY strategy) {
+    public void setReproductionStrategy(Controller.Audio.AudioController.REPRODUCTION_STRATEGY strategy) {
         this.strategy = strategy.getVal();
         if (strategy.getVal()) {
             Log.INFO("Reproduction set to Linear.");
