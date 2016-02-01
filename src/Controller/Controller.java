@@ -3,6 +3,7 @@ package Controller;
 import java.io.File;
 import static Controller.Audio.AudioController.REPRODUCTION_STRATEGY.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import Controller.Audio.AudioController;
@@ -147,6 +148,20 @@ public class Controller implements ViewObserver {
         this.view.refreshView();
     }
     
+    /*
+     * Only for demonstration.
+     */
+    private void addSong(final InputStream stream, final String songpath) {
+        MpegInfo info = MpegInfo.getInstance();
+        try {
+            info.load(new File(this.filecontrol.importToLibrary(stream, songpath)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.addSong(musicDirPath + songpath, info);
+        this.view.refreshView();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -433,14 +448,22 @@ public class Controller implements ViewObserver {
     }
 
     private void addDemoSong() {
-        this.addSong(Controller.class.getResource("/Adele - Hello.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/AC-DC - Back In Black.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Mark Ronson - Uptown Funk ft. Bruno Mars.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/OMI - Cheerleader.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Red Hot Chili Peppers - Can't Stop.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Red Hot Chili Peppers - Otherside.mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Robin Schulz - Sugar (feat. Francesco Yates) .mp3").getPath().toString().replace("%20", " "));
-        this.addSong(Controller.class.getResource("/Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack.mp3").getPath().toString().replace("%20", " "));
+        this.addSong(Controller.class.getResourceAsStream("/Adele - Hello.mp3"),
+                 "Adele - Hello.mp3");
+        this.addSong(Controller.class.getResourceAsStream("/AC-DC - Back In Black.mp3"),
+                 "AC-DC - Back In Black.mp3");
+        this.addSong(Controller.class.getResourceAsStream("/Mark Ronson - Uptown Funk ft. Bruno Mars.mp3"),
+                 "Mark Ronson - Uptown Funk ft. Bruno Mars.mp3");
+        this.addSong(Controller.class.getResourceAsStream("/OMI - Cheerleader.mp3"),
+                 "OMI - Cheerleader.mp3");
+        this.addSong(Controller.class.getResourceAsStream("/Red Hot Chili Peppers - Can't Stop.mp3"),
+                 "Red Hot Chili Peppers - Can't Stop.mp3");
+        this.addSong(Controller.class.getResourceAsStream("/Red Hot Chili Peppers - Otherside.mp3"),
+                 "Red Hot Chili Peppers - Otherside.mp3");
+        this.addSong(Controller.class.getResourceAsStream("/Robin Schulz - Sugar (feat. Francesco Yates) .mp3"),
+                 "Robin Schulz - Sugar (feat. Francesco Yates) .mp3");
+        this.addSong(Controller.class.getResourceAsStream("/Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack.mp3"),
+                 "Wiz Khalifa - See You Again ft. Charlie Puth Furious 7 Soundtrack.mp3");
         
         this.newPlaylistFile("2015 hit");
         this.newPlaylistFile("Old but Gold");

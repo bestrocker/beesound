@@ -3,6 +3,7 @@ package Controller.Files;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -115,20 +116,41 @@ public  class FileController implements SystemManager{
     @Override
     public  String importToLibrary(final String pathSource) {
        final String d = musicDirPath + pathSource.substring(pathSource.lastIndexOf(sep));
-       if (Files.notExists(Paths.get(d), LinkOption.NOFOLLOW_LINKS)) {
-           try {
-               Files.copy(Paths.get(pathSource),
-                   Paths.get(d),
-                   StandardCopyOption.COPY_ATTRIBUTES);
-               Log.INFO("Added to library " + pathSource);
-               return d;
-           } catch (Exception e) {
-               e.printStackTrace();
-               Log.ERROR("Can't importToLibrary, error during copy " + e);
-           }
-       }
+           copy(pathSource, d, null, false);
        return d;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String importToLibrary(final InputStream source, final String name) {
+        final String d = musicDirPath + name;
+            copy(name, d, source, true);
+        return d;
+      }
+    
+    private void copy(final String pathSource, final String finalPath, final InputStream stream, final boolean isStreamed) {
+        if (Files.notExists(Paths.get(finalPath), LinkOption.NOFOLLOW_LINKS)) {
+            try {
+                if (!isStreamed) {
+                    Files.copy(Paths.get(pathSource),
+                            Paths.get(finalPath),
+                            StandardCopyOption.REPLACE_EXISTING);
+                    Log.INFO("Added to library " + pathSource);
+                } else {
+                    Files.copy(stream,
+                            Paths.get(finalPath),
+                            StandardCopyOption.REPLACE_EXISTING);
+                    Log.INFO("Added to library " + pathSource);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.ERROR("Can't importToLibrary, error during copy " + e);
+            }
+        }
+    }
+    
+    
     
     /**
      * {@inheritDoc}
