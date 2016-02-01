@@ -11,7 +11,7 @@ public class BeeSoundLauncher {
         /*
          * Initialize the player.
          */
-        new Controller(new GUI(),LibraryManager.getInstance());
+        new Controller(new GUI(), LibraryManager.getInstance());
         
     }
 
