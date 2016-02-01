@@ -23,11 +23,7 @@ package Controller.Audio;
  */
 
 import org.tritonus.share.sampled.file.TAudioFileFormat;
-
 import Controller.Files.Log;
-
-import javax.print.DocFlavor.INPUT_STREAM;
-import javax.print.attribute.standard.RequestingUserName;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -362,8 +358,12 @@ public final class MpegInfo implements TagInfo {
     public Optional<String> getTitle() {
         return Optional.ofNullable(title);
     }
-    public void setTitle(final String title){
-        this.title=title;
+    /**
+     * Set Title of the song.
+     * @param title String
+     */
+    public void setTitle(final String title) {
+        this.title = title;
     }
     /**
      * {@inheritDoc}
@@ -419,9 +419,14 @@ public final class MpegInfo implements TagInfo {
         
     }
     
+    /**
+     * Class for song's duration.
+     * @author bestrocker221
+     *
+     */
     public static class Duration{
-        final private int min;
-        final private int sec;
+        private final int min;
+        private final int sec;
         public Duration(final int min, final int sec) {
             this.min = min;
             this.sec = sec;
